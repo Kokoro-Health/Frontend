@@ -4,34 +4,43 @@ import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
 import type { SignInData, SignInResponses, SignUpData, SignUpResponses } from './types.gen';
 
-export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
-    /**
-     * You can provide a client instance returned by `createClient()` instead of
-     * individual options. This might be also useful if you want to implement a
-     * custom client.
-     */
-    client?: Client;
-    /**
-     * You can pass arbitrary values through the `meta` object. This can be
-     * used to access values that aren't defined as part of the SDK function.
-     */
-    meta?: Record<string, unknown>;
+export type Options<
+	TData extends TDataShape = TDataShape,
+	ThrowOnError extends boolean = boolean
+> = Options2<TData, ThrowOnError> & {
+	/**
+	 * You can provide a client instance returned by `createClient()` instead of
+	 * individual options. This might be also useful if you want to implement a
+	 * custom client.
+	 */
+	client?: Client;
+	/**
+	 * You can pass arbitrary values through the `meta` object. This can be
+	 * used to access values that aren't defined as part of the SDK function.
+	 */
+	meta?: Record<string, unknown>;
 };
 
-export const signUp = <ThrowOnError extends boolean = false>(options: Options<SignUpData, ThrowOnError>) => (options.client ?? client).post<SignUpResponses, unknown, ThrowOnError>({
-    url: '/auth/signup',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
+export const signUp = <ThrowOnError extends boolean = false>(
+	options: Options<SignUpData, ThrowOnError>
+) =>
+	(options.client ?? client).post<SignUpResponses, unknown, ThrowOnError>({
+		url: '/auth/signup',
+		...options,
+		headers: {
+			'Content-Type': 'application/json',
+			...options.headers
+		}
+	});
 
-export const signIn = <ThrowOnError extends boolean = false>(options: Options<SignInData, ThrowOnError>) => (options.client ?? client).post<SignInResponses, unknown, ThrowOnError>({
-    url: '/auth/signin',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
+export const signIn = <ThrowOnError extends boolean = false>(
+	options: Options<SignInData, ThrowOnError>
+) =>
+	(options.client ?? client).post<SignInResponses, unknown, ThrowOnError>({
+		url: '/auth/signin',
+		...options,
+		headers: {
+			'Content-Type': 'application/json',
+			...options.headers
+		}
+	});

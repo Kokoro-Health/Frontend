@@ -6,6 +6,9 @@ import type {
 	GetMyProfileData,
 	GetMyProfileErrors,
 	GetMyProfileResponses,
+	LogoutData,
+	LogoutErrors,
+	LogoutResponses,
 	SignInData,
 	SignInErrors,
 	SignInResponses,
@@ -53,6 +56,14 @@ export const signIn = <ThrowOnError extends boolean = false>(
 			'Content-Type': 'application/json',
 			...options.headers
 		}
+	});
+
+export const logout = <ThrowOnError extends boolean = false>(
+	options?: Options<LogoutData, ThrowOnError>
+) =>
+	(options?.client ?? client).post<LogoutResponses, LogoutErrors, ThrowOnError>({
+		url: '/auth/logout',
+		...options
 	});
 
 export const getMyProfile = <ThrowOnError extends boolean = false>(

@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { signIn, signUp, type SignInRequestDto } from '$lib/api';
-	import { auth } from '$lib/store/auth.store';
+	import { signIn, type SignInRequestDto } from '$lib/api';
 	import { MailIcon, KeyRoundIcon, EyeOffIcon, EyeIcon, CircleXIcon } from '@lucide/svelte';
 
 	const iconSize = 16;
@@ -29,7 +27,7 @@
 				if (res.error) {
 					throw Error(res.error.message);
 				}
-				goto('/');
+				location.reload();
 			})
 			.catch((e: Error) => {
 				error = e.message;
@@ -54,7 +52,7 @@
 <div class="flex min-h-screen w-full items-center justify-center">
 	<form
 		onsubmit={(e) => submitForm(e)}
-		class="flex w-full max-w-xl flex-col space-y-5 rounded-box bg-base-200 p-8"
+		class="card flex w-full max-w-xl flex-col space-y-5 rounded-box bg-base-200 p-8"
 	>
 		<div class="mb-3 flex flex-col space-y-3">
 			<span class="text-2xl font-semibold">Welcome back!</span>

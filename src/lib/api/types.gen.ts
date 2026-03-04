@@ -89,6 +89,29 @@ export type SignInResponses = {
 
 export type SignInResponse = SignInResponses[keyof SignInResponses];
 
+export type LogoutData = {
+	body?: never;
+	path?: never;
+	query?: never;
+	url: '/auth/logout';
+};
+
+export type LogoutErrors = {
+	/**
+	 * Bad Request
+	 */
+	400: ErrorResponse;
+};
+
+export type LogoutError = LogoutErrors[keyof LogoutErrors];
+
+export type LogoutResponses = {
+	/**
+	 * OK
+	 */
+	200: unknown;
+};
+
 export type GetMyProfileData = {
 	body?: never;
 	path?: never;

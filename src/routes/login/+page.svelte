@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { signIn, signUp, type SignInRequestDto } from '$lib/api';
 	import { auth } from '$lib/store/auth.store';
 	import { MailIcon, KeyRoundIcon, EyeOffIcon, EyeIcon, CircleXIcon } from '@lucide/svelte';
@@ -28,6 +29,7 @@
 				if (res.error) {
 					throw Error(res.error.message);
 				}
+				goto('/');
 			})
 			.catch((e: Error) => {
 				error = e.message;

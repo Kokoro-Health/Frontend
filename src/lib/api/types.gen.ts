@@ -29,6 +29,16 @@ export type SignInRequestDto = {
 	rememberMe: boolean;
 };
 
+export type ProfileResponseDto = {
+	id: string;
+	firstName: string;
+	middleName: string;
+	lastName: string;
+	email: string;
+	profilePictureUrl: string;
+	createdAt: number;
+};
+
 export type SignUpData = {
 	body: SignUpRequestDto;
 	path?: never;
@@ -78,3 +88,28 @@ export type SignInResponses = {
 };
 
 export type SignInResponse = SignInResponses[keyof SignInResponses];
+
+export type GetMyProfileData = {
+	body?: never;
+	path?: never;
+	query?: never;
+	url: '/profile';
+};
+
+export type GetMyProfileErrors = {
+	/**
+	 * Bad Request
+	 */
+	400: ErrorResponse;
+};
+
+export type GetMyProfileError = GetMyProfileErrors[keyof GetMyProfileErrors];
+
+export type GetMyProfileResponses = {
+	/**
+	 * OK
+	 */
+	200: ProfileResponseDto;
+};
+
+export type GetMyProfileResponse = GetMyProfileResponses[keyof GetMyProfileResponses];

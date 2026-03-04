@@ -3,6 +3,9 @@
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
 import type {
+	GetMyProfileData,
+	GetMyProfileErrors,
+	GetMyProfileResponses,
 	SignInData,
 	SignInErrors,
 	SignInResponses,
@@ -50,4 +53,12 @@ export const signIn = <ThrowOnError extends boolean = false>(
 			'Content-Type': 'application/json',
 			...options.headers
 		}
+	});
+
+export const getMyProfile = <ThrowOnError extends boolean = false>(
+	options?: Options<GetMyProfileData, ThrowOnError>
+) =>
+	(options?.client ?? client).get<GetMyProfileResponses, GetMyProfileErrors, ThrowOnError>({
+		url: '/profile',
+		...options
 	});

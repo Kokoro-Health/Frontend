@@ -2,14 +2,19 @@
 
 export { type Options, signIn, signUp } from './sdk.gen';
 export type {
-	AuthResponseDto,
 	ClientOptions,
+	ErrorResponse,
 	SignInData,
+	SignInError,
+	SignInErrors,
 	SignInRequestDto,
 	SignInResponse,
 	SignInResponses,
 	SignUpData,
+	SignUpError,
+	SignUpErrors,
 	SignUpRequestDto,
 	SignUpResponse,
-	SignUpResponses
+	SignUpResponses,
+	Unit
 } from './types.gen';

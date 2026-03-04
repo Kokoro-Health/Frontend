@@ -2,7 +2,14 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { SignInData, SignInResponses, SignUpData, SignUpResponses } from './types.gen';
+import type {
+	SignInData,
+	SignInErrors,
+	SignInResponses,
+	SignUpData,
+	SignUpErrors,
+	SignUpResponses
+} from './types.gen';
 
 export type Options<
 	TData extends TDataShape = TDataShape,
@@ -24,7 +31,7 @@ export type Options<
 export const signUp = <ThrowOnError extends boolean = false>(
 	options: Options<SignUpData, ThrowOnError>
 ) =>
-	(options.client ?? client).post<SignUpResponses, unknown, ThrowOnError>({
+	(options.client ?? client).post<SignUpResponses, SignUpErrors, ThrowOnError>({
 		url: '/auth/signup',
 		...options,
 		headers: {
@@ -36,7 +43,7 @@ export const signUp = <ThrowOnError extends boolean = false>(
 export const signIn = <ThrowOnError extends boolean = false>(
 	options: Options<SignInData, ThrowOnError>
 ) =>
-	(options.client ?? client).post<SignInResponses, unknown, ThrowOnError>({
+	(options.client ?? client).post<SignInResponses, SignInErrors, ThrowOnError>({
 		url: '/auth/signin',
 		...options,
 		headers: {

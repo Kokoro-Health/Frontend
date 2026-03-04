@@ -4,22 +4,29 @@ export type ClientOptions = {
 	baseUrl: 'http://localhost:8080' | (string & {});
 };
 
-export type SignUpRequestDto = {
-	firstName?: string;
-	middleName?: string;
-	lastName?: string;
-	email?: string;
-	password?: string;
+/**
+ * Standard error structure
+ */
+export type ErrorResponse = {
+	message: string;
 };
 
-export type AuthResponseDto = {
-	token?: string;
-	expiresIn?: number;
+export type SignUpRequestDto = {
+	firstName: string;
+	middleName: string;
+	lastName: string;
+	email: string;
+	password: string;
+};
+
+export type Unit = {
+	[key: string]: unknown;
 };
 
 export type SignInRequestDto = {
-	email?: string;
-	password?: string;
+	email: string;
+	password: string;
+	rememberMe: boolean;
 };
 
 export type SignUpData = {
@@ -29,11 +36,20 @@ export type SignUpData = {
 	url: '/auth/signup';
 };
 
+export type SignUpErrors = {
+	/**
+	 * Bad Request
+	 */
+	400: ErrorResponse;
+};
+
+export type SignUpError = SignUpErrors[keyof SignUpErrors];
+
 export type SignUpResponses = {
 	/**
 	 * OK
 	 */
-	200: AuthResponseDto;
+	200: Unit;
 };
 
 export type SignUpResponse = SignUpResponses[keyof SignUpResponses];
@@ -45,11 +61,20 @@ export type SignInData = {
 	url: '/auth/signin';
 };
 
+export type SignInErrors = {
+	/**
+	 * Bad Request
+	 */
+	400: ErrorResponse;
+};
+
+export type SignInError = SignInErrors[keyof SignInErrors];
+
 export type SignInResponses = {
 	/**
 	 * OK
 	 */
-	200: AuthResponseDto;
+	200: Unit;
 };
 
 export type SignInResponse = SignInResponses[keyof SignInResponses];

@@ -8,8 +8,7 @@
 		LayoutDashboard,
 		MessageSquare,
 		Settings,
-		LogOut,
-		User
+		LogOut
 	} from '@lucide/svelte';
 	import { slide, fade } from 'svelte/transition';
 
@@ -63,7 +62,6 @@
 	];
 
 	const accountLinks = [
-		{ label: 'Profile', href: '/profile', icon: User },
 		{ label: 'Settings', href: '/settings', icon: Settings },
 		{ label: 'Log out', href: '/logout', icon: LogOut }
 	];

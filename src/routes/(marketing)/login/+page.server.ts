@@ -7,6 +7,6 @@ export const load: PageServerLoad = async ({ parent }) => {
 	await parent().then((res) => {
 		profile = res.profile;
 	});
-	new AuthGuardBuilder(profile).guestOnly('/profile').build().validate();
+	new AuthGuardBuilder(profile).guestOnly('/app').build().validate();
 	return {};
 };

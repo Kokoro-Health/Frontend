@@ -17,6 +17,7 @@ export type SignUpRequestDto = {
 	lastName: string;
 	email: string;
 	password: string;
+	tosAccepted: boolean;
 };
 
 export type Unit = {
@@ -109,8 +110,12 @@ export type LogoutResponses = {
 	/**
 	 * OK
 	 */
-	200: unknown;
+	200: {
+		[key: string]: unknown;
+	};
 };
+
+export type LogoutResponse = LogoutResponses[keyof LogoutResponses];
 
 export type GetMyProfileData = {
 	body?: never;

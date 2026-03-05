@@ -3,9 +3,7 @@
 	import { onMount } from 'svelte';
 
 	onMount(() => {
-		setTimeout(async () => {
-			performLogout();
-		}, 3000);
+		performLogout();
 	});
 </script>
 

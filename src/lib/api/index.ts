@@ -12,6 +12,7 @@ export type {
 	LogoutData,
 	LogoutError,
 	LogoutErrors,
+	LogoutResponse,
 	LogoutResponses,
 	ProfileResponseDto,
 	SignInData,

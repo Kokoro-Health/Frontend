@@ -2,74 +2,42 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type {
-	GetMyProfileData,
-	GetMyProfileErrors,
-	GetMyProfileResponses,
-	LogoutData,
-	LogoutErrors,
-	LogoutResponses,
-	SignInData,
-	SignInErrors,
-	SignInResponses,
-	SignUpData,
-	SignUpErrors,
-	SignUpResponses
-} from './types.gen';
+import type { GetEnergyInfoData, GetEnergyInfoErrors, GetEnergyInfoResponses, GetMyProfileData, GetMyProfileErrors, GetMyProfileResponses, LogoutData, LogoutErrors, LogoutResponses, SignInData, SignInErrors, SignInResponses, SignUpData, SignUpErrors, SignUpResponses } from './types.gen';
 
-export type Options<
-	TData extends TDataShape = TDataShape,
-	ThrowOnError extends boolean = boolean
-> = Options2<TData, ThrowOnError> & {
-	/**
-	 * You can provide a client instance returned by `createClient()` instead of
-	 * individual options. This might be also useful if you want to implement a
-	 * custom client.
-	 */
-	client?: Client;
-	/**
-	 * You can pass arbitrary values through the `meta` object. This can be
-	 * used to access values that aren't defined as part of the SDK function.
-	 */
-	meta?: Record<string, unknown>;
+export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
+    /**
+     * You can provide a client instance returned by `createClient()` instead of
+     * individual options. This might be also useful if you want to implement a
+     * custom client.
+     */
+    client?: Client;
+    /**
+     * You can pass arbitrary values through the `meta` object. This can be
+     * used to access values that aren't defined as part of the SDK function.
+     */
+    meta?: Record<string, unknown>;
 };
 
-export const signUp = <ThrowOnError extends boolean = false>(
-	options: Options<SignUpData, ThrowOnError>
-) =>
-	(options.client ?? client).post<SignUpResponses, SignUpErrors, ThrowOnError>({
-		url: '/auth/signup',
-		...options,
-		headers: {
-			'Content-Type': 'application/json',
-			...options.headers
-		}
-	});
+export const signUp = <ThrowOnError extends boolean = false>(options: Options<SignUpData, ThrowOnError>) => (options.client ?? client).post<SignUpResponses, SignUpErrors, ThrowOnError>({
+    url: '/auth/signup',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
-export const signIn = <ThrowOnError extends boolean = false>(
-	options: Options<SignInData, ThrowOnError>
-) =>
-	(options.client ?? client).post<SignInResponses, SignInErrors, ThrowOnError>({
-		url: '/auth/signin',
-		...options,
-		headers: {
-			'Content-Type': 'application/json',
-			...options.headers
-		}
-	});
+export const signIn = <ThrowOnError extends boolean = false>(options: Options<SignInData, ThrowOnError>) => (options.client ?? client).post<SignInResponses, SignInErrors, ThrowOnError>({
+    url: '/auth/signin',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
-export const logout = <ThrowOnError extends boolean = false>(
-	options?: Options<LogoutData, ThrowOnError>
-) =>
-	(options?.client ?? client).post<LogoutResponses, LogoutErrors, ThrowOnError>({
-		url: '/auth/logout',
-		...options
-	});
+export const logout = <ThrowOnError extends boolean = false>(options?: Options<LogoutData, ThrowOnError>) => (options?.client ?? client).post<LogoutResponses, LogoutErrors, ThrowOnError>({ url: '/auth/logout', ...options });
 
-export const getMyProfile = <ThrowOnError extends boolean = false>(
-	options?: Options<GetMyProfileData, ThrowOnError>
-) =>
-	(options?.client ?? client).get<GetMyProfileResponses, GetMyProfileErrors, ThrowOnError>({
-		url: '/profile',
-		...options
-	});
+export const getMyProfile = <ThrowOnError extends boolean = false>(options?: Options<GetMyProfileData, ThrowOnError>) => (options?.client ?? client).get<GetMyProfileResponses, GetMyProfileErrors, ThrowOnError>({ url: '/profile', ...options });
+
+export const getEnergyInfo = <ThrowOnError extends boolean = false>(options?: Options<GetEnergyInfoData, ThrowOnError>) => (options?.client ?? client).get<GetEnergyInfoResponses, GetEnergyInfoErrors, ThrowOnError>({ url: '/energy', ...options });

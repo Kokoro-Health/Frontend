@@ -1,5 +1,7 @@
 # Kokoro frontend
 
+[TODO](/To-Do.md)
+
 Stack:
 
 - SvelteKit

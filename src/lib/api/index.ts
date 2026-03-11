@@ -4,10 +4,12 @@ export {
 	addEnergyEntry,
 	getEnergyInfo,
 	getMyProfile,
+	getSettings,
 	logout,
 	type Options,
 	signIn,
-	signUp
+	signUp,
+	updateSettings
 } from './sdk.gen';
 export type {
 	AddEnergyEntryData,
@@ -29,12 +31,19 @@ export type {
 	GetMyProfileErrors,
 	GetMyProfileResponse,
 	GetMyProfileResponses,
+	GetSettingsData,
+	GetSettingsError,
+	GetSettingsErrors,
+	GetSettingsResponse,
+	GetSettingsResponses,
 	LogoutData,
 	LogoutError,
 	LogoutErrors,
 	LogoutResponse,
 	LogoutResponses,
 	ProfileResponseDto,
+	SettingsRequestDto,
+	SettingsResponseDto,
 	SignInData,
 	SignInError,
 	SignInErrors,
@@ -47,5 +56,10 @@ export type {
 	SignUpRequestDto,
 	SignUpResponse,
 	SignUpResponses,
-	Unit
+	Unit,
+	UpdateSettingsData,
+	UpdateSettingsError,
+	UpdateSettingsErrors,
+	UpdateSettingsResponse,
+	UpdateSettingsResponses
 } from './types.gen';

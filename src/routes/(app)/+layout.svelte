@@ -4,5 +4,7 @@
 	let { children } = $props();
 </script>
 
-{@render children()}
+<div class="overflow-x-hidden overflow-y-auto p-safe">
+	{@render children()}
+</div>
 <MobileDock />

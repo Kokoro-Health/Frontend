@@ -5,7 +5,7 @@
 	let { data } = $props();
 </script>
 
-<div class="min-h-screen w-full flex-2 space-y-3 overflow-y-auto px-3 py-18">
+<div class="min-h-screen w-full flex-2 space-y-3 overflow-y-auto">
 	<EnergyTracker info={data.energyInfo!!} />
 	<DailyJournal />
 </div>

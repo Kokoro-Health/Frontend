@@ -12,6 +12,9 @@ import type {
 	GetMyProfileData,
 	GetMyProfileErrors,
 	GetMyProfileResponses,
+	GetSettingsData,
+	GetSettingsErrors,
+	GetSettingsResponses,
 	LogoutData,
 	LogoutErrors,
 	LogoutResponses,
@@ -20,7 +23,10 @@ import type {
 	SignInResponses,
 	SignUpData,
 	SignUpErrors,
-	SignUpResponses
+	SignUpResponses,
+	UpdateSettingsData,
+	UpdateSettingsErrors,
+	UpdateSettingsResponses
 } from './types.gen';
 
 export type Options<
@@ -39,6 +45,26 @@ export type Options<
 	 */
 	meta?: Record<string, unknown>;
 };
+
+export const getSettings = <ThrowOnError extends boolean = false>(
+	options?: Options<GetSettingsData, ThrowOnError>
+) =>
+	(options?.client ?? client).get<GetSettingsResponses, GetSettingsErrors, ThrowOnError>({
+		url: '/user/settings',
+		...options
+	});
+
+export const updateSettings = <ThrowOnError extends boolean = false>(
+	options: Options<UpdateSettingsData, ThrowOnError>
+) =>
+	(options.client ?? client).put<UpdateSettingsResponses, UpdateSettingsErrors, ThrowOnError>({
+		url: '/user/settings',
+		...options,
+		headers: {
+			'Content-Type': 'application/json',
+			...options.headers
+		}
+	});
 
 export const addEnergyEntry = <ThrowOnError extends boolean = false>(
 	options: Options<AddEnergyEntryData, ThrowOnError>
@@ -88,7 +114,7 @@ export const getMyProfile = <ThrowOnError extends boolean = false>(
 	options?: Options<GetMyProfileData, ThrowOnError>
 ) =>
 	(options?.client ?? client).get<GetMyProfileResponses, GetMyProfileErrors, ThrowOnError>({
-		url: '/profile',
+		url: '/user/profile',
 		...options
 	});
 

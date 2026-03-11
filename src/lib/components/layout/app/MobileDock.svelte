@@ -18,7 +18,7 @@
 	const active = $derived(links.find((it) => page.url.pathname.startsWith(it.href)) || links[0]);
 </script>
 
-<div class="pb-safe dock border-t border-base-300 bg-base-200">
+<div class="dock z-100 bg-base-200 pb-safe">
 	{#each links as link}
 		{@const Icon = link.icon}
 		<a href={link.href} class="dock-item {active.name === link.name ? 'dock-active' : ''}">

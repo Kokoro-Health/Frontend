@@ -11,6 +11,23 @@ export type ErrorResponse = {
 	message: string;
 };
 
+export type SettingsRequestDto = {
+	theme: 'LIGHT';
+	language: 'ENGLISH';
+	marketingEmails: boolean;
+	securityAlerts: boolean;
+	reminderEmails: boolean;
+};
+
+export type SettingsResponseDto = {
+	theme: 'LIGHT';
+	language: 'ENGLISH';
+	marketingEmails: boolean;
+	securityAlerts: boolean;
+	reminderEmails: boolean;
+	updatedAt: string;
+};
+
 export type EnergyRequestDto = {
 	amount: number;
 };
@@ -48,6 +65,56 @@ export type EnergyInfoDto = {
 	energy: number;
 	nextEntryAllowed: string;
 };
+
+export type GetSettingsData = {
+	body?: never;
+	path?: never;
+	query?: never;
+	url: '/user/settings';
+};
+
+export type GetSettingsErrors = {
+	/**
+	 * Bad Request
+	 */
+	400: ErrorResponse;
+};
+
+export type GetSettingsError = GetSettingsErrors[keyof GetSettingsErrors];
+
+export type GetSettingsResponses = {
+	/**
+	 * OK
+	 */
+	200: SettingsResponseDto;
+};
+
+export type GetSettingsResponse = GetSettingsResponses[keyof GetSettingsResponses];
+
+export type UpdateSettingsData = {
+	body: SettingsRequestDto;
+	path?: never;
+	query?: never;
+	url: '/user/settings';
+};
+
+export type UpdateSettingsErrors = {
+	/**
+	 * Bad Request
+	 */
+	400: ErrorResponse;
+};
+
+export type UpdateSettingsError = UpdateSettingsErrors[keyof UpdateSettingsErrors];
+
+export type UpdateSettingsResponses = {
+	/**
+	 * OK
+	 */
+	200: SettingsResponseDto;
+};
+
+export type UpdateSettingsResponse = UpdateSettingsResponses[keyof UpdateSettingsResponses];
 
 export type AddEnergyEntryData = {
 	body: EnergyRequestDto;
@@ -157,7 +224,7 @@ export type GetMyProfileData = {
 	body?: never;
 	path?: never;
 	query?: never;
-	url: '/profile';
+	url: '/user/profile';
 };
 
 export type GetMyProfileErrors = {

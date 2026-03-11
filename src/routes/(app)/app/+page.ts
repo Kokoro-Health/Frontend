@@ -3,7 +3,8 @@ import { getEnergyInfo, type EnergyInfoDto } from '$lib/api';
 
 export const load: PageLoad = async () => {
 	let energyInfo: EnergyInfoDto = {
-		energy: 0
+		energy: 0,
+		nextEntryAllowed: ''
 	};
 
 	await getEnergyInfo().then((res) => {

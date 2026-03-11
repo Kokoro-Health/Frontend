@@ -1,1 +1,1 @@
-<h1 class="text-2xl">Welcome to Kokoro</h1>
+<h1 class="text-center text-2xl">Welcome to Kokoro</h1>

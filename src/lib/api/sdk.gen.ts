@@ -2,182 +2,84 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type {
-	AddEnergyEntryData,
-	AddEnergyEntryErrors,
-	AddEnergyEntryResponses,
-	DisableMfaData,
-	DisableMfaErrors,
-	DisableMfaResponses,
-	GetEnergyInfoData,
-	GetEnergyInfoErrors,
-	GetEnergyInfoResponses,
-	GetMfaSettingsData,
-	GetMfaSettingsErrors,
-	GetMfaSettingsResponses,
-	GetMyProfileData,
-	GetMyProfileErrors,
-	GetMyProfileResponses,
-	GetSettingsData,
-	GetSettingsErrors,
-	GetSettingsResponses,
-	LogoutData,
-	LogoutErrors,
-	LogoutResponses,
-	SetupMfaData,
-	SetupMfaErrors,
-	SetupMfaResponses,
-	SignInData,
-	SignInErrors,
-	SignInResponses,
-	SignUpData,
-	SignUpErrors,
-	SignUpResponses,
-	UpdateSettingsData,
-	UpdateSettingsErrors,
-	UpdateSettingsResponses,
-	VerifyMfaCodeAndEnableData,
-	VerifyMfaCodeAndEnableErrors,
-	VerifyMfaCodeAndEnableResponses
-} from './types.gen';
+import type { AddEnergyEntryData, AddEnergyEntryErrors, AddEnergyEntryResponses, DisableMfaData, DisableMfaErrors, DisableMfaResponses, GetEnergyInfoData, GetEnergyInfoErrors, GetEnergyInfoResponses, GetMfaSettingsData, GetMfaSettingsErrors, GetMfaSettingsResponses, GetMyProfileData, GetMyProfileErrors, GetMyProfileResponses, GetSettingsData, GetSettingsErrors, GetSettingsResponses, LogoutData, LogoutErrors, LogoutResponses, SetupMfaData, SetupMfaErrors, SetupMfaResponses, SignInData, SignInErrors, SignInResponses, SignUpData, SignUpErrors, SignUpResponses, UpdateSettingsData, UpdateSettingsErrors, UpdateSettingsResponses, VerifyMfaCodeAndEnableData, VerifyMfaCodeAndEnableErrors, VerifyMfaCodeAndEnableResponses } from './types.gen';
 
-export type Options<
-	TData extends TDataShape = TDataShape,
-	ThrowOnError extends boolean = boolean
-> = Options2<TData, ThrowOnError> & {
-	/**
-	 * You can provide a client instance returned by `createClient()` instead of
-	 * individual options. This might be also useful if you want to implement a
-	 * custom client.
-	 */
-	client?: Client;
-	/**
-	 * You can pass arbitrary values through the `meta` object. This can be
-	 * used to access values that aren't defined as part of the SDK function.
-	 */
-	meta?: Record<string, unknown>;
+export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
+    /**
+     * You can provide a client instance returned by `createClient()` instead of
+     * individual options. This might be also useful if you want to implement a
+     * custom client.
+     */
+    client?: Client;
+    /**
+     * You can pass arbitrary values through the `meta` object. This can be
+     * used to access values that aren't defined as part of the SDK function.
+     */
+    meta?: Record<string, unknown>;
 };
 
-export const getSettings = <ThrowOnError extends boolean = false>(
-	options?: Options<GetSettingsData, ThrowOnError>
-) =>
-	(options?.client ?? client).get<GetSettingsResponses, GetSettingsErrors, ThrowOnError>({
-		url: '/user/settings',
-		...options
-	});
+export const getSettings = <ThrowOnError extends boolean = false>(options?: Options<GetSettingsData, ThrowOnError>) => (options?.client ?? client).get<GetSettingsResponses, GetSettingsErrors, ThrowOnError>({ url: '/user/settings', ...options });
 
-export const updateSettings = <ThrowOnError extends boolean = false>(
-	options: Options<UpdateSettingsData, ThrowOnError>
-) =>
-	(options.client ?? client).put<UpdateSettingsResponses, UpdateSettingsErrors, ThrowOnError>({
-		url: '/user/settings',
-		...options,
-		headers: {
-			'Content-Type': 'application/json',
-			...options.headers
-		}
-	});
+export const updateSettings = <ThrowOnError extends boolean = false>(options: Options<UpdateSettingsData, ThrowOnError>) => (options.client ?? client).put<UpdateSettingsResponses, UpdateSettingsErrors, ThrowOnError>({
+    url: '/user/settings',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
-export const addEnergyEntry = <ThrowOnError extends boolean = false>(
-	options: Options<AddEnergyEntryData, ThrowOnError>
-) =>
-	(options.client ?? client).post<AddEnergyEntryResponses, AddEnergyEntryErrors, ThrowOnError>({
-		url: '/energy/add',
-		...options,
-		headers: {
-			'Content-Type': 'application/json',
-			...options.headers
-		}
-	});
+export const addEnergyEntry = <ThrowOnError extends boolean = false>(options: Options<AddEnergyEntryData, ThrowOnError>) => (options.client ?? client).post<AddEnergyEntryResponses, AddEnergyEntryErrors, ThrowOnError>({
+    url: '/energy/add',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
-export const signUp = <ThrowOnError extends boolean = false>(
-	options: Options<SignUpData, ThrowOnError>
-) =>
-	(options.client ?? client).post<SignUpResponses, SignUpErrors, ThrowOnError>({
-		url: '/auth/signup',
-		...options,
-		headers: {
-			'Content-Type': 'application/json',
-			...options.headers
-		}
-	});
+export const signUp = <ThrowOnError extends boolean = false>(options: Options<SignUpData, ThrowOnError>) => (options.client ?? client).post<SignUpResponses, SignUpErrors, ThrowOnError>({
+    url: '/auth/signup',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
-export const signIn = <ThrowOnError extends boolean = false>(
-	options: Options<SignInData, ThrowOnError>
-) =>
-	(options.client ?? client).post<SignInResponses, SignInErrors, ThrowOnError>({
-		url: '/auth/signin',
-		...options,
-		headers: {
-			'Content-Type': 'application/json',
-			...options.headers
-		}
-	});
+export const signIn = <ThrowOnError extends boolean = false>(options: Options<SignInData, ThrowOnError>) => (options.client ?? client).post<SignInResponses, SignInErrors, ThrowOnError>({
+    url: '/auth/signin',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
-export const verifyMfaCodeAndEnable = <ThrowOnError extends boolean = false>(
-	options: Options<VerifyMfaCodeAndEnableData, ThrowOnError>
-) =>
-	(options.client ?? client).post<
-		VerifyMfaCodeAndEnableResponses,
-		VerifyMfaCodeAndEnableErrors,
-		ThrowOnError
-	>({
-		url: '/auth/mfa/verify',
-		...options,
-		headers: {
-			'Content-Type': 'application/json',
-			...options.headers
-		}
-	});
+export const verifyMfaCodeAndEnable = <ThrowOnError extends boolean = false>(options: Options<VerifyMfaCodeAndEnableData, ThrowOnError>) => (options.client ?? client).post<VerifyMfaCodeAndEnableResponses, VerifyMfaCodeAndEnableErrors, ThrowOnError>({
+    url: '/auth/mfa/verify',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
-export const setupMfa = <ThrowOnError extends boolean = false>(
-	options?: Options<SetupMfaData, ThrowOnError>
-) =>
-	(options?.client ?? client).post<SetupMfaResponses, SetupMfaErrors, ThrowOnError>({
-		url: '/auth/mfa/setup',
-		...options
-	});
+export const setupMfa = <ThrowOnError extends boolean = false>(options?: Options<SetupMfaData, ThrowOnError>) => (options?.client ?? client).post<SetupMfaResponses, SetupMfaErrors, ThrowOnError>({ url: '/auth/mfa/setup', ...options });
 
-export const logout = <ThrowOnError extends boolean = false>(
-	options?: Options<LogoutData, ThrowOnError>
-) =>
-	(options?.client ?? client).post<LogoutResponses, LogoutErrors, ThrowOnError>({
-		url: '/auth/logout',
-		...options
-	});
+export const logout = <ThrowOnError extends boolean = false>(options?: Options<LogoutData, ThrowOnError>) => (options?.client ?? client).post<LogoutResponses, LogoutErrors, ThrowOnError>({ url: '/auth/logout', ...options });
 
-export const getMyProfile = <ThrowOnError extends boolean = false>(
-	options?: Options<GetMyProfileData, ThrowOnError>
-) =>
-	(options?.client ?? client).get<GetMyProfileResponses, GetMyProfileErrors, ThrowOnError>({
-		url: '/user/profile',
-		...options
-	});
+export const getMyProfile = <ThrowOnError extends boolean = false>(options?: Options<GetMyProfileData, ThrowOnError>) => (options?.client ?? client).get<GetMyProfileResponses, GetMyProfileErrors, ThrowOnError>({ url: '/user/profile', ...options });
 
-export const getEnergyInfo = <ThrowOnError extends boolean = false>(
-	options?: Options<GetEnergyInfoData, ThrowOnError>
-) =>
-	(options?.client ?? client).get<GetEnergyInfoResponses, GetEnergyInfoErrors, ThrowOnError>({
-		url: '/energy',
-		...options
-	});
+export const getEnergyInfo = <ThrowOnError extends boolean = false>(options?: Options<GetEnergyInfoData, ThrowOnError>) => (options?.client ?? client).get<GetEnergyInfoResponses, GetEnergyInfoErrors, ThrowOnError>({ url: '/energy', ...options });
 
-export const disableMfa = <ThrowOnError extends boolean = false>(
-	options: Options<DisableMfaData, ThrowOnError>
-) =>
-	(options.client ?? client).delete<DisableMfaResponses, DisableMfaErrors, ThrowOnError>({
-		url: '/auth/mfa',
-		...options,
-		headers: {
-			'Content-Type': 'application/json',
-			...options.headers
-		}
-	});
+export const disableMfa = <ThrowOnError extends boolean = false>(options: Options<DisableMfaData, ThrowOnError>) => (options.client ?? client).delete<DisableMfaResponses, DisableMfaErrors, ThrowOnError>({
+    url: '/auth/mfa',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
-export const getMfaSettings = <ThrowOnError extends boolean = false>(
-	options?: Options<GetMfaSettingsData, ThrowOnError>
-) =>
-	(options?.client ?? client).get<GetMfaSettingsResponses, GetMfaSettingsErrors, ThrowOnError>({
-		url: '/auth/mfa',
-		...options
-	});
+export const getMfaSettings = <ThrowOnError extends boolean = false>(options?: Options<GetMfaSettingsData, ThrowOnError>) => (options?.client ?? client).get<GetMfaSettingsResponses, GetMfaSettingsErrors, ThrowOnError>({ url: '/auth/mfa', ...options });

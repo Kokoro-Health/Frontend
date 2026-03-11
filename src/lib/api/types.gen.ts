@@ -19,13 +19,8 @@ export type SettingsRequestDto = {
 	reminderEmails: boolean;
 };
 
-export type SettingsResponseDto = {
-	theme: 'LIGHT';
-	language: 'ENGLISH';
-	marketingEmails: boolean;
-	securityAlerts: boolean;
-	reminderEmails: boolean;
-	updatedAt: string;
+export type Unit = {
+	[key: string]: unknown;
 };
 
 export type EnergyRequestDto = {
@@ -41,14 +36,33 @@ export type SignUpRequestDto = {
 	tosAccepted: boolean;
 };
 
-export type Unit = {
-	[key: string]: unknown;
-};
-
 export type SignInRequestDto = {
 	email: string;
 	password: string;
 	rememberMe: boolean;
+	mfaCode: string;
+};
+
+export type SignInResponseDto = {
+	mfaRequired: boolean;
+};
+
+export type VerifyMfaRequest = {
+	code: string;
+};
+
+export type SetupMfaResponse = {
+	secret: string;
+	qrCodeBase64: string;
+};
+
+export type SettingsResponseDto = {
+	theme: 'LIGHT';
+	language: 'ENGLISH';
+	marketingEmails: boolean;
+	securityAlerts: boolean;
+	reminderEmails: boolean;
+	updatedAt: string;
 };
 
 export type ProfileResponseDto = {
@@ -64,6 +78,14 @@ export type ProfileResponseDto = {
 export type EnergyInfoDto = {
 	energy: number;
 	nextEntryAllowed: string;
+};
+
+export type MfaSettings = {
+	mfaEnabled: boolean;
+};
+
+export type DisableMfaRequest = {
+	password: string;
 };
 
 export type GetSettingsData = {
@@ -111,7 +133,7 @@ export type UpdateSettingsResponses = {
 	/**
 	 * OK
 	 */
-	200: SettingsResponseDto;
+	200: Unit;
 };
 
 export type UpdateSettingsResponse = UpdateSettingsResponses[keyof UpdateSettingsResponses];
@@ -188,10 +210,62 @@ export type SignInResponses = {
 	/**
 	 * OK
 	 */
-	200: Unit;
+	200: SignInResponseDto;
 };
 
 export type SignInResponse = SignInResponses[keyof SignInResponses];
+
+export type VerifyMfaCodeAndEnableData = {
+	body: VerifyMfaRequest;
+	path?: never;
+	query?: never;
+	url: '/auth/mfa/verify';
+};
+
+export type VerifyMfaCodeAndEnableErrors = {
+	/**
+	 * Bad Request
+	 */
+	400: ErrorResponse;
+};
+
+export type VerifyMfaCodeAndEnableError =
+	VerifyMfaCodeAndEnableErrors[keyof VerifyMfaCodeAndEnableErrors];
+
+export type VerifyMfaCodeAndEnableResponses = {
+	/**
+	 * OK
+	 */
+	200: Unit;
+};
+
+export type VerifyMfaCodeAndEnableResponse =
+	VerifyMfaCodeAndEnableResponses[keyof VerifyMfaCodeAndEnableResponses];
+
+export type SetupMfaData = {
+	body?: never;
+	path?: never;
+	query?: never;
+	url: '/auth/mfa/setup';
+};
+
+export type SetupMfaErrors = {
+	/**
+	 * Bad Request
+	 */
+	400: ErrorResponse;
+};
+
+export type SetupMfaError = SetupMfaErrors[keyof SetupMfaErrors];
+
+export type SetupMfaResponses = {
+	/**
+	 * OK
+	 */
+	200: SetupMfaResponse;
+};
+
+export type SetupMfaResponse2 = SetupMfaResponses[keyof SetupMfaResponses];
 
 export type LogoutData = {
 	body?: never;
@@ -269,3 +343,53 @@ export type GetEnergyInfoResponses = {
 };
 
 export type GetEnergyInfoResponse = GetEnergyInfoResponses[keyof GetEnergyInfoResponses];
+
+export type DisableMfaData = {
+	body: DisableMfaRequest;
+	path?: never;
+	query?: never;
+	url: '/auth/mfa';
+};
+
+export type DisableMfaErrors = {
+	/**
+	 * Bad Request
+	 */
+	400: ErrorResponse;
+};
+
+export type DisableMfaError = DisableMfaErrors[keyof DisableMfaErrors];
+
+export type DisableMfaResponses = {
+	/**
+	 * OK
+	 */
+	200: Unit;
+};
+
+export type DisableMfaResponse = DisableMfaResponses[keyof DisableMfaResponses];
+
+export type GetMfaSettingsData = {
+	body?: never;
+	path?: never;
+	query?: never;
+	url: '/auth/mfa';
+};
+
+export type GetMfaSettingsErrors = {
+	/**
+	 * Bad Request
+	 */
+	400: ErrorResponse;
+};
+
+export type GetMfaSettingsError = GetMfaSettingsErrors[keyof GetMfaSettingsErrors];
+
+export type GetMfaSettingsResponses = {
+	/**
+	 * OK
+	 */
+	200: MfaSettings;
+};
+
+export type GetMfaSettingsResponse = GetMfaSettingsResponses[keyof GetMfaSettingsResponses];

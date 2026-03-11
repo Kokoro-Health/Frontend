@@ -99,8 +99,16 @@
 				<span class="text-2xl font-semibold">Settings</span>
 				<span class="text-sm opacity-70">Manage your account preferences and notifications.</span>
 			</div>
+			<div class="flex items-center justify-end gap-3 text-sm opacity-80">
+				{#if loading}
+					<div class="loading loading-sm"></div>
+				{/if}
+				<span>{hasChanges ? 'Autosave pending...' : 'All changes saved.'}</span>
+			</div>
 		</div>
-
+		{#if error}
+			<div class="card rounded-box bg-error p-4 text-error-content">{error}</div>
+		{/if}
 		<div class="card rounded-box bg-base-200">
 			<div class="card-body gap-5 p-5">
 				<span class="text-lg font-semibold">Notifications</span>
@@ -148,16 +156,15 @@
 			</div>
 		</div>
 
-		{#if error}
-			<div class="card rounded-box bg-error p-4 text-error-content">{error}</div>
-		{/if}
-
-		<div class="sticky bottom-0 z-10 rounded-box bg-base-100/90 p-3 backdrop-blur">
-			<div class="flex items-center justify-end gap-3 text-sm opacity-80">
-				{#if loading}
-					<div class="loading loading-sm"></div>
-				{/if}
-				<span>{hasChanges ? 'Autosave pending...' : 'All changes saved.'}</span>
+		<div class="card rounded-box bg-base-200">
+			<div class="card-body gap-4 p-5">
+				<span class="text-lg font-semibold">Account Security</span>
+				<div class="flex flex-col space-y-3">
+					<a class="btn w-full btn-primary" href="/settings/mfa"
+						>Manage Multi-Factor Authentication</a
+					>
+					<a class="btn w-full btn-error" href="/logout">Logout</a>
+				</div>
 			</div>
 		</div>
 	</div>

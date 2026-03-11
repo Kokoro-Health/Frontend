@@ -6,9 +6,15 @@ import type {
 	AddEnergyEntryData,
 	AddEnergyEntryErrors,
 	AddEnergyEntryResponses,
+	DisableMfaData,
+	DisableMfaErrors,
+	DisableMfaResponses,
 	GetEnergyInfoData,
 	GetEnergyInfoErrors,
 	GetEnergyInfoResponses,
+	GetMfaSettingsData,
+	GetMfaSettingsErrors,
+	GetMfaSettingsResponses,
 	GetMyProfileData,
 	GetMyProfileErrors,
 	GetMyProfileResponses,
@@ -18,6 +24,9 @@ import type {
 	LogoutData,
 	LogoutErrors,
 	LogoutResponses,
+	SetupMfaData,
+	SetupMfaErrors,
+	SetupMfaResponses,
 	SignInData,
 	SignInErrors,
 	SignInResponses,
@@ -26,7 +35,10 @@ import type {
 	SignUpResponses,
 	UpdateSettingsData,
 	UpdateSettingsErrors,
-	UpdateSettingsResponses
+	UpdateSettingsResponses,
+	VerifyMfaCodeAndEnableData,
+	VerifyMfaCodeAndEnableErrors,
+	VerifyMfaCodeAndEnableResponses
 } from './types.gen';
 
 export type Options<
@@ -102,6 +114,30 @@ export const signIn = <ThrowOnError extends boolean = false>(
 		}
 	});
 
+export const verifyMfaCodeAndEnable = <ThrowOnError extends boolean = false>(
+	options: Options<VerifyMfaCodeAndEnableData, ThrowOnError>
+) =>
+	(options.client ?? client).post<
+		VerifyMfaCodeAndEnableResponses,
+		VerifyMfaCodeAndEnableErrors,
+		ThrowOnError
+	>({
+		url: '/auth/mfa/verify',
+		...options,
+		headers: {
+			'Content-Type': 'application/json',
+			...options.headers
+		}
+	});
+
+export const setupMfa = <ThrowOnError extends boolean = false>(
+	options?: Options<SetupMfaData, ThrowOnError>
+) =>
+	(options?.client ?? client).post<SetupMfaResponses, SetupMfaErrors, ThrowOnError>({
+		url: '/auth/mfa/setup',
+		...options
+	});
+
 export const logout = <ThrowOnError extends boolean = false>(
 	options?: Options<LogoutData, ThrowOnError>
 ) =>
@@ -123,5 +159,25 @@ export const getEnergyInfo = <ThrowOnError extends boolean = false>(
 ) =>
 	(options?.client ?? client).get<GetEnergyInfoResponses, GetEnergyInfoErrors, ThrowOnError>({
 		url: '/energy',
+		...options
+	});
+
+export const disableMfa = <ThrowOnError extends boolean = false>(
+	options: Options<DisableMfaData, ThrowOnError>
+) =>
+	(options.client ?? client).delete<DisableMfaResponses, DisableMfaErrors, ThrowOnError>({
+		url: '/auth/mfa',
+		...options,
+		headers: {
+			'Content-Type': 'application/json',
+			...options.headers
+		}
+	});
+
+export const getMfaSettings = <ThrowOnError extends boolean = false>(
+	options?: Options<GetMfaSettingsData, ThrowOnError>
+) =>
+	(options?.client ?? client).get<GetMfaSettingsResponses, GetMfaSettingsErrors, ThrowOnError>({
+		url: '/auth/mfa',
 		...options
 	});

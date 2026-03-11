@@ -25,5 +25,10 @@ vite.config.ts.timestamp-*
 # Openapi-ts
 openapi-ts-error-*
 
-# Capacitor
-android/
+# Android specific
+android/app/build/
+android/.gradle/
+android/local.properties
+android/captures/
+android/.idea/
+android/*.iml

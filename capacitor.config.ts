@@ -5,8 +5,9 @@ const config: CapacitorConfig = {
   appName: 'Kokoro',
   webDir: 'build',
   server: {
-    url: "http://10.238.69.191:5173",
-    cleartext: true
+    url: "http://10.0.2.2:5173",
+    cleartext: true,
+    allowNavigation: ["10.238.69.191"]
   }
 };
 

@@ -1,5 +1,6 @@
 import { client } from '$lib/api/client.gen';
 import type { LayoutLoad } from './$types';
+export const prerender = true;
 
 export const load: LayoutLoad = async ({ data }) => {
 	if (data.token) {

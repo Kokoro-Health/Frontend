@@ -114,7 +114,7 @@
 			<label class="label w-full">
 				<input type="checkbox" bind:checked={signUpData.tosAccepted} class="checkbox" />
 				<span
-					>I accept the <a href="/tos" class="link link-hover" target="_blank">Terms of Service</a
+					>I accept the <a href="#" class="link link-hover" target="_blank">Terms of Service</a
 					>.</span
 				>
 			</label>

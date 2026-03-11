@@ -39,11 +39,11 @@
 	});
 
 	const navLinks = [
-		{ label: 'Features', href: '/features' },
-		{ label: 'About', href: '/about' },
-		{ label: 'Pricing', href: '/pricing' },
-		{ label: 'Blog', href: '/blog' },
-		{ label: 'Contact', href: '/contact' }
+		{ label: 'Features', href: '#' },
+		{ label: 'About', href: '#' },
+		{ label: 'Pricing', href: '#' },
+		{ label: 'Blog', href: '#' },
+		{ label: 'Contact', href: '#' }
 	];
 
 	const platformLinks = [

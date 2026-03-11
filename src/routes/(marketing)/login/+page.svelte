@@ -159,7 +159,7 @@
 					Remember me
 				</label>
 				<span class="w-full text-end">
-					<a class="link link-hover" href="/reset-password">Forgot password</a>
+					<a class="link link-hover" href="/#">Forgot password</a>
 				</span>
 			</div>
 		{/if}

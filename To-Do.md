@@ -11,3 +11,5 @@
 5. Refactor & Continue with the project.
 
 6. Get a mac-book from somewhere, install XCode and test there aswell.
+
+7. Once the MVP is done, refactor and setup a good devops environment (Jira, hosting etc...)

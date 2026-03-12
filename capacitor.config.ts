@@ -5,10 +5,10 @@ const config: CapacitorConfig = {
   appName: 'Kokoro',
   webDir: 'build',
   server: {
-    url: "http://10.0.2.2:5173",
+    url: process.env.CAPACITOR_SERVER_URL || 'http://localhost:5173',
     cleartext: true,
-    allowNavigation: ["10.238.69.191"]
-  }
+    allowNavigation: [process.env.CAPACITOR_ALLOW_NAV || 'localhost'],
+  },
 };
 
 export default config;

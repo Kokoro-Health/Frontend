@@ -1,14 +1,22 @@
-import type { CapacitorConfig } from '@capacitor/cli';
+import { CapacitorConfig } from '@capacitor/cli';
+
+const dev = process.env.NODE_ENV !== 'production';
+
+const getDevUrl = () => {
+	const lanIp = process.env.DEV_HOST ?? '10.0.2.2';
+	return `http://${lanIp}:5173`;
+};
 
 const config: CapacitorConfig = {
 	appId: 'health.kokoro',
 	appName: 'Kokoro',
 	webDir: 'build',
-	server: {
-		url: process.env.CAPACITOR_SERVER_URL || 'http://localhost:5173',
-		cleartext: true,
-		allowNavigation: [process.env.CAPACITOR_ALLOW_NAV || 'localhost', '10.0.2.2:8080']
-	}
+	server: dev
+		? {
+				url: getDevUrl(),
+				cleartext: true
+			}
+		: undefined
 };
 
 export default config;

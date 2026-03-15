@@ -1,5 +1,4 @@
 import { getMyProfile, type ProfileResponseDto } from '$lib/api';
-import { Preferences } from '@capacitor/preferences';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ cookies }) => {

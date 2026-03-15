@@ -13,7 +13,6 @@
 	let showPassword = $state(false);
 	let error: string | null = $state(null);
 	let loading = $state(false);
-	let loginEnabled = $derived(inputsValid());
 	let emailInput: HTMLInputElement | null = $state(null);
 	let mfaRequired = $state(false);
 	let mfaDigits = $state(['', '', '', '', '', '']);
@@ -76,56 +75,66 @@
 			return false;
 		return true;
 	}
+
+	const loginEnabled = $derived(inputsValid() && !loading);
 </script>
 
-<div class="flex min-h-screen w-full items-center justify-center">
+<div class="flex min-h-screen w-full items-center justify-center py-6">
 	<form
 		onsubmit={(e) => submitForm(e)}
-		class="card flex w-full max-w-xl flex-col space-y-5 rounded-box bg-base-200 p-8"
+		class="card flex w-full max-w-lg flex-col gap-6 rounded-xl p-6 sm:p-8"
 	>
-		<div class="mb-3 flex flex-col space-y-3">
-			<span class="text-2xl font-semibold">Welcome back!</span>
-			<span>Are you new to Kokoro? <a class="link" href="/signup">Sign up here.</a></span>
+		<div class="flex flex-col items-center text-center">
+			<h1 class="text-2xl font-bold tracking-tight text-base-content sm:text-3xl">Welcome back!</h1>
+			<p class="mt-2 text-sm text-base-content/70">Sign in to your account.</p>
 		</div>
-		<div class="flex flex-col space-y-3">
-			<label class="input w-full">
-				<span class="label"><MailIcon size={iconSize} /></span>
+
+		<div class="flex flex-col gap-4">
+			<label
+				class="input-bordered input flex items-center gap-2 focus-within:ring-2 focus-within:ring-primary"
+			>
+				<MailIcon size={iconSize} class="shrink-0 text-base-content/60" />
 				<input
 					type="email"
 					bind:this={emailInput}
 					bind:value={signInData.email}
 					disabled={mfaRequired}
 					placeholder="someone@example.com"
+					class="grow bg-transparent outline-none"
 				/>
 			</label>
-			<label class="input w-full">
-				<span class="label"><KeyRoundIcon size={iconSize} /></span>
+
+			<label
+				class="input-bordered input flex items-center gap-2 focus-within:ring-2 focus-within:ring-primary"
+			>
+				<KeyRoundIcon size={iconSize} class="shrink-0 text-base-content/60" />
 				<input
 					type={showPassword ? 'text' : 'password'}
 					bind:value={signInData.password}
 					disabled={mfaRequired}
 					placeholder="Password"
+					class="grow bg-transparent outline-none"
 				/>
-				<span class="label">
-					<button
-						type="button"
-						class="hover:cursor-pointer"
-						onclick={() => (showPassword = !showPassword)}
-					>
-						{#if showPassword}
-							<EyeIcon size={iconSize} />
-						{:else}
-							<EyeOffIcon size={iconSize} />
-						{/if}
-					</button>
-				</span>
+				<button
+					type="button"
+					onclick={() => (showPassword = !showPassword)}
+					class="btn shrink-0 btn-ghost btn-xs"
+					aria-label={showPassword ? 'Hide password' : 'Show password'}
+				>
+					{#if showPassword}
+						<EyeIcon size={iconSize} />
+					{:else}
+						<EyeOffIcon size={iconSize} />
+					{/if}
+				</button>
 			</label>
 		</div>
+
 		{#if mfaRequired}
 			<div class="flex flex-col items-center gap-4 py-2">
 				<div class="space-y-1 text-center">
 					<p class="font-semibold">Two-factor authentication</p>
-					<p class="text-sm text-base-content/50">
+					<p class="text-sm text-base-content/70">
 						Enter the 6-digit code from your authenticator app.
 					</p>
 				</div>
@@ -146,28 +155,50 @@
 				</div>
 			</div>
 		{/if}
+
 		{#if error}
-			<div class="card flex flex-row items-center justify-start space-x-3 bg-error p-4">
-				<span class="min-w-6"><CircleXIcon /></span>
+			<div class="alert flex items-center gap-3 rounded-lg p-4 text-sm alert-error">
+				<CircleXIcon size={iconSize} />
 				<span>{error}</span>
 			</div>
 		{/if}
+
 		{#if !mfaRequired}
 			<div class="flex justify-between">
-				<label class="label w-full">
-					<input type="checkbox" bind:checked={signInData.rememberMe} class="checkbox" />
-					Remember me
-				</label>
-				<span class="w-full text-end">
-					<a class="link link-hover" href="/#">Forgot password</a>
+				<div class="flex items-center gap-2">
+					<input
+						type="checkbox"
+						bind:checked={signInData.rememberMe}
+						class="checkbox h-5 w-5 checkbox-primary"
+						name="rememberMe"
+					/>
+					<label for="rememberMe" class="m-0 label cursor-pointer p-0 text-sm">
+						<span class="label-text">Remember me</span>
+					</label>
+				</div>
+				<span class="text-sm">
+					<a href="#" class="link link-primary">Forgot password?</a>
 				</span>
 			</div>
 		{/if}
-		<button disabled={!loginEnabled} type="submit" class="btn btn-primary">
+
+		<button
+			disabled={!loginEnabled}
+			type="submit"
+			class="btn w-full font-medium transition-opacity btn-primary disabled:cursor-not-allowed disabled:opacity-70"
+		>
 			{#if loading}
-				<div class="loading loading-sm"></div>
+				<span class="loading loading-sm loading-spinner"></span>
+				<span>{mfaRequired ? 'Verifying...' : 'Logging in...'}</span>
+			{:else}
+				<span>{mfaRequired ? 'Verify' : 'Login'}</span>
 			{/if}
-			<span>{mfaRequired ? 'Verify' : 'Login'}</span>
 		</button>
+
+		<div class="divider my-2">OR</div>
+
+		<div>
+			<a href="/signup" class="btn w-full btn-outline btn-secondary">Create account</a>
+		</div>
 	</form>
 </div>

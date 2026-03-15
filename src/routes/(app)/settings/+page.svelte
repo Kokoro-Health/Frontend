@@ -1,5 +1,15 @@
 <script lang="ts">
 	import { updateSettings, type SettingsRequestDto, type SettingsResponseDto } from '$lib/api';
+	import {
+		Sun,
+		Moon,
+		Laptop,
+		Check,
+		AlertCircle,
+		Shield,
+		LogOut,
+		ChevronRight
+	} from '@lucide/svelte';
 
 	let { data }: { data: { settings: SettingsResponseDto } } = $props();
 
@@ -21,6 +31,8 @@
 	let error: string | null = $state(null);
 	let hydrated = $state(false);
 	let saveTimer: ReturnType<typeof setTimeout> | null = null;
+
+	const AVAILABLE_THEMES = ['LIGHT', 'DARK', 'SYSTEM'] as const;
 
 	$effect(() => {
 		const source = data.settings as SettingsResponseDto;
@@ -50,20 +62,32 @@
 		loading = true;
 		error = null;
 		const payload: SettingsRequestDto = { ...settings };
+		const previousTheme = savedSettings.theme;
 
-		await updateSettings({ body: payload })
-			.then((res) => {
-				if (res.error) {
-					throw Error(res.error.message);
+		try {
+			const res = await updateSettings({ body: payload });
+			if (res.error) {
+				throw Error(res.error.message);
+			}
+			savedSettings = payload;
+
+			if (payload.theme !== previousTheme) {
+				const htmlElement = document.documentElement;
+				if (payload.theme === 'SYSTEM') {
+					htmlElement.removeAttribute('data-theme');
+				} else {
+					htmlElement.setAttribute('data-theme', 'kokoro-' + payload.theme.toLowerCase());
 				}
-				savedSettings = payload;
-			})
-			.catch((e: Error) => {
-				error = e.message;
-			})
-			.finally(() => {
-				loading = false;
-			});
+			}
+		} catch (e: unknown) {
+			error = e instanceof Error ? e.message : 'Unknown error';
+		} finally {
+			loading = false;
+		}
+	}
+
+	function setTheme(theme: (typeof AVAILABLE_THEMES)[number]) {
+		settings.theme = theme;
 	}
 
 	$effect(() => {
@@ -92,80 +116,139 @@
 	});
 </script>
 
-<div class="min-h-screen w-full pb-28">
-	<div class="mx-auto flex w-full max-w-2xl flex-col gap-4">
-		<div class="card rounded-box bg-base-200">
-			<div class="card-body gap-2 p-5">
-				<span class="text-2xl font-semibold">Settings</span>
-				<span class="text-sm opacity-70">Manage your account preferences and notifications.</span>
-			</div>
-			<div class="flex items-center justify-end gap-3 text-sm opacity-80">
-				{#if loading}
-					<div class="loading loading-sm"></div>
-				{/if}
-				<span>{hasChanges ? 'Autosave pending...' : 'All changes saved.'}</span>
-			</div>
+<div class="min-h-screen w-full px-4 pb-24 sm:px-6">
+	<div class="mx-auto flex w-full max-w-xl flex-col gap-6">
+		<div class="flex flex-col gap-1 pt-4">
+			<h1 class="text-2xl font-bold tracking-tight">Settings</h1>
+			<p class="text-sm text-base-content/70">Manage your account preferences and notifications.</p>
 		</div>
+
+		<div class="flex items-center justify-end gap-2 text-sm font-medium">
+			{#if loading}
+				<div class="loading loading-xs loading-spinner text-primary"></div>
+			{:else if error}
+				<AlertCircle class="h-4 w-4 text-error" />
+			{:else if hasChanges}
+				<div class="loading loading-xs loading-spinner text-warning"></div>
+			{:else}
+				<Check class="h-4 w-4 text-success" />
+			{/if}
+		</div>
+
 		{#if error}
-			<div class="card rounded-box bg-error p-4 text-error-content">{error}</div>
+			<div class="alert border border-error/20 alert-error shadow-sm">
+				<AlertCircle class="h-5 w-5 shrink-0" />
+				<span>{error}</span>
+			</div>
 		{/if}
-		<div class="card rounded-box bg-base-200">
-			<div class="card-body gap-5 p-5">
-				<span class="text-lg font-semibold">Notifications</span>
-				<label class="label cursor-pointer justify-between gap-4 rounded-box bg-base-100 p-4">
-					<div class="flex flex-col gap-1">
-						<span class="font-medium">Marketing emails</span>
-						<span class="text-xs opacity-70">Receive product updates and helpful tips.</span>
-					</div>
-					<input type="checkbox" class="checkbox" bind:checked={settings.marketingEmails} />
-				</label>
-				<label class="label cursor-pointer justify-between gap-4 rounded-box bg-base-100 p-4">
-					<div class="flex flex-col gap-1">
-						<span class="font-medium">Security alerts</span>
-						<span class="text-xs opacity-70"
-							>Get notified when important security events occur.</span
-						>
-					</div>
-					<input type="checkbox" class="checkbox" bind:checked={settings.securityAlerts} />
-				</label>
-				<label class="label cursor-pointer justify-between gap-4 rounded-box bg-base-100 p-4">
-					<div class="flex flex-col gap-1">
-						<span class="font-medium">Reminder emails</span>
-						<span class="text-xs opacity-70"
-							>Get gentle reminders to keep your routine on track.</span
-						>
-					</div>
-					<input type="checkbox" class="checkbox" bind:checked={settings.reminderEmails} />
-				</label>
-			</div>
-		</div>
 
-		<div class="card rounded-box bg-base-200">
-			<div class="card-body gap-4 p-5">
-				<span class="text-lg font-semibold">App preferences</span>
-				<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-					<div class="rounded-box bg-base-100 p-4">
-						<span class="text-xs opacity-70">Theme</span>
-						<div class="mt-1 font-medium">{settings.theme}</div>
-					</div>
-					<div class="rounded-box bg-base-100 p-4">
-						<span class="text-xs opacity-70">Language</span>
-						<div class="mt-1 font-medium">{settings.language}</div>
-					</div>
-				</div>
-			</div>
-		</div>
+		<section class="flex flex-col gap-4">
+			<h2 class="px-1 text-lg font-semibold">Notifications</h2>
 
-		<div class="card rounded-box bg-base-200">
-			<div class="card-body gap-4 p-5">
-				<span class="text-lg font-semibold">Account Security</span>
-				<div class="flex flex-col space-y-3">
-					<a class="btn w-full btn-primary" href="/settings/mfa"
-						>Manage Multi-Factor Authentication</a
+			<label
+				class="group flex items-center justify-between gap-4 rounded-xl border border-base-200 bg-base-100 p-4 transition-colors hover:border-base-300 active:bg-base-200"
+			>
+				<div class="flex flex-col gap-1">
+					<span class="font-medium">Marketing emails</span>
+					<span class="text-xs text-base-content/70">Receive product updates and helpful tips.</span
 					>
-					<a class="btn w-full btn-error" href="/logout">Logout</a>
+				</div>
+				<input
+					type="checkbox"
+					class="toggle h-6 w-10 toggle-primary"
+					bind:checked={settings.marketingEmails}
+				/>
+			</label>
+
+			<label
+				class="group flex items-center justify-between gap-4 rounded-xl border border-base-200 bg-base-100 p-4 transition-colors hover:border-base-300 active:bg-base-200"
+			>
+				<div class="flex flex-col gap-1">
+					<span class="font-medium">Security alerts</span>
+					<span class="text-xs text-base-content/70"
+						>Get notified when important security events occur.</span
+					>
+				</div>
+				<input
+					type="checkbox"
+					class="toggle h-6 w-10 toggle-primary"
+					bind:checked={settings.securityAlerts}
+				/>
+			</label>
+
+			<label
+				class="group flex items-center justify-between gap-4 rounded-xl border border-base-200 bg-base-100 p-4 transition-colors hover:border-base-300 active:bg-base-200"
+			>
+				<div class="flex flex-col gap-1">
+					<span class="font-medium">Reminder emails</span>
+					<span class="text-xs text-base-content/70"
+						>Get gentle reminders to keep your routine on track.</span
+					>
+				</div>
+				<input
+					type="checkbox"
+					class="toggle h-6 w-10 toggle-primary"
+					bind:checked={settings.reminderEmails}
+				/>
+			</label>
+		</section>
+
+		<section class="flex flex-col gap-4">
+			<h2 class="px-1 text-lg font-semibold">App preferences</h2>
+
+			<div class="flex flex-col gap-3">
+				<div class="rounded-xl border border-base-200 bg-base-100 p-4">
+					<span class="text-xs font-medium tracking-wide text-base-content/60 uppercase">Theme</span
+					>
+					<div class="mt-3 grid grid-cols-3 gap-2">
+						{#each AVAILABLE_THEMES as themeOption}
+							<button
+								onclick={() => setTheme(themeOption)}
+								class="flex flex-col items-center justify-center gap-1 rounded-lg border p-2 transition-all {settings.theme ===
+								themeOption
+									? 'border-primary bg-primary/10 text-primary'
+									: 'border-base-200 bg-base-100 text-base-content hover:bg-base-200'}"
+							>
+								{#if themeOption === 'LIGHT'}
+									<Sun class="h-5 w-5" />
+								{:else if themeOption === 'DARK'}
+									<Moon class="h-5 w-5" />
+								{:else}
+									<Laptop class="h-5 w-5" />
+								{/if}
+								<span class="text-[10px] font-medium">{themeOption}</span>
+							</button>
+						{/each}
+					</div>
+				</div>
+
+				<div class="rounded-xl border border-base-200 bg-base-100 p-4">
+					<span class="text-xs font-medium tracking-wide text-base-content/60 uppercase"
+						>Language</span
+					>
+					<div class="mt-1 font-medium">{settings.language}</div>
 				</div>
 			</div>
-		</div>
+		</section>
+
+		<section class="flex flex-col gap-4">
+			<h2 class="px-1 text-lg font-semibold">Account Security</h2>
+			<div class="flex flex-col gap-3">
+				<a
+					href="/settings/mfa"
+					class="hover:bg-primary-focus btn w-full justify-between rounded-xl border-none bg-primary px-4 py-3 font-medium shadow-sm btn-primary"
+				>
+					<span>Manage Multi-Factor Authentication</span>
+					<ChevronRight class="h-5 w-5 opacity-70" />
+				</a>
+				<a
+					href="/logout"
+					class="hover:bg-error-focus btn w-full justify-between rounded-xl border-none px-4 py-3 font-medium shadow-sm btn-error"
+				>
+					<span>Logout</span>
+					<LogOut class="h-5 w-5 opacity-70" />
+				</a>
+			</div>
+		</section>
 	</div>
 </div>

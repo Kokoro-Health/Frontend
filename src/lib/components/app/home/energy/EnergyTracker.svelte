@@ -4,57 +4,110 @@
 	import { Skull, Frown, Meh, Smile, Laugh } from '@lucide/svelte';
 	import EnergyBattery from './EnergyBattery.svelte';
 
+	interface Preset {
+		icon: typeof Skull;
+		label: string;
+		value: number;
+		style: string;
+	}
+
+	const PRESET_VALUES = {
+		DEAD: 0,
+		LOW: 15,
+		OKAY: 40,
+		GOOD: 70,
+		FULL: 100
+	} as const;
+
+	const COOLDOWN_MS = 1000;
+	const SECONDS_IN_MINUTE = 60;
+
+	const presets: Preset[] = [
+		{
+			icon: Skull,
+			label: 'Dead',
+			value: PRESET_VALUES.DEAD,
+			style: 'text-error hover:bg-error/20'
+		},
+		{ icon: Frown, label: 'Low', value: PRESET_VALUES.LOW, style: 'text-error hover:bg-error/10' },
+		{
+			icon: Meh,
+			label: 'Okay',
+			value: PRESET_VALUES.OKAY,
+			style: 'text-warning hover:bg-warning/10'
+		},
+		{
+			icon: Smile,
+			label: 'Good',
+			value: PRESET_VALUES.GOOD,
+			style: 'text-success hover:bg-success/10'
+		},
+		{
+			icon: Laugh,
+			label: 'Full',
+			value: PRESET_VALUES.FULL,
+			style: 'text-primary hover:bg-primary/10'
+		}
+	];
+
 	let { info }: { info: EnergyInfoDto } = $props();
 
-	const presets = [
-		{ icon: Skull, label: 'Dead', value: 0, style: 'text-error hover:bg-error/20' },
-		{ icon: Frown, label: 'Low', value: 15, style: 'text-error hover:bg-error/10' },
-		{ icon: Meh, label: 'Okay', value: 40, style: 'text-warning hover:bg-warning/10' },
-		{ icon: Smile, label: 'Good', value: 70, style: 'text-success hover:bg-success/10' },
-		{ icon: Laugh, label: 'Full', value: 100, style: 'text-primary hover:bg-primary/10' }
-	] as const;
-
+	let displayInfo = $derived(info);
 	let loading = $state(false);
-	let logged = $state<number | null>(null);
-	let cooldown = $state(0);
+	let loggedValue = $state<number | null>(null);
+	let cooldownSeconds = $state(0);
 
 	function formatCooldown(seconds: number): string {
-		const m = Math.floor(seconds / 60);
-		const s = seconds % 60;
-		if (m > 0 && s > 0) return `${m}m ${s}s`;
-		if (m > 0) return `${m}m`;
-		return `${s}s`;
+		const minutes = Math.floor(seconds / SECONDS_IN_MINUTE);
+		const remainingSeconds = seconds % SECONDS_IN_MINUTE;
+
+		if (minutes > 0 && remainingSeconds > 0) return `${minutes}m ${remainingSeconds}s`;
+		if (minutes > 0) return `${minutes}m`;
+		return `${remainingSeconds}s`;
 	}
 
 	$effect(() => {
-		const next = info.nextEntryAllowed;
-		if (!next) return;
+		const nextAllowed = displayInfo.nextEntryAllowed;
+		if (!nextAllowed) {
+			cooldownSeconds = 0;
+			return;
+		}
+
+		const targetTime = new Date(nextAllowed).getTime();
 
 		const tick = () => {
-			cooldown = Math.max(0, Math.ceil((new Date(next).getTime() - Date.now()) / 1000));
+			const now = Date.now();
+			const diff = Math.ceil((targetTime - now) / COOLDOWN_MS);
+			cooldownSeconds = Math.max(0, diff);
 		};
 
 		tick();
-		if (cooldown <= 0) return;
+		if (cooldownSeconds <= 0) return;
 
-		const id = setInterval(() => {
-			tick();
-			if (cooldown <= 0) clearInterval(id);
-		}, 1000);
+		const intervalId = setInterval(tick, COOLDOWN_MS);
 
-		return () => clearInterval(id);
+		return () => clearInterval(intervalId);
 	});
 
-	async function log(amount: number) {
-		if (loading || cooldown > 0) return;
+	$effect(() => {
+		displayInfo = info;
+	});
+
+	async function handleLog(amount: number) {
+		if (loading || cooldownSeconds > 0) return;
+
 		loading = true;
-		logged = amount;
+		loggedValue = amount;
+
 		try {
 			await addEnergyEntry({ body: { amount } });
+			const response = await getEnergyInfo();
+			if (response.data) {
+				displayInfo = response.data;
+				loggedValue = null;
+			}
 		} finally {
 			loading = false;
-			const res = await getEnergyInfo();
-			if (res.data) info = res.data;
 		}
 	}
 </script>
@@ -67,7 +120,7 @@
 		</div>
 
 		<div class="flex justify-center py-2">
-			<EnergyBattery level={info.energy} />
+			<EnergyBattery level={displayInfo.energy} />
 		</div>
 
 		<div class="divider my-0 text-xs text-base-content/40">How are you feeling?</div>
@@ -75,12 +128,12 @@
 		<div class="grid grid-cols-5 gap-1.5">
 			{#each presets as preset}
 				<button
-					class="flex flex-col items-center gap-1.5 rounded-xl py-3 transition-all duration-150 {preset.style} {logged ===
+					class="flex flex-col items-center gap-1.5 rounded-xl py-3 transition-all duration-150 {preset.style} {loggedValue ===
 					preset.value
 						? 'ring-2 ring-current ring-offset-2 ring-offset-base-200'
 						: ''} disabled:opacity-40"
-					onclick={() => log(preset.value)}
-					disabled={loading || cooldown > 0}
+					onclick={() => handleLog(preset.value)}
+					disabled={loading || cooldownSeconds > 0}
 				>
 					<preset.icon size={20} strokeWidth={2} />
 					<span class="text-[10px] leading-none font-medium">{preset.label}</span>
@@ -88,9 +141,9 @@
 			{/each}
 		</div>
 
-		{#if cooldown > 0}
+		{#if cooldownSeconds > 0}
 			<p class="text-center text-xs text-base-content/40">
-				Next entry in {formatCooldown(cooldown)}
+				Next entry in {formatCooldown(cooldownSeconds)}
 			</p>
 		{/if}
 	</div>

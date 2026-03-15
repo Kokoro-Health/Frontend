@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import type { Component } from 'svelte';
-	import { GitGraphIcon, HouseIcon, SettingsIcon } from '@lucide/svelte';
+	import { GitGraphIcon, HouseIcon, SettingsIcon, TimerIcon } from '@lucide/svelte';
 
 	interface Link {
 		name: string;
@@ -11,18 +11,21 @@
 
 	const ROUTES = {
 		SETTINGS: '/settings',
-		HOME: '/app'
+		HOME: '/app',
+		ANALYTICS: '/analytics'
 	} as const;
 
 	const LABELS = {
 		SETTINGS: 'Settings',
-		HOME: 'Home'
+		HOME: 'Home',
+		ANALYTICS: 'Review'
 	} as const;
 
 	const ICON_SIZE = 20;
 
 	const links: Link[] = [
 		{ name: LABELS.HOME, href: ROUTES.HOME, icon: HouseIcon },
+		{ name: LABELS.ANALYTICS, href: ROUTES.ANALYTICS, icon: TimerIcon },
 		{ name: LABELS.SETTINGS, href: ROUTES.SETTINGS, icon: SettingsIcon }
 	];
 

@@ -177,7 +177,7 @@
 					</label>
 				</div>
 				<span class="text-sm">
-					<a href="#" class="link link-primary">Forgot password?</a>
+					<a href="/reset-password" class="link link-primary">Forgot password?</a>
 				</span>
 			</div>
 		{/if}

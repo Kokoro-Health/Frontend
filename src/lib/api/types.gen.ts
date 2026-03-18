@@ -51,6 +51,11 @@ export type SignInResponseDto = {
 	mfaRequired: boolean;
 };
 
+export type PasswordResetRequestDto = {
+	code: string;
+	password: string;
+};
+
 export type VerifyMfaRequest = {
 	code: string;
 };
@@ -282,6 +287,64 @@ export type SignInResponses = {
 
 export type SignInResponse = SignInResponses[keyof SignInResponses];
 
+export type RequestPasswordResetData = {
+	body?: never;
+	path?: never;
+	query: {
+		email: string;
+	};
+	url: '/auth/reset-password';
+};
+
+export type RequestPasswordResetErrors = {
+	/**
+	 * Bad Request
+	 */
+	400: ErrorResponse;
+};
+
+export type RequestPasswordResetError =
+	RequestPasswordResetErrors[keyof RequestPasswordResetErrors];
+
+export type RequestPasswordResetResponses = {
+	/**
+	 * OK
+	 */
+	200: {
+		[key: string]: unknown;
+	};
+};
+
+export type RequestPasswordResetResponse =
+	RequestPasswordResetResponses[keyof RequestPasswordResetResponses];
+
+export type ResetPasswordData = {
+	body: PasswordResetRequestDto;
+	path?: never;
+	query?: never;
+	url: '/auth/reset-password/confirm';
+};
+
+export type ResetPasswordErrors = {
+	/**
+	 * Bad Request
+	 */
+	400: ErrorResponse;
+};
+
+export type ResetPasswordError = ResetPasswordErrors[keyof ResetPasswordErrors];
+
+export type ResetPasswordResponses = {
+	/**
+	 * OK
+	 */
+	200: {
+		[key: string]: unknown;
+	};
+};
+
+export type ResetPasswordResponse = ResetPasswordResponses[keyof ResetPasswordResponses];
+
 export type VerifyMfaCodeAndEnableData = {
 	body: VerifyMfaRequest;
 	path?: never;
@@ -440,6 +503,37 @@ export type GetEnergyForDateRangeResponses = {
 
 export type GetEnergyForDateRangeResponse =
 	GetEnergyForDateRangeResponses[keyof GetEnergyForDateRangeResponses];
+
+export type ValidatePasswordResetCodeData = {
+	body?: never;
+	path?: never;
+	query: {
+		code: string;
+	};
+	url: '/auth/validate-code';
+};
+
+export type ValidatePasswordResetCodeErrors = {
+	/**
+	 * Bad Request
+	 */
+	400: ErrorResponse;
+};
+
+export type ValidatePasswordResetCodeError =
+	ValidatePasswordResetCodeErrors[keyof ValidatePasswordResetCodeErrors];
+
+export type ValidatePasswordResetCodeResponses = {
+	/**
+	 * OK
+	 */
+	200: {
+		[key: string]: unknown;
+	};
+};
+
+export type ValidatePasswordResetCodeResponse =
+	ValidatePasswordResetCodeResponses[keyof ValidatePasswordResetCodeResponses];
 
 export type DisableMfaData = {
 	body: DisableMfaRequest;

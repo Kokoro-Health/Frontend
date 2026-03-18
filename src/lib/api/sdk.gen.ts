@@ -27,9 +27,15 @@ import type {
 	LogoutData,
 	LogoutErrors,
 	LogoutResponses,
+	RequestPasswordResetData,
+	RequestPasswordResetErrors,
+	RequestPasswordResetResponses,
 	RequestVerificationCodeData,
 	RequestVerificationCodeErrors,
 	RequestVerificationCodeResponses,
+	ResetPasswordData,
+	ResetPasswordErrors,
+	ResetPasswordResponses,
 	SetupMfaData,
 	SetupMfaErrors,
 	SetupMfaResponses,
@@ -42,6 +48,9 @@ import type {
 	UpdateSettingsData,
 	UpdateSettingsErrors,
 	UpdateSettingsResponses,
+	ValidatePasswordResetCodeData,
+	ValidatePasswordResetCodeErrors,
+	ValidatePasswordResetCodeResponses,
 	VerifyCodeData,
 	VerifyCodeErrors,
 	VerifyCodeResponses,
@@ -140,6 +149,27 @@ export const signIn = <ThrowOnError extends boolean = false>(
 		}
 	});
 
+export const requestPasswordReset = <ThrowOnError extends boolean = false>(
+	options: Options<RequestPasswordResetData, ThrowOnError>
+) =>
+	(options.client ?? client).post<
+		RequestPasswordResetResponses,
+		RequestPasswordResetErrors,
+		ThrowOnError
+	>({ url: '/auth/reset-password', ...options });
+
+export const resetPassword = <ThrowOnError extends boolean = false>(
+	options: Options<ResetPasswordData, ThrowOnError>
+) =>
+	(options.client ?? client).post<ResetPasswordResponses, ResetPasswordErrors, ThrowOnError>({
+		url: '/auth/reset-password/confirm',
+		...options,
+		headers: {
+			'Content-Type': 'application/json',
+			...options.headers
+		}
+	});
+
 export const verifyMfaCodeAndEnable = <ThrowOnError extends boolean = false>(
 	options: Options<VerifyMfaCodeAndEnableData, ThrowOnError>
 ) =>
@@ -196,6 +226,15 @@ export const getEnergyForDateRange = <ThrowOnError extends boolean = false>(
 		GetEnergyForDateRangeErrors,
 		ThrowOnError
 	>({ url: '/energy/recent', ...options });
+
+export const validatePasswordResetCode = <ThrowOnError extends boolean = false>(
+	options: Options<ValidatePasswordResetCodeData, ThrowOnError>
+) =>
+	(options.client ?? client).get<
+		ValidatePasswordResetCodeResponses,
+		ValidatePasswordResetCodeErrors,
+		ThrowOnError
+	>({ url: '/auth/validate-code', ...options });
 
 export const disableMfa = <ThrowOnError extends boolean = false>(
 	options: Options<DisableMfaData, ThrowOnError>

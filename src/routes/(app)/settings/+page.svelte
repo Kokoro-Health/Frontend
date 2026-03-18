@@ -8,7 +8,8 @@
 		AlertCircle,
 		Shield,
 		LogOut,
-		ChevronRight
+		ChevronRight,
+		RefreshCcw
 	} from '@lucide/svelte';
 
 	let { data }: { data: { settings: SettingsResponseDto } } = $props();
@@ -240,6 +241,13 @@
 				>
 					<span>Manage Multi-Factor Authentication</span>
 					<ChevronRight class="h-5 w-5 opacity-70" />
+				</a>
+				<a
+					href="/reset-password"
+					class="hover:bg-primary-focus btn w-full justify-between rounded-xl border-none bg-primary px-4 py-3 font-medium shadow-sm btn-primary"
+				>
+					<span>Reset Password</span>
+					<RefreshCcw class="h-5 w-5 opacity-70" />
 				</a>
 				<a
 					href="/logout"

@@ -9,6 +9,9 @@ import type {
 	DisableMfaData,
 	DisableMfaErrors,
 	DisableMfaResponses,
+	GetEnergyForDateRangeData,
+	GetEnergyForDateRangeErrors,
+	GetEnergyForDateRangeResponses,
 	GetEnergyInfoData,
 	GetEnergyInfoErrors,
 	GetEnergyInfoResponses,
@@ -161,6 +164,15 @@ export const getEnergyInfo = <ThrowOnError extends boolean = false>(
 		url: '/energy',
 		...options
 	});
+
+export const getEnergyForDateRange = <ThrowOnError extends boolean = false>(
+	options: Options<GetEnergyForDateRangeData, ThrowOnError>
+) =>
+	(options.client ?? client).get<
+		GetEnergyForDateRangeResponses,
+		GetEnergyForDateRangeErrors,
+		ThrowOnError
+	>({ url: '/energy/recent', ...options });
 
 export const disableMfa = <ThrowOnError extends boolean = false>(
 	options: Options<DisableMfaData, ThrowOnError>

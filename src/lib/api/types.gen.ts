@@ -81,6 +81,11 @@ export type EnergyInfoDto = {
 	nextEntryAllowed: string;
 };
 
+export type EnergyInfoDateDto = {
+	date: string;
+	amount: number;
+};
+
 export type MfaSettings = {
 	mfaEnabled: boolean;
 };
@@ -344,6 +349,36 @@ export type GetEnergyInfoResponses = {
 };
 
 export type GetEnergyInfoResponse = GetEnergyInfoResponses[keyof GetEnergyInfoResponses];
+
+export type GetEnergyForDateRangeData = {
+	body?: never;
+	path?: never;
+	query: {
+		from: string;
+		to: string;
+	};
+	url: '/energy/recent';
+};
+
+export type GetEnergyForDateRangeErrors = {
+	/**
+	 * Bad Request
+	 */
+	400: ErrorResponse;
+};
+
+export type GetEnergyForDateRangeError =
+	GetEnergyForDateRangeErrors[keyof GetEnergyForDateRangeErrors];
+
+export type GetEnergyForDateRangeResponses = {
+	/**
+	 * OK
+	 */
+	200: Array<EnergyInfoDateDto>;
+};
+
+export type GetEnergyForDateRangeResponse =
+	GetEnergyForDateRangeResponses[keyof GetEnergyForDateRangeResponses];
 
 export type DisableMfaData = {
 	body: DisableMfaRequest;

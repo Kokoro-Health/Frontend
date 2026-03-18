@@ -207,7 +207,6 @@
 				{:else}
 					<div class="flex h-full items-center justify-center">
 						<span>No data available</span>
-						<span>{JSON.stringify(entries, null, 2)}</span>
 					</div>
 				{/if}
 			</div>

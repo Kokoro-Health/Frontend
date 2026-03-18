@@ -78,7 +78,7 @@
 	}
 </script>
 
-<div class="flex min-h-screen w-full items-center justify-center px-4 py-6">
+<div class="flex min-h-screen w-full items-center justify-center py-6">
 	{#if showConfetti}
 		<div class="pointer-events-none fixed inset-0 z-50 flex items-center justify-center">
 			<Confetti amount={150} xSpread={70} />
@@ -110,7 +110,7 @@
 		<div class="flex flex-col gap-4">
 			{#if currentStage === STAGE_NAMES}
 				<div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-					<label class="input-bordered input flex items-center gap-2">
+					<label class="input-bordered input flex w-full items-center gap-2">
 						<input
 							type="text"
 							bind:value={signUpData.firstName}
@@ -118,7 +118,7 @@
 							class="grow"
 						/>
 					</label>
-					<label class="input-bordered input flex items-center gap-2">
+					<label class="input-bordered input flex w-full items-center gap-2">
 						<input
 							type="text"
 							bind:value={signUpData.middleName}
@@ -126,7 +126,7 @@
 							class="grow"
 						/>
 					</label>
-					<label class="input-bordered input flex items-center gap-2">
+					<label class="input-bordered input flex w-full items-center gap-2">
 						<input
 							type="text"
 							bind:value={signUpData.lastName}
@@ -146,7 +146,7 @@
 				</button>
 			{:else}
 				<label
-					class="input-bordered input flex items-center gap-2 focus-within:ring-2 focus-within:ring-primary"
+					class="input-bordered input flex w-full items-center gap-2 focus-within:ring-2 focus-within:ring-primary"
 				>
 					<MailIcon size={iconSize} class="shrink-0 text-base-content/60" />
 					<input
@@ -159,7 +159,7 @@
 				</label>
 
 				<label
-					class="input-bordered input flex items-center gap-2 focus-within:ring-2 focus-within:ring-primary"
+					class="input-bordered input flex w-full items-center gap-2 focus-within:ring-2 focus-within:ring-primary"
 				>
 					<KeyRoundIcon size={iconSize} class="shrink-0 text-base-content/60" />
 					<input

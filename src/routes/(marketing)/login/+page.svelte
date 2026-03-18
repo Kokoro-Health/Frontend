@@ -91,7 +91,7 @@
 
 		<div class="flex flex-col gap-4">
 			<label
-				class="input-bordered input flex items-center gap-2 focus-within:ring-2 focus-within:ring-primary"
+				class="input-bordered input flex w-full items-center gap-2 focus-within:ring-2 focus-within:ring-primary"
 			>
 				<MailIcon size={iconSize} class="shrink-0 text-base-content/60" />
 				<input
@@ -100,12 +100,12 @@
 					bind:value={signInData.email}
 					disabled={mfaRequired}
 					placeholder="someone@example.com"
-					class="grow bg-transparent outline-none"
+					class="w-full grow bg-transparent outline-none"
 				/>
 			</label>
 
 			<label
-				class="input-bordered input flex items-center gap-2 focus-within:ring-2 focus-within:ring-primary"
+				class="input-bordered input flex w-full items-center gap-2 focus-within:ring-2 focus-within:ring-primary"
 			>
 				<KeyRoundIcon size={iconSize} class="shrink-0 text-base-content/60" />
 				<input
@@ -113,7 +113,7 @@
 					bind:value={signInData.password}
 					disabled={mfaRequired}
 					placeholder="Password"
-					class="grow bg-transparent outline-none"
+					class="w-full grow bg-transparent outline-none"
 				/>
 				<button
 					type="button"

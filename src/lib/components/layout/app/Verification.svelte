@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { requestVerificationCode, verifyCode } from '$lib/api';
-	import { Code, X, RefreshCw } from '@lucide/svelte';
+	import { Code, X, RefreshCw, CheckCircle } from '@lucide/svelte';
 
 	const CODE_LENGTH = 6;
 	const PLACEHOLDER_CODE = '000000';
@@ -8,79 +8,133 @@
 	let { email, onSuccess }: { email: string; onSuccess: () => void } = $props();
 
 	let verificationModal: HTMLDialogElement | null = $state(null);
+	let codeInput: HTMLInputElement | null = $state(null);
 	let code = $state('');
-	let nextCodeAvailableAt = $state(Date.now());
+	let nextCodeAvailableAt = $state<number | null>(null);
 	let isLoading = $state(false);
+	let isVerifying = $state(false);
 	let errorMessage = $state<string | null>(null);
+	let successMessage = $state<string | null>(null);
 	let resendSeconds = $state(0);
+	let intervalId: ReturnType<typeof setInterval> | null = $state(null);
 
 	let codeInputValid = $derived(code.length === CODE_LENGTH);
-	let canResend = $derived(Date.now() >= nextCodeAvailableAt);
+	let canResend = $derived(nextCodeAvailableAt !== null && Date.now() >= nextCodeAvailableAt);
 
 	$effect(() => {
-		resendSeconds = Math.max(0, Math.ceil((nextCodeAvailableAt - Date.now()) / 1000));
+		if (intervalId) {
+			clearInterval(intervalId);
+			intervalId = null;
+		}
 
-		if (canResend) return;
+		if (nextCodeAvailableAt === null || Date.now() >= nextCodeAvailableAt) {
+			resendSeconds = 0;
+			return;
+		}
 
-		const intervalId = setInterval(() => {
+		intervalId = setInterval(() => {
+			if (nextCodeAvailableAt == null) return;
 			const remaining = nextCodeAvailableAt - Date.now();
 
 			if (remaining <= 0) {
 				resendSeconds = 0;
-				clearInterval(intervalId);
+				clearInterval(intervalId!);
+				intervalId = null;
+				nextCodeAvailableAt = null;
 			} else {
 				resendSeconds = Math.ceil(remaining / 1000);
 			}
 		}, 1000);
 
-		return () => clearInterval(intervalId);
+		return () => {
+			if (intervalId) {
+				clearInterval(intervalId);
+				intervalId = null;
+			}
+		};
 	});
 
 	function showModal() {
-		requestCode();
-		verificationModal?.showModal();
+		if (!verificationModal) return;
+
 		errorMessage = null;
+		successMessage = null;
+		code = '';
+
+		if (!nextCodeAvailableAt) {
+			requestCode();
+		}
+
+		verificationModal.showModal();
+
+		$effect(() => {
+			codeInput?.focus();
+			return () => {};
+		});
 	}
 
 	function closeModal() {
 		verificationModal?.close();
 		errorMessage = null;
+		successMessage = null;
 		code = '';
 	}
 
 	async function requestCode() {
+		if (isLoading) return;
+
 		errorMessage = null;
 		isLoading = true;
+
 		try {
 			const res = await requestVerificationCode();
-			if (res.data) {
+			if (res.data?.nextCodeAllowedAt) {
 				nextCodeAvailableAt = Date.parse(res.data.nextCodeAllowedAt);
 				resendSeconds = Math.ceil((nextCodeAvailableAt - Date.now()) / 1000);
 			}
+		} catch {
+			errorMessage = 'Failed to send verification code';
 		} finally {
 			isLoading = false;
 		}
 	}
 
 	async function handleVerify() {
-		isLoading = true;
+		if (!codeInputValid || isVerifying) return;
+
+		isVerifying = true;
+		errorMessage = null;
+
 		try {
-			await verifyCode({
-				query: {
-					code: code
-				}
-			}).then((res) => {
-				if (res.error?.message) {
-					errorMessage = res.error.message;
-				} else {
+			const res = await verifyCode({
+				query: { code }
+			});
+
+			if (res.error?.message) {
+				errorMessage = res.error.message;
+			} else {
+				successMessage = 'Email verified successfully!';
+				setTimeout(() => {
 					closeModal();
 					onSuccess();
-				}
-			});
+				}, 1000);
+			}
 		} catch {
 			errorMessage = 'Network error occurred';
 		} finally {
-			isLoading = false;
+			isVerifying = false;
+		}
+	}
+
+	function handleInput(event: Event) {
+		const target = event.target as HTMLInputElement;
+		target.value = target.value.replace(/[^0-9]/g, '').slice(0, CODE_LENGTH);
+		code = target.value;
+	}
+
+	function handleKeyDown(event: KeyboardEvent) {
+		if (event.key === 'Enter' && codeInputValid && !isVerifying) {
+			handleVerify();
 		}
 	}
 </script>
@@ -89,7 +143,11 @@
 	class="flex h-16 w-full flex-row items-center justify-between bg-warning/30 px-4 text-warning-content/40 md:static md:h-auto md:bg-transparent md:p-0 md:text-inherit"
 >
 	<span class="truncate text-sm font-medium md:text-base">Please verify your email address.</span>
-	<button onclick={showModal} class="btn btn-sm btn-warning md:hidden">
+	<button
+		class="btn btn-sm btn-warning md:hidden"
+		onclick={showModal}
+		aria-label="Open verification modal"
+	>
 		<Code size={16} />
 		Verify
 	</button>
@@ -99,11 +157,20 @@
 	id="verificationModal"
 	bind:this={verificationModal}
 	class="modal modal-bottom sm:modal-middle"
+	onclose={() => {
+		errorMessage = null;
+		successMessage = null;
+		code = '';
+	}}
 >
 	<div class="modal-box w-full px-6 pt-6 pb-safe">
 		<div class="flex items-center justify-between">
 			<h3 class="text-xl font-bold">Verify your account</h3>
-			<button class="btn btn-circle btn-ghost btn-sm" onclick={closeModal}>
+			<button
+				class="btn btn-circle btn-ghost btn-sm"
+				onclick={closeModal}
+				aria-label="Close verification modal"
+			>
 				<X size={18} />
 			</button>
 		</div>
@@ -112,8 +179,15 @@
 		</p>
 
 		{#if errorMessage}
-			<div class="mb-4 alert alert-error">
+			<div class="mb-4 alert alert-error" role="alert">
 				<span>{errorMessage}</span>
+			</div>
+		{/if}
+
+		{#if successMessage}
+			<div class="mb-4 alert alert-success" role="alert">
+				<CheckCircle size={16} class="mr-2" />
+				<span>{successMessage}</span>
 			</div>
 		{/if}
 
@@ -122,25 +196,38 @@
 				<span class="label-text">Verification Code</span>
 			</label>
 			<input
+				bind:this={codeInput}
 				name="code"
 				bind:value={code}
-				type="text"
-				pattern="[0-9]{6}"
+				type="tel"
 				inputmode="numeric"
 				placeholder={PLACEHOLDER_CODE}
 				class="input-bordered input w-full"
 				maxlength={CODE_LENGTH}
-				disabled={isLoading}
+				disabled={isLoading || isVerifying}
+				oninput={handleInput}
+				onkeydown={handleKeyDown}
+				aria-describedby="code-help"
 			/>
+			<span id="code-help" class="label-text-alt text-muted">
+				Enter the 6-digit code sent to your email
+			</span>
 		</div>
 
 		<div class="modal-action flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-			<button class="btn btn-ghost" onclick={closeModal} disabled={isLoading}> Close </button>
+			<button class="btn btn-ghost" onclick={closeModal} disabled={isLoading || isVerifying}>
+				Close
+			</button>
 
-			<button class="btn btn-secondary" disabled={!canResend || isLoading} onclick={requestCode}>
-				{#if isLoading && !canResend}
+			<button
+				class="btn btn-secondary"
+				disabled={!canResend || isLoading}
+				onclick={requestCode}
+				aria-disabled={!canResend}
+			>
+				{#if isLoading}
 					<RefreshCw class="animate-spin" size={16} />
-				{:else if !canResend}
+				{:else if !canResend && nextCodeAvailableAt}
 					Resend in {resendSeconds}s
 				{:else}
 					Resend
@@ -149,10 +236,11 @@
 
 			<button
 				class="btn btn-primary"
-				disabled={!codeInputValid || isLoading}
+				disabled={!codeInputValid || isVerifying}
 				onclick={handleVerify}
+				aria-label="Verify code"
 			>
-				{#if isLoading}
+				{#if isVerifying}
 					<RefreshCw class="animate-spin" size={16} />
 				{:else}
 					Verify

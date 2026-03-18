@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { AlertCircle, Calendar, Check, RefreshCw } from '@lucide/svelte';
+	import { Calendar, RefreshCw } from '@lucide/svelte';
 	import { getEnergyForDateRange } from '$lib/api';
 	import { Line } from 'svelte-chartjs';
 	import type { ChartOptions } from 'chart.js';

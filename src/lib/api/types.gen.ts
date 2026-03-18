@@ -23,6 +23,10 @@ export type Unit = {
 	[key: string]: unknown;
 };
 
+export type VerificationRequestResponseDto = {
+	nextCodeAllowedAt: string;
+};
+
 export type EnergyRequestDto = {
 	amount: number;
 };
@@ -74,6 +78,7 @@ export type ProfileResponseDto = {
 	profilePictureUrl: string;
 	theme: 'LIGHT' | 'DARK' | 'SYSTEM';
 	createdAt: number;
+	verified: boolean;
 };
 
 export type EnergyInfoDto = {
@@ -143,6 +148,62 @@ export type UpdateSettingsResponses = {
 };
 
 export type UpdateSettingsResponse = UpdateSettingsResponses[keyof UpdateSettingsResponses];
+
+export type VerifyCodeData = {
+	body?: never;
+	path?: never;
+	query: {
+		code: string;
+	};
+	url: '/user/profile/verify';
+};
+
+export type VerifyCodeErrors = {
+	/**
+	 * Bad Request
+	 */
+	400: ErrorResponse;
+};
+
+export type VerifyCodeError = VerifyCodeErrors[keyof VerifyCodeErrors];
+
+export type VerifyCodeResponses = {
+	/**
+	 * OK
+	 */
+	200: {
+		[key: string]: unknown;
+	};
+};
+
+export type VerifyCodeResponse = VerifyCodeResponses[keyof VerifyCodeResponses];
+
+export type RequestVerificationCodeData = {
+	body?: never;
+	path?: never;
+	query?: never;
+	url: '/user/profile/requestVerification';
+};
+
+export type RequestVerificationCodeErrors = {
+	/**
+	 * Bad Request
+	 */
+	400: ErrorResponse;
+};
+
+export type RequestVerificationCodeError =
+	RequestVerificationCodeErrors[keyof RequestVerificationCodeErrors];
+
+export type RequestVerificationCodeResponses = {
+	/**
+	 * OK
+	 */
+	200: VerificationRequestResponseDto;
+};
+
+export type RequestVerificationCodeResponse =
+	RequestVerificationCodeResponses[keyof RequestVerificationCodeResponses];
 
 export type AddEnergyEntryData = {
 	body: EnergyRequestDto;

@@ -27,6 +27,9 @@ import type {
 	LogoutData,
 	LogoutErrors,
 	LogoutResponses,
+	RequestVerificationCodeData,
+	RequestVerificationCodeErrors,
+	RequestVerificationCodeResponses,
 	SetupMfaData,
 	SetupMfaErrors,
 	SetupMfaResponses,
@@ -39,6 +42,9 @@ import type {
 	UpdateSettingsData,
 	UpdateSettingsErrors,
 	UpdateSettingsResponses,
+	VerifyCodeData,
+	VerifyCodeErrors,
+	VerifyCodeResponses,
 	VerifyMfaCodeAndEnableData,
 	VerifyMfaCodeAndEnableErrors,
 	VerifyMfaCodeAndEnableResponses
@@ -80,6 +86,23 @@ export const updateSettings = <ThrowOnError extends boolean = false>(
 			...options.headers
 		}
 	});
+
+export const verifyCode = <ThrowOnError extends boolean = false>(
+	options: Options<VerifyCodeData, ThrowOnError>
+) =>
+	(options.client ?? client).post<VerifyCodeResponses, VerifyCodeErrors, ThrowOnError>({
+		url: '/user/profile/verify',
+		...options
+	});
+
+export const requestVerificationCode = <ThrowOnError extends boolean = false>(
+	options?: Options<RequestVerificationCodeData, ThrowOnError>
+) =>
+	(options?.client ?? client).post<
+		RequestVerificationCodeResponses,
+		RequestVerificationCodeErrors,
+		ThrowOnError
+	>({ url: '/user/profile/requestVerification', ...options });
 
 export const addEnergyEntry = <ThrowOnError extends boolean = false>(
 	options: Options<AddEnergyEntryData, ThrowOnError>

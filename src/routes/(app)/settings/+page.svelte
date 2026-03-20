@@ -117,13 +117,13 @@
 	});
 </script>
 
-<div class="min-h-screen w-full px-4 pb-24 sm:px-6">
-	<div class="mx-auto flex w-full max-w-xl flex-col gap-6">
-		<div class="flex flex-col gap-1 pt-4">
-			<h1 class="text-2xl font-bold tracking-tight">Settings</h1>
-			<p class="text-sm text-base-content/70">Manage your account preferences and notifications.</p>
-		</div>
+<svelte:head>
+	<title>Settings</title>
+	<meta name="description" content="Manage your account preferences and notifications." />
+</svelte:head>
 
+<div class="w-full">
+	<div class="flex w-full max-w-xl flex-col">
 		<div class="flex items-center justify-end gap-2 text-sm font-medium">
 			{#if loading}
 				<div class="loading loading-xs loading-spinner text-primary"></div>

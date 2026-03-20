@@ -12,7 +12,12 @@
 	let { data }: Props = $props();
 </script>
 
-<div class="w-full flex-1 space-y-3 overflow-y-auto p-4">
+<svelte:head>
+	<title>Home</title>
+	<meta name="description" content="Home - The landing page (testing)" />
+</svelte:head>
+
+<div class="w-full flex-1 space-y-3 overflow-y-auto">
 	{#if data.energyInfo}
 		<EnergyTracker info={data.energyInfo} />
 	{:else}

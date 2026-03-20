@@ -55,11 +55,19 @@
 	}
 </script>
 
-<div class="flex flex-col gap-6">
+<svelte:head>
+	<title>MFA Settings</title>
+	<meta
+		name="description"
+		content="Manage your multi-factor authentication settings to secure your account."
+	/>
+</svelte:head>
+
+<div class="flex flex-col">
 	{#if !data.settings.mfaEnabled}
 		{#if !qrCode}
 			<div class="flex flex-col gap-2">
-				<p class="font-semibold">Two-factor authentication</p>
+				<p class="font-semibold">Authenticator App</p>
 				<p class="text-sm text-base-content/50">
 					Scan a QR code with your authenticator app to get started.
 				</p>

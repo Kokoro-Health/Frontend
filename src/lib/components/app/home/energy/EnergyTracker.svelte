@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { EnergyInfoDto } from '$lib/api';
 	import { addEnergyEntry, getEnergyInfo } from '$lib/api/sdk.gen';
-	import { Skull, Frown, Meh, Smile, Laugh } from '@lucide/svelte';
+	import { Skull, Frown, Meh, Smile, Laugh, ChartArea, ChartPie } from '@lucide/svelte';
 	import EnergyBattery from './EnergyBattery.svelte';
 
 	interface Preset {
@@ -116,7 +116,12 @@
 	<div class="card-body gap-5 p-5">
 		<div class="flex items-center justify-between">
 			<h2 class="text-sm font-semibold tracking-wide">Energy</h2>
-			<span class="text-xs text-base-content/40">Today</span>
+			<div class="flex flex-row items-center justify-center space-x-3">
+				<span class="text-xs text-base-content/40">Today</span>
+				<a href="/energy/analytics" class="btn btn-soft btn-sm">
+					<ChartPie size={18} />
+				</a>
+			</div>
 		</div>
 
 		<div class="flex justify-center py-2">

@@ -145,8 +145,8 @@
 	<meta name="description" content="View your energy consumption over time." />
 </svelte:head>
 
-<div class="w-full px-4 pb-24">
-	<div class="mx-auto flex w-full max-w-xl flex-col gap-6">
+<div class="w-full">
+	<div class="flex w-full max-w-xl flex-col gap-6">
 		<section class="flex flex-col gap-4">
 			<div class="flex items-center justify-between">
 				<div class="flex items-center gap-2">

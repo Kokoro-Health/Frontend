@@ -14,7 +14,7 @@
 
 <svelte:head>
 	<title>Home</title>
-	<meta name="description" content="Home - The landing page (testing)" />
+	<meta name="description" content="Access the core features & track your energy." />
 </svelte:head>
 
 <div class="w-full flex-1 space-y-3 overflow-y-auto">

@@ -1,8 +1,9 @@
 <script lang="ts">
 	import type { EnergyInfoDto } from '$lib/api';
-	import { addEnergyEntry, getEnergyInfo } from '$lib/api/sdk.gen';
-	import { Skull, Frown, Meh, Smile, Laugh, ChartArea, ChartPie } from '@lucide/svelte';
+	import { addEnergyEntry, getEnergyInfoToday, getEnergyReasons } from '$lib/api/sdk.gen';
+	import { Skull, Frown, Meh, Smile, Laugh, ChartPie } from '@lucide/svelte';
 	import EnergyBattery from './EnergyBattery.svelte';
+	import ReasonModal from './ReasonModal.svelte';
 
 	interface Preset {
 		icon: typeof Skull;
@@ -56,6 +57,9 @@
 	let loading = $state(false);
 	let loggedValue = $state<number | null>(null);
 	let cooldownSeconds = $state(0);
+	let showReasonModal = $state(false);
+	let pendingAmount = $state<number | null>(null);
+	let reasons = $state<string[]>([]);
 
 	function formatCooldown(seconds: number): string {
 		const minutes = Math.floor(seconds / SECONDS_IN_MINUTE);
@@ -93,15 +97,39 @@
 		displayInfo = info;
 	});
 
-	async function handleLog(amount: number) {
+	async function openReasonModal(amount: number) {
+		pendingAmount = amount;
+		const loadedReasons = await loadReasons();
+		reasons = loadedReasons;
+		showReasonModal = true;
+	}
+
+	async function loadReasons(): Promise<string[]> {
+		let loadedReasons: string[] = [];
+		await getEnergyReasons().then((res) => {
+			if (!res.data) return;
+			loadedReasons = res.data.reasons;
+		});
+		return loadedReasons;
+	}
+	function handleReasonModalClose() {
+		showReasonModal = false;
+		pendingAmount = null;
+	}
+
+	async function handleLog(amount: number, reason?: string | null) {
 		if (loading || cooldownSeconds > 0) return;
+		if (reason === undefined) {
+			openReasonModal(amount);
+			return;
+		}
 
 		loading = true;
 		loggedValue = amount;
 
 		try {
-			await addEnergyEntry({ body: { amount } });
-			const response = await getEnergyInfo();
+			await addEnergyEntry({ body: { amount, reason: reason ?? '' } });
+			const response = await getEnergyInfoToday();
 			if (response.data) {
 				displayInfo = response.data;
 				loggedValue = null;
@@ -109,6 +137,14 @@
 		} finally {
 			loading = false;
 		}
+	}
+
+	function handleReasonSelect(reason: string | null) {
+		showReasonModal = false;
+		if (pendingAmount !== null) {
+			handleLog(pendingAmount, reason);
+		}
+		pendingAmount = null;
 	}
 </script>
 
@@ -153,3 +189,7 @@
 		{/if}
 	</div>
 </div>
+
+{#if showReasonModal}
+	<ReasonModal {reasons} onSelect={handleReasonSelect} onClose={handleReasonModalClose} />
+{/if}

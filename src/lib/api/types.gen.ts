@@ -17,6 +17,8 @@ export type SettingsRequestDto = {
     marketingEmails: boolean;
     securityAlerts: boolean;
     reminderEmails: boolean;
+    timezone: string;
+    dateFormat: string;
 };
 
 export type Unit = {
@@ -29,6 +31,7 @@ export type VerificationRequestResponseDto = {
 
 export type EnergyRequestDto = {
     amount: number;
+    reason: string;
 };
 
 export type SignUpRequestDto = {
@@ -71,6 +74,8 @@ export type SettingsResponseDto = {
     marketingEmails: boolean;
     securityAlerts: boolean;
     reminderEmails: boolean;
+    timezone: string;
+    dateFormat: string;
     updatedAt: string;
 };
 
@@ -82,18 +87,25 @@ export type ProfileResponseDto = {
     email: string;
     profilePictureUrl: string;
     theme: 'LIGHT' | 'DARK' | 'SYSTEM';
+    timezone: string;
+    dateFormat: string;
     createdAt: number;
     verified: boolean;
 };
 
 export type EnergyInfoDto = {
     energy: number;
+    reason: string;
     nextEntryAllowed: string;
 };
 
 export type EnergyInfoDateDto = {
     date: string;
     amount: number;
+};
+
+export type ReasonsResponseDto = {
+    reasons: Array<string>;
 };
 
 export type MfaSettings = {
@@ -443,30 +455,57 @@ export type GetMyProfileResponses = {
 
 export type GetMyProfileResponse = GetMyProfileResponses[keyof GetMyProfileResponses];
 
-export type GetEnergyInfoData = {
+export type GetEnergyInfoTodayData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/energy';
 };
 
-export type GetEnergyInfoErrors = {
+export type GetEnergyInfoTodayErrors = {
     /**
      * Bad Request
      */
     400: ErrorResponse;
 };
 
-export type GetEnergyInfoError = GetEnergyInfoErrors[keyof GetEnergyInfoErrors];
+export type GetEnergyInfoTodayError = GetEnergyInfoTodayErrors[keyof GetEnergyInfoTodayErrors];
 
-export type GetEnergyInfoResponses = {
+export type GetEnergyInfoTodayResponses = {
     /**
      * OK
      */
     200: EnergyInfoDto;
 };
 
-export type GetEnergyInfoResponse = GetEnergyInfoResponses[keyof GetEnergyInfoResponses];
+export type GetEnergyInfoTodayResponse = GetEnergyInfoTodayResponses[keyof GetEnergyInfoTodayResponses];
+
+export type GetEnergyEntryByIdData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/energy/{id}';
+};
+
+export type GetEnergyEntryByIdErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+};
+
+export type GetEnergyEntryByIdError = GetEnergyEntryByIdErrors[keyof GetEnergyEntryByIdErrors];
+
+export type GetEnergyEntryByIdResponses = {
+    /**
+     * OK
+     */
+    200: EnergyInfoDto;
+};
+
+export type GetEnergyEntryByIdResponse = GetEnergyEntryByIdResponses[keyof GetEnergyEntryByIdResponses];
 
 export type GetEnergyForDateRangeData = {
     body?: never;
@@ -495,6 +534,31 @@ export type GetEnergyForDateRangeResponses = {
 };
 
 export type GetEnergyForDateRangeResponse = GetEnergyForDateRangeResponses[keyof GetEnergyForDateRangeResponses];
+
+export type GetEnergyReasonsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/energy/reasons';
+};
+
+export type GetEnergyReasonsErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+};
+
+export type GetEnergyReasonsError = GetEnergyReasonsErrors[keyof GetEnergyReasonsErrors];
+
+export type GetEnergyReasonsResponses = {
+    /**
+     * OK
+     */
+    200: ReasonsResponseDto;
+};
+
+export type GetEnergyReasonsResponse = GetEnergyReasonsResponses[keyof GetEnergyReasonsResponses];
 
 export type ValidatePasswordResetCodeData = {
     body?: never;

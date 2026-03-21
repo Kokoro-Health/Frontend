@@ -6,7 +6,6 @@
 		Laptop,
 		Check,
 		AlertCircle,
-		Shield,
 		LogOut,
 		ChevronRight,
 		RefreshCcw
@@ -19,14 +18,18 @@
 		language: 'ENGLISH',
 		marketingEmails: false,
 		securityAlerts: false,
-		reminderEmails: false
+		reminderEmails: false,
+		timezone: '',
+		dateFormat: ''
 	});
 	let settings: SettingsRequestDto = $state({
 		theme: 'LIGHT',
 		language: 'ENGLISH',
 		marketingEmails: false,
 		securityAlerts: false,
-		reminderEmails: false
+		reminderEmails: false,
+		timezone: '',
+		dateFormat: ''
 	});
 	let loading = $state(false);
 	let error: string | null = $state(null);
@@ -42,7 +45,9 @@
 			language: source.language as SettingsRequestDto['language'],
 			marketingEmails: source.marketingEmails as SettingsRequestDto['marketingEmails'],
 			securityAlerts: source.securityAlerts as SettingsRequestDto['securityAlerts'],
-			reminderEmails: source.reminderEmails as SettingsRequestDto['reminderEmails']
+			reminderEmails: source.reminderEmails as SettingsRequestDto['reminderEmails'],
+			timezone: source.timezone,
+			dateFormat: source.dateFormat
 		};
 		savedSettings = { ...incoming };
 		settings = { ...incoming };

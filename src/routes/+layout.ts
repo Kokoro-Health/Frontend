@@ -1,5 +1,5 @@
 import { client } from '$lib/api/client.gen';
-import { getBackendUrl } from '$lib/backend';
+import { getBackendUrl } from '$lib/util/backend';
 import type { LayoutLoad } from './$types';
 
 export const prerender = true;

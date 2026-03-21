@@ -1,0 +1,52 @@
+<script lang="ts">
+	import type { EnergyInfoDateDto, ProfileResponseDto } from '$lib/api';
+	import { formatInstant } from '$lib/util/dateUtil';
+	import { EyeIcon } from '@lucide/svelte';
+
+	let {
+		entries,
+		loading,
+		profile
+	}: { entries: EnergyInfoDateDto[]; loading: boolean; profile: ProfileResponseDto } = $props();
+
+	const skeletonRows = Array(5).fill(null);
+</script>
+
+<div class="rounded-xl border border-base-200">
+	<div>
+		<table class="table w-full table-zebra text-sm">
+			<thead>
+				<tr>
+					<th class="font-medium">Date</th>
+					<th class="text-right font-medium">Average</th>
+					<th class="w-fit text-center font-medium">View</th>
+				</tr>
+			</thead>
+			<tbody class="max-h-32 overflow-y-auto">
+				{#if loading}
+					{#each skeletonRows as _}
+						<tr>
+							<td><div class="h-4 w-24 skeleton"></div></td>
+							<td class="text-right"><div class="ml-auto h-4 w-12 skeleton"></div></td>
+							<td class="w-fit text-center"
+								><div class="rounded-btn mx-auto h-8 w-8 skeleton"></div></td
+							>
+						</tr>
+					{/each}
+				{:else}
+					{#each entries as entry}
+						<tr>
+							<td class="font-medium">{formatInstant(entry.date, profile)}</td>
+							<td class="text-right">{entry.amount}%</td>
+							<td class="w-fit text-center">
+								<a href={`/energy/analytics/${entry.date}`} class="btn opacity-70 btn-ghost btn-sm">
+									<EyeIcon size={18} />
+								</a>
+							</td>
+						</tr>
+					{/each}
+				{/if}
+			</tbody>
+		</table>
+	</div>
+</div>

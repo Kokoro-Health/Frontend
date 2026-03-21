@@ -1,13 +1,14 @@
 import type { PageLoad } from './$types';
-import { getEnergyInfo, type EnergyInfoDto } from '$lib/api';
+import { getEnergyInfoToday, type EnergyInfoDto } from '$lib/api';
 
 export const load: PageLoad = async () => {
 	let energyInfo: EnergyInfoDto = {
 		energy: 0,
-		nextEntryAllowed: ''
+		nextEntryAllowed: '',
+		reason: ''
 	};
 
-	await getEnergyInfo().then((res) => {
+	await getEnergyInfoToday().then((res) => {
 		if (res.data) energyInfo = res.data;
 	});
 	return {

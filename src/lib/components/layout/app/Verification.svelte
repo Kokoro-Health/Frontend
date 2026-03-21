@@ -140,7 +140,7 @@
 </script>
 
 <div
-	class="flex h-16 w-full flex-row items-center justify-between bg-warning/30 px-4 text-warning-content/40 md:static md:h-auto md:bg-transparent md:p-0 md:text-inherit"
+	class="card flex h-16 w-full flex-row items-center justify-between bg-warning/30 px-4 text-warning-content/70"
 >
 	<span class="truncate text-sm font-medium md:text-base">Please verify your email address.</span>
 	<button

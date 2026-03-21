@@ -10,7 +10,6 @@
 
 	function onVerificationSuccess() {
 		if (!window) return;
-
 		window.location.reload();
 	}
 
@@ -32,11 +31,15 @@
 </script>
 
 <MobileHeader />
-<div class="overflow-x-hidden overflow-y-auto px-4">
+
+<main class="overflow-x-hidden overflow-y-auto px-4 transition-all duration-500 ease-out">
 	{#if data.profile && !data.profile.verified}
-		<Verification onSuccess={() => onVerificationSuccess()} email={data.profile.email} />
+		<div class="animate-fade-in-up mb-4">
+			<Verification onSuccess={() => onVerificationSuccess()} email={data.profile.email} />
+		</div>
 	{/if}
 	{@render children()}
-</div>
+</main>
+
 <MobileDock />
 <ThemeLoader theme={data.profile!!.theme} />

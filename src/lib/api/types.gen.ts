@@ -99,9 +99,22 @@ export type EnergyInfoDto = {
     nextEntryAllowed: string;
 };
 
+export type EnergyDetailsDto = {
+    influentialPositive: ReasonAmount;
+    influentialNegative: ReasonAmount;
+    average: number;
+    entries: Array<EnergyInfoDateDto>;
+};
+
 export type EnergyInfoDateDto = {
     date: string;
     amount: number;
+    reason: string;
+};
+
+export type ReasonAmount = {
+    reason: string;
+    level: number;
 };
 
 export type ReasonsResponseDto = {
@@ -480,32 +493,32 @@ export type GetEnergyInfoTodayResponses = {
 
 export type GetEnergyInfoTodayResponse = GetEnergyInfoTodayResponses[keyof GetEnergyInfoTodayResponses];
 
-export type GetEnergyEntryByIdData = {
+export type GetEnergyEntriesForDayData = {
     body?: never;
     path: {
-        id: string;
+        date: string;
     };
     query?: never;
-    url: '/energy/{id}';
+    url: '/energy/{date}';
 };
 
-export type GetEnergyEntryByIdErrors = {
+export type GetEnergyEntriesForDayErrors = {
     /**
      * Bad Request
      */
     400: ErrorResponse;
 };
 
-export type GetEnergyEntryByIdError = GetEnergyEntryByIdErrors[keyof GetEnergyEntryByIdErrors];
+export type GetEnergyEntriesForDayError = GetEnergyEntriesForDayErrors[keyof GetEnergyEntriesForDayErrors];
 
-export type GetEnergyEntryByIdResponses = {
+export type GetEnergyEntriesForDayResponses = {
     /**
      * OK
      */
-    200: EnergyInfoDto;
+    200: EnergyDetailsDto;
 };
 
-export type GetEnergyEntryByIdResponse = GetEnergyEntryByIdResponses[keyof GetEnergyEntryByIdResponses];
+export type GetEnergyEntriesForDayResponse = GetEnergyEntriesForDayResponses[keyof GetEnergyEntriesForDayResponses];
 
 export type GetEnergyForDateRangeData = {
     body?: never;

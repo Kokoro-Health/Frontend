@@ -34,7 +34,7 @@
 						</tr>
 					{/each}
 				{:else}
-					{#each entries as entry}
+					{#each entries.toReversed() as entry}
 						<tr>
 							<td class="font-medium">{formatInstant(entry.date, profile)}</td>
 							<td class="text-right">{entry.amount}%</td>

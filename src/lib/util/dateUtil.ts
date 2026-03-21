@@ -24,7 +24,7 @@ const PATTERN_MAP: Record<string, Intl.DateTimeFormatOptions> = {
 	}
 };
 
-function getLocale(user: ProfileResponseDto): string {
+export function getLocale(user: ProfileResponseDto): string {
 	return user.dateFormat.includes('-') ? 'de-CH' : 'en';
 }
 

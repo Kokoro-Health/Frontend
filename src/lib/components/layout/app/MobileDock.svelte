@@ -33,7 +33,7 @@
 	);
 </script>
 
-<div class="h-24"></div>
+<div class="h-28"></div>
 <div
 	class="dock z-100 rounded-t-3xl bg-linear-to-t from-primary/10 to-secondary/5 pb-safe shadow-lg backdrop-blur-sm"
 >

@@ -1,4 +1,3 @@
-<!-- EnergyBattery.svelte -->
 <script lang="ts">
 	import { Frown, Meh, Smile, Laugh, Zap, Skull } from '@lucide/svelte';
 

@@ -14,7 +14,7 @@
 </svelte:head>
 
 <div class="flex min-h-screen flex-col space-y-6">
-	<div class="card bg-base-200">
+	<div class="card border border-base-200">
 		<div class="card-body items-center py-6">
 			<EnergyBattery level={data.details.average} />
 			<span class="mt-2 text-sm text-base-content/60">Average Energy</span>
@@ -52,11 +52,15 @@
 			>
 				<ClockIcon size={16} /> <span>Timeline</span>
 			</div>
-			<ul class="menu w-full rounded-lg bg-base-200 p-0">
+			<ul class="menu w-full rounded-lg border border-base-200 p-0">
 				{#each data.details.entries as entry}
-					<li class="flex flex-row items-center gap-3 p-3">
+					<li class="flex flex-row items-center gap-3 border-b border-base-200 p-3">
 						<span>{toAmPmTime(entry.date, data.profile!!)}</span>
-						<span class="flex-1 text-sm">{entry.reason}</span>
+						{#if entry.reason}
+							<span class="flex-1 text-sm">{entry.reason}</span>
+						{:else}
+							<span class="flex-1 text-sm opacity-80">None</span>
+						{/if}
 						<div class="badge badge-sm badge-neutral">{entry.amount}%</div>
 					</li>
 				{/each}

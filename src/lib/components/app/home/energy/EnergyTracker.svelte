@@ -148,7 +148,7 @@
 	}
 </script>
 
-<div class="card w-full rounded-box bg-base-200">
+<div class="card w-full rounded-box border border-base-200">
 	<div class="card-body gap-5 p-5">
 		<div class="flex items-center justify-between">
 			<h2 class="text-sm font-semibold tracking-wide">Energy</h2>

@@ -1,9 +1,5 @@
 <script lang="ts">
-	import {
-		requestPasswordReset,
-		resetPassword,
-		validatePasswordResetCode
-	} from '$lib/api/sdk.gen.js';
+	import { requestPasswordReset, resetPassword, validatePasswordResetCode } from '$lib/api';
 	import {
 		HouseIcon,
 		Loader2Icon,

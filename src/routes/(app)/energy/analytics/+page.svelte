@@ -82,7 +82,7 @@
 		<EnergyGraphDateRange
 			bind:fromInput
 			bind:toInput
-			profile={data.profile!!}
+			profile={data.profile!}
 			{applyPreset}
 			{fetchData}
 			{entries}

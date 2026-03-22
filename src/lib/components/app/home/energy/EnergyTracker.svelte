@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { EnergyInfoDto } from '$lib/api';
-	import { addEnergyEntry, getEnergyInfoToday, getEnergyReasons } from '$lib/api/sdk.gen';
+	import { addEnergyEntry, getEnergyInfoToday, getEnergyReasons } from '$lib/api';
 	import { Skull, Frown, Meh, Smile, Laugh, ChartPie } from '@lucide/svelte';
 	import EnergyBattery from './EnergyBattery.svelte';
 	import ReasonModal from './ReasonModal.svelte';
@@ -57,9 +57,10 @@
 	let loading = $state(false);
 	let loggedValue = $state<number | null>(null);
 	let cooldownSeconds = $state(0);
-	let showReasonModal = $state(false);
 	let pendingAmount = $state<number | null>(null);
 	let reasons = $state<string[]>([]);
+
+	let reasonModalInstance: InstanceType<any> | null = null;
 
 	function formatCooldown(seconds: number): string {
 		const minutes = Math.floor(seconds / SECONDS_IN_MINUTE);
@@ -101,7 +102,10 @@
 		pendingAmount = amount;
 		const loadedReasons = await loadReasons();
 		reasons = loadedReasons;
-		showReasonModal = true;
+
+		if (reasonModalInstance) {
+			reasonModalInstance.showModal();
+		}
 	}
 
 	async function loadReasons(): Promise<string[]> {
@@ -111,10 +115,6 @@
 			loadedReasons = res.data.reasons;
 		});
 		return loadedReasons;
-	}
-	function handleReasonModalClose() {
-		showReasonModal = false;
-		pendingAmount = null;
 	}
 
 	async function handleLog(amount: number, reason?: string | null) {
@@ -140,7 +140,6 @@
 	}
 
 	function handleReasonSelect(reason: string | null) {
-		showReasonModal = false;
 		if (pendingAmount !== null) {
 			handleLog(pendingAmount, reason);
 		}
@@ -190,6 +189,11 @@
 	</div>
 </div>
 
-{#if showReasonModal}
-	<ReasonModal {reasons} onSelect={handleReasonSelect} onClose={handleReasonModalClose} />
-{/if}
+<ReasonModal
+	bind:this={reasonModalInstance}
+	{reasons}
+	onSelect={handleReasonSelect}
+	onClose={() => {
+		pendingAmount = null;
+	}}
+/>

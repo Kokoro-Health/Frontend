@@ -1,11 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
+import { KeyboardResize } from '@capacitor/keyboard';
 
 const dev = process.env.NODE_ENV !== 'production';
-
-const getDevUrl = () => {
-	const lanIp = process.env.DEV_HOST ?? '10.0.2.2';
-	return `http://${lanIp}:5173`;
-};
 
 const config: CapacitorConfig = {
 	appId: 'health.kokoro',
@@ -13,10 +9,16 @@ const config: CapacitorConfig = {
 	webDir: 'build',
 	server: dev
 		? {
-				url: getDevUrl(),
+				url: process.env.DEV_HOST,
 				cleartext: true
 			}
-		: undefined
+		: undefined,
+	plugins: {
+		Keyboard: {
+			resize: KeyboardResize.Native,
+			resizeOnFullScreen: true
+		}
+	}
 };
 
 export default config;

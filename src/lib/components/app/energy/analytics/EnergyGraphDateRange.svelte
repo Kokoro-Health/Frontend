@@ -1,19 +1,21 @@
 <script lang="ts">
 	import { ArrowDown, ArrowUp, RefreshCw } from '@lucide/svelte';
-	import { Line } from 'svelte-chartjs';
 	import type { ChartOptions } from 'chart.js';
 	import { Chart, registerables } from 'chart.js';
-	import { formatInstant } from '$lib/util/dateUtil';
+	import { formatInstant, toInstant, toIsoDate, toIsoDateFromString } from '$lib/util/dateUtil';
 	import type { EnergyInfoDateDto, ProfileResponseDto } from '$lib/api';
+	import ChartWrapper from '$lib/components/ui/ChartWrapper.svelte';
 
 	Chart.register(...registerables);
 
-	const CHART_MAX_VALUE = 100;
-	const CHART_LINE_TENSION = 0.4;
-	const CHART_BORDER_WIDTH = 2;
-	const CHART_POINT_RADIUS = 4;
-	const CHART_POINT_HIT_RADIUS = 10;
-	const CHART_POINT_HOVER_RADIUS = 6;
+	const CHART_CONFIG = {
+		maxValue: 100,
+		lineTension: 0.4,
+		borderWidth: 2,
+		pointRadius: 4,
+		pointHitRadius: 10,
+		pointHoverRadius: 6
+	};
 
 	let {
 		dateRangePresets,
@@ -38,8 +40,8 @@
 	let isLoading = $state(false);
 	let showAdvancedDateRange = $state(false);
 
-	let fromInputDateString = $derived(fromInput ? fromInput.split('T')[0] : '');
-	let toInputDateString = $derived(toInput ? toInput.split('T')[0] : '');
+	let fromInputDateString = $derived(fromInput ? toIsoDateFromString(fromInput) : '');
+	let toInputDateString = $derived(toInput ? toIsoDateFromString(toInput) : '');
 
 	function handleFromDateChange(e: Event): void {
 		const value = (e.target as HTMLInputElement).value;
@@ -63,7 +65,7 @@
 		}>;
 	}>({ labels: [], datasets: [] });
 
-	let chartOptions: ChartOptions<'line'> = $state({
+	let chartOptions: ChartOptions<'line'> = {
 		responsive: true,
 		maintainAspectRatio: false,
 		plugins: {
@@ -74,32 +76,30 @@
 				backgroundColor: 'rgba(0, 0, 0, 0.8)',
 				titleColor: '#fff',
 				bodyColor: '#fff',
-				borderRadius: 8,
 				padding: 10
 			}
 		},
 		scales: {
 			x: {
-				grid: { display: false, drawBorder: false },
+				grid: { display: false },
 				ticks: { color: '#9ca3af' }
 			},
 			y: {
-				grid: { color: 'rgba(0, 0, 0, 0.05)', borderDash: [4, 4] },
+				grid: { color: 'rgba(0, 0, 0, 0.05)' },
 				ticks: { color: '#9ca3af' },
 				beginAtZero: true,
-				max: CHART_MAX_VALUE
+				max: CHART_CONFIG.maxValue
 			}
 		},
 		elements: {
-			line: { tension: CHART_LINE_TENSION, borderWidth: CHART_BORDER_WIDTH },
+			line: { tension: CHART_CONFIG.lineTension, borderWidth: CHART_CONFIG.borderWidth },
 			point: {
-				radius: CHART_POINT_RADIUS,
-				hitRadius: CHART_POINT_HIT_RADIUS,
-				hoverRadius: CHART_POINT_HOVER_RADIUS
+				radius: CHART_CONFIG.pointRadius,
+				hitRadius: CHART_CONFIG.pointHitRadius,
+				hoverRadius: CHART_CONFIG.pointHoverRadius
 			}
 		}
-	});
-
+	};
 	function updateChart(data: { date: string; amount: number }[]): void {
 		chartData = {
 			labels: data.map((d) => formatInstant(d.date, profile)),
@@ -200,7 +200,7 @@
 			<span class="loading loading-md loading-spinner text-primary"></span>
 		</div>
 	{:else if entries.length > 0}
-		<Line data={chartData} options={chartOptions} />
+		<ChartWrapper type="line" data={chartData} options={chartOptions as any} />
 	{:else}
 		<div class="flex h-full items-center justify-center">
 			<span>No data available</span>

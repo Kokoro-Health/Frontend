@@ -65,5 +65,9 @@ export function toDate(instantStr: string): Date {
 }
 
 export function toIsoDate(date: Date): string {
-	return date.toISOString().split('T')[0];
+	return toIsoDateFromString(date.toISOString());
+}
+
+export function toIsoDateFromString(str: string): string {
+	return str.split('T')[0];
 }

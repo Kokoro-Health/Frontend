@@ -16,4 +16,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 </svelte:head>
 
-{@render children()}
+<div class="select-none">
+	{@render children()}
+</div>

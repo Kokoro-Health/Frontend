@@ -12,7 +12,7 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
-		"openapi-ts": "openapi-ts",
+		"openapi-ts": "curl http://localhost:8080/docs > openapi.json && openapi-ts",
 		"android-dev": "concurrently \"bun run dev --host\" \"bunx cap open android\"",
 		"android-dev-unix": "bun run dev --host & bun run build && bunx cap sync && bunx cap open android",
 		"ios-dev": "concurrently \"bun run dev --host\" \"bunx cap open ios\""
@@ -49,6 +49,7 @@
 		"@capacitor/assets": "^3.0.5",
 		"@capacitor/core": "^8.2.0",
 		"@capacitor/ios": "^8.2.0",
+		"@capacitor/keyboard": "^8.0.1",
 		"@capacitor/preferences": "^8.0.1",
 		"@capacitor/screen-orientation": "^8.0.1",
 		"@lucide/svelte": "^0.577.0",

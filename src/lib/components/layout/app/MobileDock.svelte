@@ -11,13 +11,13 @@
 
 	const ROUTES = {
 		SETTINGS: '/settings',
-		COMMUNITY: '/community',
+		JOURNAL: '/journal',
 		HOME: '/app'
 	} as const;
 
 	const LABELS = {
 		SETTINGS: 'Settings',
-		COMMUNITY: 'Community',
+		JOURNAL: 'Journal',
 		HOME: 'Home'
 	} as const;
 
@@ -25,7 +25,7 @@
 
 	const links: Link[] = [
 		{ name: LABELS.HOME, href: ROUTES.HOME, icon: HouseIcon },
-		{ name: LABELS.COMMUNITY, href: ROUTES.COMMUNITY, icon: MessageCircle },
+		{ name: LABELS.JOURNAL, href: ROUTES.JOURNAL, icon: MessageCircle },
 		{ name: LABELS.SETTINGS, href: ROUTES.SETTINGS, icon: SettingsIcon }
 	];
 

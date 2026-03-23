@@ -1,5 +1,10 @@
 import type { PageLoad } from './$types';
-import { getEnergyInfoToday, type EnergyInfoDto } from '$lib/api';
+import {
+	getCurrentJournal,
+	getEnergyInfoToday,
+	type EnergyInfoDto,
+	type JournalEntryDto
+} from '$lib/api';
 
 export const load: PageLoad = async () => {
 	let energyInfo: EnergyInfoDto = {
@@ -7,11 +12,20 @@ export const load: PageLoad = async () => {
 		nextEntryAllowed: '',
 		reason: ''
 	};
+	let journalContent: JournalEntryDto = {
+		content: ''
+	};
 
 	await getEnergyInfoToday().then((res) => {
 		if (res.data) energyInfo = res.data;
 	});
+
+	await getCurrentJournal().then((res) => {
+		if (res.data) journalContent = res.data;
+	});
+
 	return {
-		energyInfo: energyInfo
+		energyInfo: energyInfo,
+		journalContent: journalContent
 	};
 };

@@ -29,6 +29,14 @@ export type VerificationRequestResponseDto = {
     nextCodeAllowedAt: string;
 };
 
+export type JournalRequestDto = {
+    content: string;
+};
+
+export type JournalEntryDto = {
+    content: string;
+};
+
 export type EnergyRequestDto = {
     amount: number;
     reason: string;
@@ -232,6 +240,56 @@ export type RequestVerificationCodeResponses = {
 };
 
 export type RequestVerificationCodeResponse = RequestVerificationCodeResponses[keyof RequestVerificationCodeResponses];
+
+export type GetCurrentJournalData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/journal';
+};
+
+export type GetCurrentJournalErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+};
+
+export type GetCurrentJournalError = GetCurrentJournalErrors[keyof GetCurrentJournalErrors];
+
+export type GetCurrentJournalResponses = {
+    /**
+     * OK
+     */
+    200: JournalEntryDto;
+};
+
+export type GetCurrentJournalResponse = GetCurrentJournalResponses[keyof GetCurrentJournalResponses];
+
+export type UpdateCurrentJournalData = {
+    body: JournalRequestDto;
+    path?: never;
+    query?: never;
+    url: '/journal';
+};
+
+export type UpdateCurrentJournalErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+};
+
+export type UpdateCurrentJournalError = UpdateCurrentJournalErrors[keyof UpdateCurrentJournalErrors];
+
+export type UpdateCurrentJournalResponses = {
+    /**
+     * OK
+     */
+    200: JournalEntryDto;
+};
+
+export type UpdateCurrentJournalResponse = UpdateCurrentJournalResponses[keyof UpdateCurrentJournalResponses];
 
 export type AddEnergyEntryData = {
     body: EnergyRequestDto;

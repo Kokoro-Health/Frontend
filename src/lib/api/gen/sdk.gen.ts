@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { AddEnergyEntryData, AddEnergyEntryErrors, AddEnergyEntryResponses, DisableMfaData, DisableMfaErrors, DisableMfaResponses, GetEnergyEntriesForDayData, GetEnergyEntriesForDayErrors, GetEnergyEntriesForDayResponses, GetEnergyForDateRangeData, GetEnergyForDateRangeErrors, GetEnergyForDateRangeResponses, GetEnergyInfoTodayData, GetEnergyInfoTodayErrors, GetEnergyInfoTodayResponses, GetEnergyReasonsData, GetEnergyReasonsErrors, GetEnergyReasonsResponses, GetMfaSettingsData, GetMfaSettingsErrors, GetMfaSettingsResponses, GetMyProfileData, GetMyProfileErrors, GetMyProfileResponses, GetSettingsData, GetSettingsErrors, GetSettingsResponses, LogoutData, LogoutErrors, LogoutResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, RequestVerificationCodeData, RequestVerificationCodeErrors, RequestVerificationCodeResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, SetupMfaData, SetupMfaErrors, SetupMfaResponses, SignInData, SignInErrors, SignInResponses, SignUpData, SignUpErrors, SignUpResponses, UpdateSettingsData, UpdateSettingsErrors, UpdateSettingsResponses, ValidatePasswordResetCodeData, ValidatePasswordResetCodeErrors, ValidatePasswordResetCodeResponses, VerifyCodeData, VerifyCodeErrors, VerifyCodeResponses, VerifyMfaCodeAndEnableData, VerifyMfaCodeAndEnableErrors, VerifyMfaCodeAndEnableResponses } from './types.gen';
+import type { AddEnergyEntryData, AddEnergyEntryErrors, AddEnergyEntryResponses, DisableMfaData, DisableMfaErrors, DisableMfaResponses, GetCurrentJournalData, GetCurrentJournalErrors, GetCurrentJournalResponses, GetEnergyEntriesForDayData, GetEnergyEntriesForDayErrors, GetEnergyEntriesForDayResponses, GetEnergyForDateRangeData, GetEnergyForDateRangeErrors, GetEnergyForDateRangeResponses, GetEnergyInfoTodayData, GetEnergyInfoTodayErrors, GetEnergyInfoTodayResponses, GetEnergyReasonsData, GetEnergyReasonsErrors, GetEnergyReasonsResponses, GetMfaSettingsData, GetMfaSettingsErrors, GetMfaSettingsResponses, GetMyProfileData, GetMyProfileErrors, GetMyProfileResponses, GetSettingsData, GetSettingsErrors, GetSettingsResponses, LogoutData, LogoutErrors, LogoutResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, RequestVerificationCodeData, RequestVerificationCodeErrors, RequestVerificationCodeResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, SetupMfaData, SetupMfaErrors, SetupMfaResponses, SignInData, SignInErrors, SignInResponses, SignUpData, SignUpErrors, SignUpResponses, UpdateCurrentJournalData, UpdateCurrentJournalErrors, UpdateCurrentJournalResponses, UpdateSettingsData, UpdateSettingsErrors, UpdateSettingsResponses, ValidatePasswordResetCodeData, ValidatePasswordResetCodeErrors, ValidatePasswordResetCodeResponses, VerifyCodeData, VerifyCodeErrors, VerifyCodeResponses, VerifyMfaCodeAndEnableData, VerifyMfaCodeAndEnableErrors, VerifyMfaCodeAndEnableResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -32,6 +32,17 @@ export const updateSettings = <ThrowOnError extends boolean = false>(options: Op
 export const verifyCode = <ThrowOnError extends boolean = false>(options: Options<VerifyCodeData, ThrowOnError>) => (options.client ?? client).post<VerifyCodeResponses, VerifyCodeErrors, ThrowOnError>({ url: '/user/profile/verify', ...options });
 
 export const requestVerificationCode = <ThrowOnError extends boolean = false>(options?: Options<RequestVerificationCodeData, ThrowOnError>) => (options?.client ?? client).post<RequestVerificationCodeResponses, RequestVerificationCodeErrors, ThrowOnError>({ url: '/user/profile/requestVerification', ...options });
+
+export const getCurrentJournal = <ThrowOnError extends boolean = false>(options?: Options<GetCurrentJournalData, ThrowOnError>) => (options?.client ?? client).get<GetCurrentJournalResponses, GetCurrentJournalErrors, ThrowOnError>({ url: '/journal', ...options });
+
+export const updateCurrentJournal = <ThrowOnError extends boolean = false>(options: Options<UpdateCurrentJournalData, ThrowOnError>) => (options.client ?? client).post<UpdateCurrentJournalResponses, UpdateCurrentJournalErrors, ThrowOnError>({
+    url: '/journal',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 export const addEnergyEntry = <ThrowOnError extends boolean = false>(options: Options<AddEnergyEntryData, ThrowOnError>) => (options.client ?? client).post<AddEnergyEntryResponses, AddEnergyEntryErrors, ThrowOnError>({
     url: '/energy/add',

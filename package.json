@@ -15,7 +15,7 @@
 		"openapi-ts": "curl http://localhost:8080/docs > openapi.json && openapi-ts",
 		"android-dev": "concurrently \"bun run dev --host\" \"bunx cap open android\"",
 		"android-dev-unix": "bun run dev --host & bun run build && bunx cap sync && bunx cap open android",
-		"ios-dev": "concurrently \"bun run dev --host\" \"bunx cap open ios\""
+		"ios-dev": "bunx cap sync ios && concurrently \"bun run dev --host\" \"bunx cap open ios\""
 	},
 	"devDependencies": {
 		"@capacitor/cli": "^8.2.0",

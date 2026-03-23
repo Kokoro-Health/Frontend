@@ -12,8 +12,9 @@ export const load: PageLoad = async () => {
 		nextEntryAllowed: '',
 		reason: ''
 	};
-	let journalContent: JournalEntryDto = {
-		content: ''
+	let journal: JournalEntryDto = {
+		content: '',
+		availableUntil: ''
 	};
 
 	await getEnergyInfoToday().then((res) => {
@@ -21,11 +22,11 @@ export const load: PageLoad = async () => {
 	});
 
 	await getCurrentJournal().then((res) => {
-		if (res.data) journalContent = res.data;
+		if (res.data) journal = res.data;
 	});
 
 	return {
 		energyInfo: energyInfo,
-		journalContent: journalContent
+		journal: journal
 	};
 };

@@ -35,6 +35,7 @@ export type JournalRequestDto = {
 
 export type JournalEntryDto = {
     content: string;
+    availableUntil: string;
 };
 
 export type EnergyRequestDto = {

@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { updateCurrentJournal } from '$lib/api';
+	import { updateCurrentJournal, type JournalEntryDto } from '$lib/api';
+	import { toDate } from '$lib/util/dateUtil';
 	import { CloudCheck, InfoIcon } from '@lucide/svelte';
 	import { onDestroy } from 'svelte';
 
@@ -8,13 +9,18 @@
 
 	type SavingState = 'idle' | 'pending' | 'saving' | 'saved' | 'error';
 
-	let { content = $bindable() }: { content: string } = $props();
+	let { entry = $bindable() }: { entry: JournalEntryDto } = $props();
 
 	let savingState = $state<SavingState>('idle');
-	let savedContent = $state(content);
+	let savedContent = $state('');
+	let content = $state('');
+	let availableUntilStr = $state('');
+	let availableUntil: Date | null = $state(null);
+	let countdownDisplay = $state('');
 	let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 	let savedDisplayTimer: ReturnType<typeof setTimeout> | null = null;
 	let pendingSave = false;
+	let countdownInterval: ReturnType<typeof setInterval> | null = null;
 
 	function clearTimers() {
 		if (debounceTimer) {
@@ -25,6 +31,10 @@
 			clearTimeout(savedDisplayTimer);
 			savedDisplayTimer = null;
 		}
+		if (countdownInterval) {
+			clearInterval(countdownInterval);
+			countdownInterval = null;
+		}
 	}
 
 	function scheduleTransitionToIdle() {
@@ -32,6 +42,62 @@
 		savedDisplayTimer = setTimeout(() => {
 			savingState = 'idle';
 		}, SAVED_DISPLAY_MS);
+	}
+
+	function startCountdown() {
+		if (countdownInterval) clearInterval(countdownInterval);
+
+		updateCountdown();
+
+		countdownInterval = setInterval(() => {
+			updateCountdown();
+		}, 1_000);
+	}
+
+	function updateCountdown() {
+		if (!availableUntil) {
+			countdownDisplay = '';
+			return;
+		}
+
+		const now = new Date();
+		const diffMs = availableUntil.getTime() - now.getTime();
+
+		if (diffMs <= 0) {
+			countdownDisplay = '';
+			clearCountdown();
+			refreshContent();
+			return;
+		}
+
+		const totalSeconds = Math.floor(diffMs / 1_000);
+		const minutes = Math.floor(totalSeconds / 60);
+		const seconds = totalSeconds % 60;
+
+		countdownDisplay = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+	}
+
+	function clearCountdown() {
+		if (countdownInterval) {
+			clearInterval(countdownInterval);
+			countdownInterval = null;
+		}
+	}
+
+	async function refreshContent() {
+		try {
+			const res = await updateCurrentJournal({
+				body: {
+					content: content
+				}
+			});
+			const data = res.data;
+			if (!data) throw new Error('No response data');
+
+			savedContent = content;
+			availableUntil = toDate(data.availableUntil);
+			startCountdown();
+		} catch {}
 	}
 
 	async function save() {
@@ -59,6 +125,8 @@
 
 			savedContent = snapshot;
 			savingState = 'saved';
+			availableUntil = toDate(data.availableUntil);
+			startCountdown();
 			scheduleTransitionToIdle();
 		} catch {
 			savingState = 'error';
@@ -85,6 +153,21 @@
 		}
 		scheduleSave();
 	}
+
+	$effect(() => {
+		if (content.trim() && availableUntil && availableUntil.getTime() > Date.now()) {
+			startCountdown();
+		}
+	});
+
+	$effect(() => {
+		if (entry) {
+			content = entry.content;
+			savedContent = entry.content;
+			availableUntil = toDate(entry.availableUntil);
+			availableUntilStr = entry.availableUntil;
+		}
+	});
 
 	onDestroy(clearTimers);
 </script>
@@ -121,6 +204,11 @@
 						<CloudCheck size={16} class="text-success" />
 					{/if}
 				</span>
+				{#if countdownDisplay}
+					<span class="font-mono text-xs text-base-content/60">
+						{countdownDisplay}
+					</span>
+				{/if}
 				<span class="text-xs text-base-content/40">Today</span>
 			</div>
 		</div>

@@ -142,12 +142,8 @@
 <div
 	class="card flex h-16 w-full flex-row items-center justify-between bg-warning/30 px-4 text-warning-content/70"
 >
-	<span class="truncate text-sm font-medium md:text-base">Please verify your email address.</span>
-	<button
-		class="btn btn-sm btn-warning md:hidden"
-		onclick={showModal}
-		aria-label="Open verification modal"
-	>
+	<span class="truncate text-sm font-medium">Please verify your email address.</span>
+	<button class="btn btn-sm btn-warning" onclick={showModal} aria-label="Open verification modal">
 		<Code size={16} />
 		Verify
 	</button>

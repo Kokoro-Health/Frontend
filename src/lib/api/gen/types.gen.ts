@@ -34,13 +34,14 @@ export type JournalRequestDto = {
 };
 
 export type JournalEntryDto = {
+    id?: string | null;
     content: string;
-    availableUntil: string;
+    availableUntil?: string | null;
 };
 
 export type EnergyRequestDto = {
     amount: number;
-    reason: string;
+    reason?: string | null;
 };
 
 export type SignUpRequestDto = {
@@ -56,7 +57,7 @@ export type SignInRequestDto = {
     email: string;
     password: string;
     rememberMe: boolean;
-    mfaCode: string;
+    mfaCode?: string | null;
 };
 
 export type SignInResponseDto = {
@@ -100,6 +101,12 @@ export type ProfileResponseDto = {
     dateFormat: string;
     createdAt: number;
     verified: boolean;
+};
+
+export type ShortJournalResponseDto = {
+    id: string;
+    content: string;
+    lockedSince: string;
 };
 
 export type EnergyInfoDto = {
@@ -291,6 +298,33 @@ export type UpdateCurrentJournalResponses = {
 };
 
 export type UpdateCurrentJournalResponse = UpdateCurrentJournalResponses[keyof UpdateCurrentJournalResponses];
+
+export type UpdateCurrentJournal1Data = {
+    body: JournalRequestDto;
+    path: {
+        id: string | null;
+    };
+    query?: never;
+    url: '/journal/{id}';
+};
+
+export type UpdateCurrentJournal1Errors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+};
+
+export type UpdateCurrentJournal1Error = UpdateCurrentJournal1Errors[keyof UpdateCurrentJournal1Errors];
+
+export type UpdateCurrentJournal1Responses = {
+    /**
+     * OK
+     */
+    200: JournalEntryDto;
+};
+
+export type UpdateCurrentJournal1Response = UpdateCurrentJournal1Responses[keyof UpdateCurrentJournal1Responses];
 
 export type AddEnergyEntryData = {
     body: EnergyRequestDto;
@@ -526,6 +560,31 @@ export type GetMyProfileResponses = {
 };
 
 export type GetMyProfileResponse = GetMyProfileResponses[keyof GetMyProfileResponses];
+
+export type GetRecentJournalsShortData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/journal/recent';
+};
+
+export type GetRecentJournalsShortErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+};
+
+export type GetRecentJournalsShortError = GetRecentJournalsShortErrors[keyof GetRecentJournalsShortErrors];
+
+export type GetRecentJournalsShortResponses = {
+    /**
+     * OK
+     */
+    200: Array<ShortJournalResponseDto>;
+};
+
+export type GetRecentJournalsShortResponse = GetRecentJournalsShortResponses[keyof GetRecentJournalsShortResponses];
 
 export type GetEnergyInfoTodayData = {
     body?: never;

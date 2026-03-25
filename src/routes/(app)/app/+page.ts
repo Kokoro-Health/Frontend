@@ -13,6 +13,7 @@ export const load: PageLoad = async () => {
 		reason: ''
 	};
 	let journal: JournalEntryDto = {
+		id: '',
 		content: '',
 		availableUntil: ''
 	};

@@ -16,5 +16,5 @@
 	{:else}
 		<div class="py-8 text-center text-base-content/60">Loading energy data...</div>
 	{/if}
-	<DailyJournal entry={data.journal} />
+	<DailyJournal profile={data.profile!} />
 </div>

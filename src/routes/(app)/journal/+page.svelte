@@ -1,7 +1,16 @@
+<script lang="ts">
+	import DailyJournal from '$lib/components/app/home/journal/DailyJournal.svelte';
+	import RecentJournalTable from '$lib/components/app/journal/RecentJournalTable.svelte';
+
+	let { data } = $props();
+	let profile = $derived(data.profile!);
+</script>
+
 <svelte:head>
-	<title>Community</title>
+	<title>Journal</title>
 </svelte:head>
 
-<div>
-	<span>Hello Vello</span>
+<div class="flex flex-col space-y-4">
+	<DailyJournal profile={data.profile!} />
+	<RecentJournalTable {profile} recentsShort={data.recentJournals} />
 </div>

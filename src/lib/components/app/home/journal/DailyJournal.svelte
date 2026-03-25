@@ -1,224 +1,255 @@
 <script lang="ts">
-	import { updateCurrentJournal, type JournalEntryDto } from '$lib/api';
-	import { toDate } from '$lib/util/dateUtil';
-	import { CloudCheck, InfoIcon } from '@lucide/svelte';
-	import { onDestroy } from 'svelte';
+	import {
+		getCurrentJournal,
+		updateCurrentJournal,
+		updateCurrentJournal1,
+		type JournalEntryDto,
+		type ProfileResponseDto
+	} from '$lib/api';
+	import { onMount, onDestroy } from 'svelte';
+	import { browser } from '$app/environment';
+	import { Check, AlertCircle, Loader2, Lock, Save } from '@lucide/svelte';
+	import { toAmPmTime } from '$lib/util/timeUtil';
 
-	const SAVE_DEBOUNCE_MS = 2_000;
-	const SAVED_DISPLAY_MS = 2_500;
+	const SAVE_DELAY = 1500;
+	let { profile }: { profile: ProfileResponseDto } = $props();
 
-	type SavingState = 'idle' | 'pending' | 'saving' | 'saved' | 'error';
+	let current = $state<JournalEntryDto | null>(null);
+	let contentInput = $state('');
+	let isLoading = $state(true);
+	let isSaving = $state(false);
+	let lastSaved = $state<Date | null>(null);
+	let error = $state<string | null>(null);
+	let saveStatus = $state<'idle' | 'scheduled' | 'saving' | 'error'>('idle');
+	let initialLoad = $state(false);
 
-	let { entry = $bindable() }: { entry: JournalEntryDto } = $props();
+	let saveTimeout: ReturnType<typeof setTimeout> | null = null;
 
-	let savingState = $state<SavingState>('idle');
-	let savedContent = $state('');
-	let content = $state('');
-	let availableUntilStr = $state('');
-	let availableUntil: Date | null = $state(null);
-	let countdownDisplay = $state('');
-	let debounceTimer: ReturnType<typeof setTimeout> | null = null;
-	let savedDisplayTimer: ReturnType<typeof setTimeout> | null = null;
-	let pendingSave = false;
-	let countdownInterval: ReturnType<typeof setInterval> | null = null;
+	const isDirty = $derived(contentInput !== (current?.content ?? ''));
 
-	function clearTimers() {
-		if (debounceTimer) {
-			clearTimeout(debounceTimer);
-			debounceTimer = null;
-		}
-		if (savedDisplayTimer) {
-			clearTimeout(savedDisplayTimer);
-			savedDisplayTimer = null;
-		}
-		if (countdownInterval) {
-			clearInterval(countdownInterval);
-			countdownInterval = null;
-		}
+	function checkAvailable(): boolean {
+		if (!current?.availableUntil) return true;
+		return new Date(current.availableUntil) > new Date();
 	}
 
-	function scheduleTransitionToIdle() {
-		if (savedDisplayTimer) clearTimeout(savedDisplayTimer);
-		savedDisplayTimer = setTimeout(() => {
-			savingState = 'idle';
-		}, SAVED_DISPLAY_MS);
-	}
+	const canEdit = $derived(!isLoading && checkAvailable());
 
-	function startCountdown() {
-		if (countdownInterval) clearInterval(countdownInterval);
+	async function loadCurrent() {
+		isLoading = true;
+		error = null;
+		saveStatus = 'idle';
 
-		updateCountdown();
-
-		countdownInterval = setInterval(() => {
-			updateCountdown();
-		}, 1_000);
-	}
-
-	function updateCountdown() {
-		if (!availableUntil) {
-			countdownDisplay = '';
-			return;
-		}
-
-		const now = new Date();
-		const diffMs = availableUntil.getTime() - now.getTime();
-
-		if (diffMs <= 0) {
-			countdownDisplay = '';
-			clearCountdown();
-			refreshContent();
-			return;
-		}
-
-		const totalSeconds = Math.floor(diffMs / 1_000);
-		const minutes = Math.floor(totalSeconds / 60);
-		const seconds = totalSeconds % 60;
-
-		countdownDisplay = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-	}
-
-	function clearCountdown() {
-		if (countdownInterval) {
-			clearInterval(countdownInterval);
-			countdownInterval = null;
-		}
-	}
-
-	async function refreshContent() {
 		try {
-			const res = await updateCurrentJournal({
-				body: {
-					content: content
-				}
-			});
-			const data = res.data;
-			if (!data) throw new Error('No response data');
+			const res = await getCurrentJournal();
+			if (!res.data) {
+				throw new Error(res.error?.message ?? 'Failed to load journal');
+			}
 
-			savedContent = content;
-			availableUntil = toDate(data.availableUntil);
-			startCountdown();
-		} catch {}
+			const data = res.data;
+			initialLoad = true;
+			current = data;
+			contentInput = data.content ?? '';
+			lastSaved = data.id ? new Date() : null;
+		} catch (e) {
+			error = e instanceof Error ? e.message : 'Failed to load journal';
+			console.error('Journal load error:', e);
+		} finally {
+			isLoading = false;
+		}
 	}
 
 	async function save() {
-		if (savingState === 'saving') {
-			pendingSave = true;
-			return;
-		}
-		if (content === savedContent) {
-			savingState = 'saved';
-			scheduleTransitionToIdle();
+		if (!initialLoad) return;
+		if (!isDirty || isSaving || !current) return;
+
+		if (!current.id && !contentInput.trim()) {
 			return;
 		}
 
-		savingState = 'saving';
-		const snapshot = content;
+		isSaving = true;
+		saveStatus = 'saving';
+		error = null;
 
 		try {
-			const res = await updateCurrentJournal({
-				body: {
-					content: snapshot
-				}
-			});
-			const data = res.data;
-			if (!data) throw new Error('No response data');
-
-			savedContent = snapshot;
-			savingState = 'saved';
-			availableUntil = toDate(data.availableUntil);
-			startCountdown();
-			scheduleTransitionToIdle();
-		} catch {
-			savingState = 'error';
-		} finally {
-			if (pendingSave) {
-				pendingSave = false;
-				scheduleSave();
+			let res;
+			if (current.id) {
+				res = await updateCurrentJournal1({
+					body: { content: contentInput },
+					path: { id: current.id }
+				});
+			} else {
+				res = await updateCurrentJournal({
+					body: { content: contentInput }
+				});
 			}
+
+			if (!res.data) {
+				throw new Error('Save failed: no response data');
+			}
+
+			const returned = res.data;
+
+			if (!returned.id) {
+				if (!contentInput.trim()) {
+					current = returned;
+					saveStatus = 'idle';
+				} else {
+					error = 'Session expired or conflict. Reloading...';
+					saveStatus = 'error';
+					await loadCurrent();
+				}
+				return;
+			}
+
+			current = returned;
+			lastSaved = new Date();
+			saveStatus = 'idle';
+
+			if (returned.content !== contentInput) {
+				console.warn('Content divergence detected.');
+				contentInput = returned.content ?? '';
+			}
+		} catch (e) {
+			error = e instanceof Error ? e.message : 'Failed to save';
+			saveStatus = 'error';
+			console.error('Journal save error:', e);
+		} finally {
+			isSaving = false;
 		}
 	}
 
 	function scheduleSave() {
-		if (debounceTimer) clearTimeout(debounceTimer);
-		savingState = 'pending';
-		debounceTimer = setTimeout(save, SAVE_DEBOUNCE_MS);
-	}
+		if (saveTimeout) clearTimeout(saveTimeout);
 
-	function handleInput(e: Event) {
-		content = (e.currentTarget as HTMLTextAreaElement).value;
-		if (content === savedContent) {
-			clearTimers();
-			savingState = 'idle';
+		if (!isDirty) {
+			saveStatus = 'idle';
 			return;
 		}
-		scheduleSave();
+
+		saveStatus = 'scheduled';
+		saveTimeout = setTimeout(() => {
+			save();
+		}, SAVE_DELAY);
 	}
 
 	$effect(() => {
-		if (content.trim() && availableUntil && availableUntil.getTime() > Date.now()) {
-			startCountdown();
+		contentInput;
+		if (current && isDirty) {
+			scheduleSave();
 		}
 	});
 
-	$effect(() => {
-		if (entry) {
-			content = entry.content;
-			savedContent = entry.content;
-			availableUntil = toDate(entry.availableUntil);
-			availableUntilStr = entry.availableUntil;
+	function handleBeforeUnload(e: BeforeUnloadEvent) {
+		if (isDirty && saveStatus !== 'saving') {
+			e.preventDefault();
+			e.returnValue = '';
+		}
+	}
+
+	onMount(() => {
+		loadCurrent();
+		if (browser) {
+			window.addEventListener('beforeunload', handleBeforeUnload);
 		}
 	});
 
-	onDestroy(clearTimers);
+	onDestroy(() => {
+		if (saveTimeout) clearTimeout(saveTimeout);
+		if (browser) {
+			window.removeEventListener('beforeunload', handleBeforeUnload);
+		}
+		if (isDirty && !isSaving && current) {
+			save();
+		}
+	});
 </script>
 
-<div class="card w-full rounded-box border border-base-200">
-	<div class="card-body gap-5 p-5">
-		<div class="flex items-center justify-between">
-			<div class="flex flex-row items-center space-x-1">
-				<h2 class="text-sm font-semibold tracking-wide">Journal</h2>
-				<details class="dropdown dropdown-top">
-					<summary class="btn text-info btn-ghost btn-xs">
-						<InfoIcon size={16} />
-					</summary>
-					<div
-						class="dropdown-content menu z-10 w-80 -translate-x-1/4 rounded-box border border-base-200 bg-base-100 p-3 shadow-sm"
-					>
-						<span>
-							Entries are automatically locked 30 minutes after you stop writing. You can access
-							your history via the Journal tab.
-						</span>
-					</div>
-				</details>
-			</div>
-
-			<div class="flex items-center gap-2">
-				<span class="text-xs text-base-content/40 transition-opacity">
-					{#if savingState === 'error'}
-						<span class="text-error">Failed to save</span>
-					{:else if savingState === 'saving'}
-						<span class="loading loading-xs loading-spinner text-secondary"></span>
-					{:else if savingState === 'pending'}
-						<span class="loading loading-xs loading-dots text-base-content/40"></span>
-					{:else if savingState === 'saved'}
-						<CloudCheck size={16} class="text-success" />
-					{/if}
-				</span>
-				{#if countdownDisplay}
-					<span class="font-mono text-xs text-base-content/60">
-						{countdownDisplay}
-					</span>
-				{/if}
-				<span class="text-xs text-base-content/40">Today</span>
-			</div>
+<div class="card border border-base-200 bg-base-100 p-4">
+	<div class="mb-3 flex items-center justify-between">
+		<div class="flex items-center gap-2">
+			<h2 class="text-sm font-semibold">Journal</h2>
+			{#if isLoading}
+				<Loader2 class="h-3 w-3 animate-spin text-primary" />
+			{/if}
 		</div>
 
-		<textarea
-			class="textarea-bordered textarea w-full resize-none"
-			placeholder="Write about your day..."
-			rows={5}
-			value={content}
-			oninput={handleInput}
-		></textarea>
+		<div class="flex items-center gap-2 text-xs">
+			{#if !checkAvailable()}
+				<span class="badge gap-1 badge-sm badge-warning">
+					<Lock class="h-3 w-3" />
+					Read-only
+				</span>
+			{:else if saveStatus === 'saving'}
+				<span class="flex items-center gap-1 text-info">
+					<Loader2 class="h-3 w-3 animate-spin" />
+					Saving...
+				</span>
+			{:else if saveStatus === 'scheduled'}
+				<span class="text-warning">Unsaved changes</span>
+			{:else if saveStatus === 'error'}
+				<span class="flex items-center gap-1 text-error">
+					<AlertCircle class="h-3 w-3" />
+					Save failed
+				</span>
+			{:else if lastSaved && !isDirty}
+				<span class="flex items-center gap-1 text-success">
+					<Check class="h-3 w-3" />
+					Saved {toAmPmTime(lastSaved.toISOString(), profile)}
+				</span>
+			{/if}
+		</div>
+	</div>
+
+	{#if error}
+		<div class="mb-3 alert py-2 alert-error">
+			<AlertCircle class="h-4 w-4" />
+			<span class="text-xs">{error}</span>
+			<button
+				class="btn btn-ghost btn-xs"
+				onclick={() => {
+					error = null;
+					loadCurrent();
+				}}
+			>
+				Reload
+			</button>
+		</div>
+	{/if}
+
+	<textarea
+		bind:value={contentInput}
+		class="textarea-bordered textarea min-h-32 w-full text-sm"
+		class:textarea-disabled={!canEdit || !initialLoad}
+		placeholder={isLoading ? 'Loading...' : "How's your day going?"}
+		disabled={!canEdit || !initialLoad}
+		aria-label="Journal entry"
+	></textarea>
+
+	<div class="mt-2 flex items-center justify-between text-xs text-base-content/60">
+		<span>{contentInput.length} characters</span>
+		<div class="flex items-center gap-2">
+			{#if current?.availableUntil}
+				<span class:text-error={!checkAvailable()}>
+					{#if checkAvailable()}
+						Until {toAmPmTime(current.availableUntil, profile)}
+					{:else}
+						Expired
+					{/if}
+				</span>
+			{/if}
+			{#if canEdit && isDirty}
+				<button
+					class="btn gap-1 btn-ghost btn-xs"
+					onclick={() => {
+						if (saveTimeout) clearTimeout(saveTimeout);
+						save();
+					}}
+					disabled={isSaving}
+				>
+					<Save class="h-3 w-3" />
+					Save
+				</button>
+			{/if}
+		</div>
 	</div>
 </div>

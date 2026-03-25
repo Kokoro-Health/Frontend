@@ -65,7 +65,7 @@
 	}
 
 	function inputsValid(): boolean {
-		if (mfaRequired) return signInData.mfaCode.length === 6;
+		if (mfaRequired) return signInData.mfaCode?.length === 6;
 		if (
 			signInData.password.length < 8 ||
 			!signInData.email ||
@@ -101,6 +101,7 @@
 					disabled={mfaRequired}
 					placeholder="someone@example.com"
 					class="w-full grow bg-transparent outline-none"
+					autocomplete="email"
 				/>
 			</label>
 
@@ -114,6 +115,7 @@
 					disabled={mfaRequired}
 					placeholder="Password"
 					class="w-full grow bg-transparent outline-none"
+					autocomplete="current-password"
 				/>
 				<button
 					type="button"

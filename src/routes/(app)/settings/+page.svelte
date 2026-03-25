@@ -199,7 +199,7 @@
 			</label>
 		</section>
 
-		<section class="flex flex-col gap-4">
+		<section class="flex flex-col gap-4 pt-6">
 			<h2 class="px-1 text-lg font-semibold">App preferences</h2>
 
 			<div class="flex flex-col gap-3">
@@ -237,7 +237,7 @@
 			</div>
 		</section>
 
-		<section class="flex flex-col gap-4">
+		<section class="flex flex-col gap-4 pt-6">
 			<h2 class="px-1 text-lg font-semibold">Account Security</h2>
 			<div class="flex flex-col gap-3">
 				<a

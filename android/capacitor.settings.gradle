@@ -2,6 +2,9 @@
 include ':capacitor-android'
 project(':capacitor-android').projectDir = new File('../node_modules/@capacitor/android/capacitor')
 
+include ':capacitor-clipboard'
+project(':capacitor-clipboard').projectDir = new File('../node_modules/@capacitor/clipboard/android')
+
 include ':capacitor-keyboard'
 project(':capacitor-keyboard').projectDir = new File('../node_modules/@capacitor/keyboard/android')
 
@@ -10,6 +13,3 @@ project(':capacitor-preferences').projectDir = new File('../node_modules/@capaci
 
 include ':capacitor-screen-orientation'
 project(':capacitor-screen-orientation').projectDir = new File('../node_modules/@capacitor/screen-orientation/android')
-
-include ':capacitor-swipe-gestures-plugin'
-project(':capacitor-swipe-gestures-plugin').projectDir = new File('../node_modules/capacitor-swipe-gestures-plugin/android')

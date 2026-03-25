@@ -242,6 +242,7 @@
 							type="password"
 							class="input-bordered input join-item w-full focus:outline-none"
 							placeholder="Password"
+							autocomplete="new-password"
 							bind:value={newPassword}
 							required
 							disabled={loading}
@@ -270,6 +271,7 @@
 						type="password"
 						class="input-bordered input w-full focus:outline-none"
 						placeholder="Password"
+						autocomplete="current-password"
 						bind:value={confirmPassword}
 						required
 						disabled={loading}

@@ -9,7 +9,7 @@
 	}: { recentsShort: ShortJournalResponseDto[]; profile: ProfileResponseDto } = $props();
 </script>
 
-<div class="card border border-base-200 bg-base-100 shadow-sm">
+<div class="card border border-base-200 bg-base-100">
 	<div class="card-body gap-4 p-4">
 		<div class="flex items-center justify-between">
 			<h2 class="card-title text-sm">Recent Journals</h2>

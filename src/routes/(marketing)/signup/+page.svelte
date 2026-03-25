@@ -116,6 +116,7 @@
 							bind:value={signUpData.firstName}
 							placeholder="First name"
 							class="grow"
+							autocomplete="name"
 						/>
 					</label>
 					<label class="input-bordered input flex w-full items-center gap-2">
@@ -132,6 +133,7 @@
 							bind:value={signUpData.lastName}
 							placeholder="Last name"
 							class="grow"
+							autocomplete="family-name"
 						/>
 					</label>
 				</div>
@@ -155,6 +157,7 @@
 						bind:value={signUpData.email}
 						placeholder="someone@example.com"
 						class="grow bg-transparent outline-none"
+						autocomplete="email"
 					/>
 				</label>
 
@@ -167,6 +170,7 @@
 						bind:value={signUpData.password}
 						placeholder="Password"
 						class="grow bg-transparent outline-none"
+						autocomplete="new-password"
 					/>
 					<button
 						type="button"

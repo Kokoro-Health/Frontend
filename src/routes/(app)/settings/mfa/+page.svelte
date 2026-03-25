@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { setupMfa, verifyMfaCodeAndEnable } from '$lib/api';
+	import { Clipboard } from '@capacitor/clipboard';
+	import { CopyIcon } from '@lucide/svelte';
 
 	let { data } = $props();
 	let qrCode: string | null = $state(null);
@@ -11,6 +13,13 @@
 
 	let code = $derived(digits.join(''));
 	let codeComplete = $derived(code.length === 6);
+
+	async function copySecret() {
+		if (!secret) return;
+		await Clipboard.write({
+			string: secret
+		});
+	}
 
 	async function generateQRCode() {
 		await setupMfa()
@@ -90,9 +99,20 @@
 					alt="MFA QR Code"
 					class="rounded-xl border border-base-300"
 				/>
-				<div class="flex flex-col items-center gap-1">
+				<div class="flex w-full flex-col items-center gap-1">
 					<span class="text-xs text-base-content/40">Manual entry key</span>
-					<code class="rounded bg-base-200 px-3 py-1 font-mono text-sm">{secret}</code>
+					<label class="input w-full">
+						<input
+							type="text"
+							bind:value={secret}
+							disabled={true}
+							placeholder="secret"
+							class="w-full"
+						/>
+						<span class="label">
+							<button class="btn btn-sm" disabled={false} onclick={copySecret}><CopyIcon /></button>
+						</span>
+					</label>
 				</div>
 				<div class="flex gap-2">
 					{#each digits as _, i}

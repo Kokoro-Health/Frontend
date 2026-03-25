@@ -124,6 +124,30 @@
 			}
 		},
 		"/journal/{id}": {
+			"get": {
+				"tags": ["journal-controller"],
+				"operationId": "getJournalById",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "string", "format": "uuid" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": { "*/*": { "schema": { "$ref": "#/components/schemas/JournalEntryDto" } } }
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+						}
+					}
+				}
+			},
 			"post": {
 				"tags": ["journal-controller"],
 				"operationId": "updateCurrentJournal_1",

@@ -299,6 +299,33 @@ export type UpdateCurrentJournalResponses = {
 
 export type UpdateCurrentJournalResponse = UpdateCurrentJournalResponses[keyof UpdateCurrentJournalResponses];
 
+export type GetJournalByIdData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/journal/{id}';
+};
+
+export type GetJournalByIdErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+};
+
+export type GetJournalByIdError = GetJournalByIdErrors[keyof GetJournalByIdErrors];
+
+export type GetJournalByIdResponses = {
+    /**
+     * OK
+     */
+    200: JournalEntryDto;
+};
+
+export type GetJournalByIdResponse = GetJournalByIdResponses[keyof GetJournalByIdResponses];
+
 export type UpdateCurrentJournal1Data = {
     body: JournalRequestDto;
     path: {

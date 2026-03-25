@@ -13,19 +13,19 @@
 	<div class="card-header">
 		<h2 class="text-sm font-semibold">Recent Journals</h2>
 	</div>
-	<div class="overflow-x-auto">
-		<table class="table table-zebra">
+	<div class="w-full">
+		<table class="table table-zebra text-xs">
 			<thead>
 				<tr>
-					<th>Date</th>
-					<th>Content Preview</th>
-					<th></th>
+					<th class="text-xs">Date</th>
+					<th class="text-xs">Content Preview</th>
+					<th class="text-xs"></th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody class="w-full">
 				{#each recentsShort as entry}
-					<tr class="hover">
-						<td class="text-sm whitespace-nowrap opacity-70">
+					<tr class="hover w-full">
+						<td class="whitespace-nowrap opacity-70">
 							{formatInstant(entry.lockedSince, profile)}
 						</td>
 						<td class="max-w-md truncate">

@@ -22,7 +22,7 @@
 			{#if recentsShort.length === 0}
 				<div class="py-6 text-center text-base-content/60">No recent journals found</div>
 			{:else}
-				{#each recentsShort as entry}
+				{#each recentsShort.reverse() as entry}
 					<div class="flex items-center justify-between gap-4 py-3">
 						<div class="min-w-0 flex-1">
 							<div class="mb-1 text-xs opacity-70">

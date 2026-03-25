@@ -9,36 +9,39 @@
 	}: { recentsShort: ShortJournalResponseDto[]; profile: ProfileResponseDto } = $props();
 </script>
 
-<div class="card border border-base-200 p-4">
-	<div class="card-header">
-		<h2 class="text-sm font-semibold">Recent Journals</h2>
-	</div>
-	<div class="w-full">
-		<table class="table table-zebra text-xs">
-			<thead>
-				<tr>
-					<th class="text-xs">Date</th>
-					<th class="text-xs">Content Preview</th>
-					<th class="text-xs"></th>
-				</tr>
-			</thead>
-			<tbody class="w-full">
+<div class="card border border-base-200 bg-base-100 shadow-sm">
+	<div class="card-body gap-4 p-4">
+		<div class="flex items-center justify-between">
+			<h2 class="card-title text-sm">Recent Journals</h2>
+			{#if recentsShort.length > 3}
+				<a href="/journal" class="btn btn-ghost btn-xs">View All</a>
+			{/if}
+		</div>
+
+		<div class="divide-y divide-base-200">
+			{#if recentsShort.length === 0}
+				<div class="py-6 text-center text-base-content/60">No recent journals found</div>
+			{:else}
 				{#each recentsShort as entry}
-					<tr class="hover w-full">
-						<td class="whitespace-nowrap opacity-70">
-							{formatInstant(entry.lockedSince, profile)}
-						</td>
-						<td class="max-w-md truncate">
-							{entry.content}
-						</td>
-						<td class="text-right">
-							<a href="/journal/{entry.id}" class="btn gap-1 opacity-70 btn-ghost btn-sm">
-								<EyeIcon size={18} />
-							</a>
-						</td>
-					</tr>
+					<div class="flex items-center justify-between gap-4 py-3">
+						<div class="min-w-0 flex-1">
+							<div class="mb-1 text-xs opacity-70">
+								{formatInstant(entry.lockedSince, profile)}
+							</div>
+							<div class="truncate text-sm">
+								{entry.content}
+							</div>
+						</div>
+						<a
+							href="/journal/{entry.id}"
+							class="btn btn-square
+						shrink-0 btn-ghost btn-sm"
+						>
+							<EyeIcon size={16} />
+						</a>
+					</div>
 				{/each}
-			</tbody>
-		</table>
+			{/if}
+		</div>
 	</div>
 </div>

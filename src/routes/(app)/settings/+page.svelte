@@ -241,6 +241,13 @@
 			<h2 class="px-1 text-lg font-semibold">Account Security</h2>
 			<div class="flex flex-col gap-3">
 				<a
+					href="/settings/profile"
+					class="hover:bg-primary-focus btn w-full justify-between rounded-xl border-none bg-primary px-4 py-3 font-medium shadow-sm btn-primary"
+				>
+					<span>Manage Your Profile & Data</span>
+					<ChevronRight class="h-5 w-5 opacity-70" />
+				</a>
+				<a
 					href="/settings/mfa"
 					class="hover:bg-primary-focus btn w-full justify-between rounded-xl border-none bg-primary px-4 py-3 font-medium shadow-sm btn-primary"
 				>

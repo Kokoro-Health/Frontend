@@ -366,6 +366,24 @@
 				}
 			}
 		},
+		"/streak": {
+			"get": {
+				"tags": ["streak-controller"],
+				"operationId": "getCurrentStreak",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": { "*/*": { "schema": { "$ref": "#/components/schemas/StreakResponseDto" } } }
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+						}
+					}
+				}
+			}
+		},
 		"/journal/recent": {
 			"get": {
 				"tags": ["journal-controller"],
@@ -702,6 +720,14 @@
 					"dateFormat": { "type": "string" },
 					"createdAt": { "type": "integer", "format": "int64" },
 					"verified": { "type": "boolean" }
+				}
+			},
+			"StreakResponseDto": {
+				"required": ["streak", "streakIncreasedToday"],
+				"type": "object",
+				"properties": {
+					"streak": { "type": "integer", "format": "int32" },
+					"streakIncreasedToday": { "type": "boolean" }
 				}
 			},
 			"ShortJournalResponseDto": {

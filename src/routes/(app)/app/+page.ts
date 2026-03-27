@@ -1,9 +1,11 @@
 import type { PageLoad } from './$types';
 import {
 	getCurrentJournal,
+	getCurrentStreak,
 	getEnergyInfoToday,
 	type EnergyInfoDto,
-	type JournalEntryDto
+	type JournalEntryDto,
+	type StreakResponseDto
 } from '$lib/api';
 
 export const load: PageLoad = async () => {
@@ -17,6 +19,10 @@ export const load: PageLoad = async () => {
 		content: '',
 		availableUntil: ''
 	};
+	let streak: StreakResponseDto = {
+		streak: 0,
+		streakIncreasedToday: false
+	};
 
 	await getEnergyInfoToday().then((res) => {
 		if (res.data) energyInfo = res.data;
@@ -25,9 +31,13 @@ export const load: PageLoad = async () => {
 	await getCurrentJournal().then((res) => {
 		if (res.data) journal = res.data;
 	});
+	await getCurrentStreak().then((res) => {
+		if (res.data) streak = res.data;
+	});
 
 	return {
 		energyInfo: energyInfo,
-		journal: journal
+		journal: journal,
+		streak: streak
 	};
 };

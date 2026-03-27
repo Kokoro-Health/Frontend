@@ -103,6 +103,11 @@ export type ProfileResponseDto = {
     verified: boolean;
 };
 
+export type StreakResponseDto = {
+    streak: number;
+    streakIncreasedToday: boolean;
+};
+
 export type ShortJournalResponseDto = {
     id: string;
     content: string;
@@ -587,6 +592,31 @@ export type GetMyProfileResponses = {
 };
 
 export type GetMyProfileResponse = GetMyProfileResponses[keyof GetMyProfileResponses];
+
+export type GetCurrentStreakData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/streak';
+};
+
+export type GetCurrentStreakErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+};
+
+export type GetCurrentStreakError = GetCurrentStreakErrors[keyof GetCurrentStreakErrors];
+
+export type GetCurrentStreakResponses = {
+    /**
+     * OK
+     */
+    200: StreakResponseDto;
+};
+
+export type GetCurrentStreakResponse = GetCurrentStreakResponses[keyof GetCurrentStreakResponses];
 
 export type GetRecentJournalsShortData = {
     body?: never;

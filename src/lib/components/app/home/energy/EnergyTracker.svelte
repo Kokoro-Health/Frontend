@@ -51,7 +51,7 @@
 		}
 	];
 
-	let { info }: { info: EnergyInfoDto } = $props();
+	let { info, onChange }: { info: EnergyInfoDto; onChange: () => void } = $props();
 
 	let displayInfo = $derived(info);
 	let loading = $state(false);
@@ -136,6 +136,7 @@
 			}
 		} finally {
 			loading = false;
+			onChange();
 		}
 	}
 

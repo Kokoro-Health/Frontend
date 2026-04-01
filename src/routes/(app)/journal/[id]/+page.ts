@@ -1,6 +1,8 @@
 import { getJournalById, type JournalEntryDto } from '$lib/api';
 import type { PageLoad } from './$types';
 
+export const prerender = false;
+
 export const load: PageLoad = async ({ params }) => {
 	let id = params.id;
 	let entry: JournalEntryDto = {

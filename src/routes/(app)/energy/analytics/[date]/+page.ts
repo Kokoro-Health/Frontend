@@ -1,6 +1,8 @@
 import { getEnergyEntriesForDay, type EnergyDetailsDto } from '$lib/api';
 import type { PageLoad } from './$types';
 
+export const prerender = false;
+
 export const load: PageLoad = async ({ params }) => {
 	let date = params.date;
 	let details: EnergyDetailsDto = {

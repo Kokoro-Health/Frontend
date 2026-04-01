@@ -293,6 +293,33 @@ export type RequestVerificationCodeResponses = {
 
 export type RequestVerificationCodeResponse = RequestVerificationCodeResponses[keyof RequestVerificationCodeResponses];
 
+export type UploadProfilePictureData = {
+    body: {
+        file?: Blob | File;
+    };
+    path?: never;
+    query?: never;
+    url: '/user/profile/profilePicure';
+};
+
+export type UploadProfilePictureErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+};
+
+export type UploadProfilePictureError = UploadProfilePictureErrors[keyof UploadProfilePictureErrors];
+
+export type UploadProfilePictureResponses = {
+    /**
+     * OK
+     */
+    200: Unit;
+};
+
+export type UploadProfilePictureResponse = UploadProfilePictureResponses[keyof UploadProfilePictureResponses];
+
 export type GetCurrentJournalData = {
     body?: never;
     path?: never;

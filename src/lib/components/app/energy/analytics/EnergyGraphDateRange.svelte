@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ArrowDown, ArrowUp, RefreshCw } from '@lucide/svelte';
-	import type { ChartOptions } from 'chart.js';
+	import type { ChartConfiguration, ChartOptions } from 'chart.js';
 	import { Chart, registerables } from 'chart.js';
 	import { formatInstant, toIsoDateFromString } from '$util/dateUtil';
 	import type { EnergyInfoDateDto, ProfileResponseDto } from '$api';
@@ -136,7 +136,7 @@
 </script>
 
 <div class="scrollbar-hide flex w-full space-x-2 overflow-x-auto pb-2">
-	{#each dateRangePresets as preset}
+	{#each dateRangePresets as preset (preset)}
 		<button
 			class="btn shrink-0 text-xs btn-sm"
 			class:btn-primary={selectedPreset === preset}
@@ -200,7 +200,11 @@
 			<span class="loading loading-md loading-spinner text-primary"></span>
 		</div>
 	{:else if entries.length > 0}
-		<ChartWrapper type="line" data={chartData} options={chartOptions as any} />
+		<ChartWrapper
+			type="line"
+			data={chartData}
+			options={chartOptions as ChartConfiguration['options']}
+		/>
 	{:else}
 		<div class="flex h-full items-center justify-center">
 			<span>No data available</span>

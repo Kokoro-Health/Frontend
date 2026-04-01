@@ -13,7 +13,7 @@ export const load: LayoutServerLoad = async ({ cookies }) => {
 				}
 			});
 			profile = res.data ?? null;
-		} catch (e) {
+		} catch {
 			profile = null;
 		}
 	}

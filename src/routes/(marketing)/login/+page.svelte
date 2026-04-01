@@ -141,7 +141,7 @@
 					</p>
 				</div>
 				<div class="flex gap-2">
-					{#each mfaDigits as _, i}
+					{#each mfaDigits as digit, i (digit)}
 						<input
 							type="text"
 							inputmode="numeric"

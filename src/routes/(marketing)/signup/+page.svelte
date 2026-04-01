@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { signUp, type SignUpRequestDto } from '$lib/api';
+	import { tosUrl } from '$lib/util/webUrl';
 	import {
 		MailIcon,
 		KeyRoundIcon,
@@ -202,7 +203,7 @@
 					/>
 					<label for="tosAccepted" class="m-0 label cursor-pointer p-0 text-sm">
 						<span class="label-text">
-							I accept the <a href="#" class="link link-primary">Terms of Service</a>.
+							I accept the <a href={tosUrl} class="link link-primary">Terms of Service</a>.
 						</span>
 					</label>
 				</div>

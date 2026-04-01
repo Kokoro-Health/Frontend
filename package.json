@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
-		"build": "bun run openapi-ts & vite build",
+		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -13,8 +13,7 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"openapi-ts": "curl http://localhost:8080/docs > openapi.json && openapi-ts",
-		"android-dev": "concurrently \"bun run dev --host\" \"bunx cap open android\"",
-		"android-dev-unix": "bun run dev --host & bun run build && bunx cap sync && bunx cap open android",
+		"android-dev": "concurrently \"bun run dev --host\" \"bunx cap sync\" \"bunx cap open android\"",
 		"ios-dev": "bunx cap sync ios && concurrently \"bun run dev --host\" \"bunx cap open ios\""
 	},
 	"devDependencies": {
@@ -53,7 +52,6 @@
 		"@capacitor/keyboard": "^8.0.1",
 		"@capacitor/preferences": "^8.0.1",
 		"@capacitor/screen-orientation": "^8.0.1",
-		"@darkedges/capacitor-native-webauthn": "^0.0.4",
 		"@lucide/svelte": "^0.577.0",
 		"chart.js": "^4.5.1",
 		"frontend": ".",

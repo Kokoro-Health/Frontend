@@ -44,6 +44,7 @@ Edit .env to configure API endpoints and secrets.
 4. Sync Capacitor
 
 ```bash
+    bun run build
     bunx cap sync ios
     bunx cap sync android
 ```

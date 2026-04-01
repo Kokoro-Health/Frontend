@@ -8,6 +8,7 @@
 		LockIcon,
 		ShieldCheckIcon
 	} from '@lucide/svelte';
+	import { resolve } from '$app/paths';
 	import { onMount } from 'svelte';
 
 	let { data } = $props();
@@ -288,7 +289,7 @@
 			<p class="max-w-xs text-sm text-base-content/70">
 				Your password has been successfully reset. You can now log in with your new credentials.
 			</p>
-			<a href="/" class="btn mt-2 w-full max-w-xs btn-primary">
+			<a href={resolve('/')} class="btn mt-2 w-full max-w-xs btn-primary">
 				<LockIcon size={16} />
 				Back to Login
 			</a>

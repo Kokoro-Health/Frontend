@@ -115,7 +115,7 @@
 					</label>
 				</div>
 				<div class="flex gap-2">
-					{#each digits as _, i}
+					{#each digits as digit, i (digit)}
 						<input
 							type="text"
 							inputmode="numeric"

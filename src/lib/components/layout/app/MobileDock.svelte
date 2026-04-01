@@ -2,6 +2,7 @@
 	import { page } from '$app/state';
 	import type { Component } from 'svelte';
 	import { HouseIcon, MessageCircle, SettingsIcon } from '@lucide/svelte';
+	import { resolve } from '$app/paths';
 
 	interface Link {
 		name: string;
@@ -40,10 +41,10 @@
 <div
 	class="dock z-100 rounded-t-3xl bg-linear-to-t from-primary/10 to-secondary/5 pb-safe shadow-lg backdrop-blur-sm"
 >
-	{#each links as link}
+	{#each links as link (link.name)}
 		{@const Icon = link.icon}
 		<a
-			href={link.href}
+			href={resolve(link.href as any)}
 			class="dock-item {active.name === link.name
 				? 'dock-active'
 				: ''} transition-all duration-300 hover:scale-105"

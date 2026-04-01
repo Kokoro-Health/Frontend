@@ -9,6 +9,7 @@
 		CircleXIcon,
 		ArrowLeftIcon
 	} from '@lucide/svelte';
+	import { resolve } from '$app/paths';
 	import Confetti from 'svelte-confetti';
 
 	const iconSize = 16;
@@ -203,7 +204,10 @@
 					/>
 					<label for="tosAccepted" class="m-0 label cursor-pointer p-0 text-sm">
 						<span class="label-text">
-							I accept the <a href={tosUrl} class="link link-primary">Terms of Service</a>.
+							I accept the
+							<a target="_blank" href={resolve(tosUrl as any)} class="link link-primary"
+								>Terms of Service</a
+							>.
 						</span>
 					</label>
 				</div>
@@ -226,7 +230,7 @@
 		<div class="divider my-2">OR</div>
 
 		<div>
-			<a href="/login" class="btn w-full btn-outline btn-secondary">Login instead</a>
+			<a href={resolve('/login')} class="btn w-full btn-outline btn-secondary">Login instead</a>
 		</div>
 	</form>
 </div>

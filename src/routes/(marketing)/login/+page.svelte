@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { signIn, type SignInRequestDto } from '$api';
 	import { MailIcon, KeyRoundIcon, EyeOffIcon, EyeIcon, CircleXIcon } from '@lucide/svelte';
+	import { resolve } from '$app/paths';
 
 	const iconSize = 16;
 
@@ -179,7 +180,7 @@
 					</label>
 				</div>
 				<span class="text-sm">
-					<a href="/reset-password" class="link link-primary">Forgot password?</a>
+					<a href={resolve('/reset-password')} class="link link-primary">Forgot password?</a>
 				</span>
 			</div>
 		{/if}
@@ -200,7 +201,7 @@
 		<div class="divider my-2">OR</div>
 
 		<div>
-			<a href="/signup" class="btn w-full btn-outline btn-secondary">Create account</a>
+			<a href={resolve('/signup')} class="btn w-full btn-outline btn-secondary">Create account</a>
 		</div>
 	</form>
 </div>

@@ -4,6 +4,7 @@
 	import { Skull, Frown, Meh, Smile, Laugh, ChartPie } from '@lucide/svelte';
 	import EnergyBattery from './EnergyBattery.svelte';
 	import ReasonModal from './ReasonModal.svelte';
+	import { resolve } from '$app/paths';
 
 	interface Preset {
 		icon: typeof Skull;
@@ -154,7 +155,7 @@
 			<h2 class="text-sm font-semibold tracking-wide">Energy</h2>
 			<div class="flex flex-row items-center justify-center space-x-3">
 				<span class="text-xs text-base-content/40">Today</span>
-				<a href="/energy/analytics" class="btn btn-soft btn-sm">
+				<a href={resolve('/energy/analytics')} class="btn btn-soft btn-sm">
 					<ChartPie size={18} />
 				</a>
 			</div>
@@ -167,7 +168,7 @@
 		<div class="divider my-0 text-xs text-base-content/40">How are you feeling?</div>
 
 		<div class="grid grid-cols-5 gap-1.5">
-			{#each presets as preset}
+			{#each presets as preset (preset.value)}
 				<button
 					class="flex flex-col items-center gap-1.5 rounded-xl py-3 transition-all duration-150 {preset.style} {loggedValue ===
 					preset.value
@@ -190,11 +191,4 @@
 	</div>
 </div>
 
-<ReasonModal
-	bind:this={reasonModalInstance}
-	{reasons}
-	onSelect={handleReasonSelect}
-	onClose={() => {
-		pendingAmount = null;
-	}}
-/>
+<ReasonModal bind:this={reasonModalInstance} {reasons} onSelect={handleReasonSelect} />

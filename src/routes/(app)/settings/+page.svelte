@@ -10,6 +10,7 @@
 		ChevronRight,
 		RefreshCcw
 	} from '@lucide/svelte';
+	import { resolve } from '$app/paths';
 
 	let { data }: { data: { settings: SettingsResponseDto } } = $props();
 
@@ -97,15 +98,6 @@
 	}
 
 	$effect(() => {
-		settings.theme;
-		settings.language;
-		settings.marketingEmails;
-		settings.securityAlerts;
-		settings.reminderEmails;
-		hasChanges;
-		loading;
-		hydrated;
-
 		if (!hydrated || !hasChanges || loading) return;
 
 		if (saveTimer) clearTimeout(saveTimer);
@@ -207,7 +199,7 @@
 					<span class="text-xs font-medium tracking-wide text-base-content/60 uppercase">Theme</span
 					>
 					<div class="mt-3 grid grid-cols-3 gap-2">
-						{#each AVAILABLE_THEMES as themeOption}
+						{#each AVAILABLE_THEMES as themeOption (themeOption)}
 							<button
 								onclick={() => setTheme(themeOption)}
 								class="flex flex-col items-center justify-center gap-1 rounded-lg border p-2 transition-all {settings.theme ===
@@ -241,28 +233,28 @@
 			<h2 class="px-1 text-lg font-semibold">Account Security</h2>
 			<div class="flex flex-col gap-3">
 				<a
-					href="/settings/profile"
+					href={resolve('/settings/profile')}
 					class="hover:bg-primary-focus btn w-full justify-between rounded-xl border-none bg-primary px-4 py-3 font-medium shadow-sm btn-primary"
 				>
 					<span>Manage Your Profile & Data</span>
 					<ChevronRight class="h-5 w-5 opacity-70" />
 				</a>
 				<a
-					href="/settings/mfa"
+					href={resolve('/settings/mfa')}
 					class="hover:bg-primary-focus btn w-full justify-between rounded-xl border-none bg-primary px-4 py-3 font-medium shadow-sm btn-primary"
 				>
 					<span>Manage Multi-Factor Authentication</span>
 					<ChevronRight class="h-5 w-5 opacity-70" />
 				</a>
 				<a
-					href="/reset-password"
+					href={resolve('/reset-password')}
 					class="hover:bg-primary-focus btn w-full justify-between rounded-xl border-none bg-primary px-4 py-3 font-medium shadow-sm btn-primary"
 				>
 					<span>Reset Password</span>
 					<RefreshCcw class="h-5 w-5 opacity-70" />
 				</a>
 				<a
-					href="/logout"
+					href={resolve('/logout')}
 					class="hover:bg-error-focus btn w-full justify-between rounded-xl border-none px-4 py-3 font-medium shadow-sm btn-error"
 				>
 					<span>Logout</span>

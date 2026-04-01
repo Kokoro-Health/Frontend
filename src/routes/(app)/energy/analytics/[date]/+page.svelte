@@ -53,7 +53,7 @@
 				<ClockIcon size={16} /> <span>Timeline</span>
 			</div>
 			<ul class="menu w-full rounded-lg border border-base-200 p-0">
-				{#each data.details.entries as entry}
+				{#each data.details.entries as entry (entry.date)}
 					<li class="flex flex-row items-center gap-3 border-b border-base-200 p-3">
 						<span>{toAmPmTime(entry.date, data.profile!)}</span>
 						{#if entry.reason}

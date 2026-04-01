@@ -15,7 +15,7 @@
 <div class="flex flex-col">
 	<main class="flex-1 pb-4">
 		<div class="prose max-w-none">
-			{@html data.entry?.content.replace(/\n/g, '<br>')}
+			{data.entry.content}
 		</div>
 	</main>
 

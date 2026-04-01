@@ -3,12 +3,10 @@
 
 	let {
 		reasons,
-		onSelect,
-		onClose
+		onSelect
 	}: {
 		reasons: string[];
 		onSelect: (reason: string | null) => void;
-		onClose: () => void;
 	} = $props();
 
 	const MAX_VISIBLE_REASONS = 4;
@@ -106,7 +104,7 @@
 		<div class="flex-1 overflow-y-auto py-4">
 			{#if displayedReasons.length > 0}
 				<div class="mb-4 flex flex-wrap gap-2 {expanded ? 'max-h-64 overflow-y-auto' : ''}">
-					{#each displayedReasons as reason}
+					{#each displayedReasons as reason (reason)}
 						<button
 							class="btn shadow-none btn-sm {selectedReason === reason
 								? 'btn-primary'

@@ -4,6 +4,7 @@
 	import PasskeyList from './passkey/PasskeyList.svelte';
 	import { PlusIcon } from '@lucide/svelte';
 	import { checkPasskeySupport } from '$util/passkey';
+	import { resolve } from '$app/paths';
 
 	let passkeys: PasskeyResponse[] = $state([]);
 	let passkeyEnabled = $state(true);
@@ -24,7 +25,9 @@
 	{#if passkeyEnabled}
 		<div class="flex flex-col space-y-4">
 			<div class="flex flex-row justify-between">
-				<a href="/settings/mfa/passkey/create" class="btn btn-primary"><PlusIcon /> Add Passkey</a>
+				<a href={resolve('/settings/mfa/passkey/create')} class="btn btn-primary"
+					><PlusIcon /> Add Passkey</a
+				>
 			</div>
 			<PasskeyList keys={passkeys} />
 		</div>

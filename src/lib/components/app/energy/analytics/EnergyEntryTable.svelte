@@ -2,6 +2,7 @@
 	import type { EnergyInfoDateDto, ProfileResponseDto } from '$api';
 	import { formatInstant } from '$util/dateUtil';
 	import { EyeIcon } from '@lucide/svelte';
+	import { resolve } from '$app/paths';
 
 	let {
 		entries,
@@ -39,7 +40,10 @@
 							<td class="font-medium">{formatInstant(entry.date, profile)}</td>
 							<td class="text-right">{entry.amount}%</td>
 							<td class="w-fit text-center">
-								<a href={`/energy/analytics/${entry.date}`} class="btn opacity-70 btn-ghost btn-sm">
+								<a
+									href={resolve(`/energy/analytics/${entry.date}`)}
+									class="btn opacity-70 btn-ghost btn-sm"
+								>
 									<EyeIcon size={18} />
 								</a>
 							</td>

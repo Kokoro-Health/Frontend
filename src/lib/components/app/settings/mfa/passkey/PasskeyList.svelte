@@ -8,7 +8,7 @@
 	{#if keys.length === 0}
 		<span>No passkeys available</span>
 	{:else}
-		{#each keys as key}
+		{#each keys as key (key.id)}
 			<div>
 				<span>{key.deviceName}</span>
 				<span>{key.createdAt}</span>

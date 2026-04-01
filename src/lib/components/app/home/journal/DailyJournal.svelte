@@ -133,7 +133,6 @@
 	}
 
 	$effect(() => {
-		contentInput;
 		if (current && isDirty) {
 			scheduleSave();
 		}

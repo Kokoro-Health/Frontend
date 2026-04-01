@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import type { Component } from 'svelte';
-	import { HouseIcon, MessageCircle, Route, SettingsIcon } from '@lucide/svelte';
+	import { HouseIcon, MessageCircle, SettingsIcon } from '@lucide/svelte';
 
 	interface Link {
 		name: string;

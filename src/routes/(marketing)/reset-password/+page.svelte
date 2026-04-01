@@ -3,10 +3,8 @@
 	import {
 		HouseIcon,
 		Loader2Icon,
-		CheckCircleIcon,
 		AlertCircleIcon,
 		ArrowRightIcon,
-		KeyRoundIcon,
 		LockIcon,
 		ShieldCheckIcon
 	} from '@lucide/svelte';

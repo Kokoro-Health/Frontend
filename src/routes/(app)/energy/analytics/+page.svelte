@@ -89,6 +89,6 @@
 			{selectedPreset}
 			dateRangePresets={DATE_RANGE_PRESETS}
 		/>
-		<EnergyEntryTable {loading} {entries} profile={data.profile!!} />
+		<EnergyEntryTable {loading} {entries} profile={data.profile!} />
 	</section>
 </div>

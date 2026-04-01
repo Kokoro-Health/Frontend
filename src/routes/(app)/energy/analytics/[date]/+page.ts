@@ -4,7 +4,7 @@ import type { PageLoad } from './$types';
 export const prerender = false;
 
 export const load: PageLoad = async ({ params }) => {
-	let date = params.date;
+	const date = params.date;
 	let details: EnergyDetailsDto = {
 		entries: [],
 		average: 0,

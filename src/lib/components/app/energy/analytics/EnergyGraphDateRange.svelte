@@ -2,7 +2,7 @@
 	import { ArrowDown, ArrowUp, RefreshCw } from '@lucide/svelte';
 	import type { ChartOptions } from 'chart.js';
 	import { Chart, registerables } from 'chart.js';
-	import { formatInstant, toInstant, toIsoDate, toIsoDateFromString } from '$util/dateUtil';
+	import { formatInstant, toIsoDateFromString } from '$util/dateUtil';
 	import type { EnergyInfoDateDto, ProfileResponseDto } from '$api';
 	import ChartWrapper from '$components/ui/ChartWrapper.svelte';
 

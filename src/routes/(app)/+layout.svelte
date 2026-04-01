@@ -42,4 +42,4 @@
 </main>
 
 <MobileDock />
-<ThemeLoader theme={data.profile!!.theme} />
+<ThemeLoader theme={data.profile!.theme} />

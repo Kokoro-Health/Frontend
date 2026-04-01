@@ -2,11 +2,11 @@
 	import EnergyBattery from '$components/app/home/energy/EnergyBattery.svelte';
 	import { formatInstant } from '$util/dateUtil.js';
 	import { toAmPmTime } from '$util/timeUtil.js';
-	import { ArrowUp, ArrowDown, Clock, ClockIcon } from '@lucide/svelte';
+	import { ArrowUp, ArrowDown, ClockIcon } from '@lucide/svelte';
 
 	let { data } = $props();
 
-	let formattedDate = $derived(formatInstant(data.date, data.profile!!));
+	let formattedDate = $derived(formatInstant(data.date, data.profile!));
 </script>
 
 <svelte:head>
@@ -55,7 +55,7 @@
 			<ul class="menu w-full rounded-lg border border-base-200 p-0">
 				{#each data.details.entries as entry}
 					<li class="flex flex-row items-center gap-3 border-b border-base-200 p-3">
-						<span>{toAmPmTime(entry.date, data.profile!!)}</span>
+						<span>{toAmPmTime(entry.date, data.profile!)}</span>
 						{#if entry.reason}
 							<span class="flex-1 text-sm">{entry.reason}</span>
 						{:else}

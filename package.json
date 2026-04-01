@@ -53,6 +53,7 @@
 		"@capacitor/keyboard": "^8.0.1",
 		"@capacitor/preferences": "^8.0.1",
 		"@capacitor/screen-orientation": "^8.0.1",
+		"@darkedges/capacitor-native-webauthn": "^0.0.4",
 		"@lucide/svelte": "^0.577.0",
 		"chart.js": "^4.5.1",
 		"frontend": ".",

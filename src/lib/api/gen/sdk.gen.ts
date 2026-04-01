@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { AddEnergyEntryData, AddEnergyEntryErrors, AddEnergyEntryResponses, DisableMfaData, DisableMfaErrors, DisableMfaResponses, GetCurrentJournalData, GetCurrentJournalErrors, GetCurrentJournalResponses, GetCurrentStreakData, GetCurrentStreakErrors, GetCurrentStreakResponses, GetEnergyEntriesForDayData, GetEnergyEntriesForDayErrors, GetEnergyEntriesForDayResponses, GetEnergyForDateRangeData, GetEnergyForDateRangeErrors, GetEnergyForDateRangeResponses, GetEnergyInfoTodayData, GetEnergyInfoTodayErrors, GetEnergyInfoTodayResponses, GetEnergyReasonsData, GetEnergyReasonsErrors, GetEnergyReasonsResponses, GetJournalByIdData, GetJournalByIdErrors, GetJournalByIdResponses, GetMfaSettingsData, GetMfaSettingsErrors, GetMfaSettingsResponses, GetMyProfileData, GetMyProfileErrors, GetMyProfileResponses, GetRecentJournalsShortData, GetRecentJournalsShortErrors, GetRecentJournalsShortResponses, GetSettingsData, GetSettingsErrors, GetSettingsResponses, LogoutData, LogoutErrors, LogoutResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, RequestVerificationCodeData, RequestVerificationCodeErrors, RequestVerificationCodeResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, SetupMfaData, SetupMfaErrors, SetupMfaResponses, SignInData, SignInErrors, SignInResponses, SignUpData, SignUpErrors, SignUpResponses, UpdateCurrentJournal1Data, UpdateCurrentJournal1Errors, UpdateCurrentJournal1Responses, UpdateCurrentJournalData, UpdateCurrentJournalErrors, UpdateCurrentJournalResponses, UpdateSettingsData, UpdateSettingsErrors, UpdateSettingsResponses, ValidatePasswordResetCodeData, ValidatePasswordResetCodeErrors, ValidatePasswordResetCodeResponses, VerifyCodeData, VerifyCodeErrors, VerifyCodeResponses, VerifyMfaCodeAndEnableData, VerifyMfaCodeAndEnableErrors, VerifyMfaCodeAndEnableResponses } from './types.gen';
+import type { AddEnergyEntryData, AddEnergyEntryErrors, AddEnergyEntryResponses, DisableMfaData, DisableMfaErrors, DisableMfaResponses, GetCurrentJournalData, GetCurrentJournalErrors, GetCurrentJournalResponses, GetCurrentStreakData, GetCurrentStreakErrors, GetCurrentStreakResponses, GetEnergyEntriesForDayData, GetEnergyEntriesForDayErrors, GetEnergyEntriesForDayResponses, GetEnergyForDateRangeData, GetEnergyForDateRangeErrors, GetEnergyForDateRangeResponses, GetEnergyInfoTodayData, GetEnergyInfoTodayErrors, GetEnergyInfoTodayResponses, GetEnergyReasonsData, GetEnergyReasonsErrors, GetEnergyReasonsResponses, GetJournalByIdData, GetJournalByIdErrors, GetJournalByIdResponses, GetMfaSettingsData, GetMfaSettingsErrors, GetMfaSettingsResponses, GetMyProfileData, GetMyProfileErrors, GetMyProfileResponses, GetRecentJournalsShortData, GetRecentJournalsShortErrors, GetRecentJournalsShortResponses, GetSettingsData, GetSettingsErrors, GetSettingsResponses, LogoutData, LogoutErrors, LogoutResponses, PasskeyAuthFinishData, PasskeyAuthFinishErrors, PasskeyAuthFinishResponses, PasskeyAuthStartData, PasskeyAuthStartErrors, PasskeyAuthStartResponses, PasskeyDeleteData, PasskeyDeleteErrors, PasskeyDeleteResponses, PasskeyListData, PasskeyListErrors, PasskeyListResponses, PasskeyRegisterFinishData, PasskeyRegisterFinishErrors, PasskeyRegisterFinishResponses, PasskeyRegisterStartData, PasskeyRegisterStartErrors, PasskeyRegisterStartResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, RequestVerificationCodeData, RequestVerificationCodeErrors, RequestVerificationCodeResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, SetupMfaData, SetupMfaErrors, SetupMfaResponses, SignInData, SignInErrors, SignInResponses, SignUpData, SignUpErrors, SignUpResponses, UpdateCurrentJournal1Data, UpdateCurrentJournal1Errors, UpdateCurrentJournal1Responses, UpdateCurrentJournalData, UpdateCurrentJournalErrors, UpdateCurrentJournalResponses, UpdateSettingsData, UpdateSettingsErrors, UpdateSettingsResponses, ValidatePasswordResetCodeData, ValidatePasswordResetCodeErrors, ValidatePasswordResetCodeResponses, VerifyCodeData, VerifyCodeErrors, VerifyCodeResponses, VerifyMfaCodeAndEnableData, VerifyMfaCodeAndEnableErrors, VerifyMfaCodeAndEnableResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -93,6 +93,35 @@ export const resetPassword = <ThrowOnError extends boolean = false>(options: Opt
     }
 });
 
+export const passkeyRegisterStart = <ThrowOnError extends boolean = false>(options?: Options<PasskeyRegisterStartData, ThrowOnError>) => (options?.client ?? client).post<PasskeyRegisterStartResponses, PasskeyRegisterStartErrors, ThrowOnError>({ url: '/auth/passkeys/register/start', ...options });
+
+export const passkeyRegisterFinish = <ThrowOnError extends boolean = false>(options: Options<PasskeyRegisterFinishData, ThrowOnError>) => (options.client ?? client).post<PasskeyRegisterFinishResponses, PasskeyRegisterFinishErrors, ThrowOnError>({
+    url: '/auth/passkeys/register/finish',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+export const passkeyAuthStart = <ThrowOnError extends boolean = false>(options: Options<PasskeyAuthStartData, ThrowOnError>) => (options.client ?? client).post<PasskeyAuthStartResponses, PasskeyAuthStartErrors, ThrowOnError>({
+    url: '/auth/passkeys/auth/start',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+export const passkeyAuthFinish = <ThrowOnError extends boolean = false>(options: Options<PasskeyAuthFinishData, ThrowOnError>) => (options.client ?? client).post<PasskeyAuthFinishResponses, PasskeyAuthFinishErrors, ThrowOnError>({
+    url: '/auth/passkeys/auth/finish',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
 export const verifyMfaCodeAndEnable = <ThrowOnError extends boolean = false>(options: Options<VerifyMfaCodeAndEnableData, ThrowOnError>) => (options.client ?? client).post<VerifyMfaCodeAndEnableResponses, VerifyMfaCodeAndEnableErrors, ThrowOnError>({
     url: '/auth/mfa/verify',
     ...options,
@@ -122,6 +151,8 @@ export const getEnergyReasons = <ThrowOnError extends boolean = false>(options?:
 
 export const validatePasswordResetCode = <ThrowOnError extends boolean = false>(options: Options<ValidatePasswordResetCodeData, ThrowOnError>) => (options.client ?? client).get<ValidatePasswordResetCodeResponses, ValidatePasswordResetCodeErrors, ThrowOnError>({ url: '/auth/validate-code', ...options });
 
+export const passkeyList = <ThrowOnError extends boolean = false>(options?: Options<PasskeyListData, ThrowOnError>) => (options?.client ?? client).get<PasskeyListResponses, PasskeyListErrors, ThrowOnError>({ url: '/auth/passkeys', ...options });
+
 export const disableMfa = <ThrowOnError extends boolean = false>(options: Options<DisableMfaData, ThrowOnError>) => (options.client ?? client).delete<DisableMfaResponses, DisableMfaErrors, ThrowOnError>({
     url: '/auth/mfa',
     ...options,
@@ -132,3 +163,5 @@ export const disableMfa = <ThrowOnError extends boolean = false>(options: Option
 });
 
 export const getMfaSettings = <ThrowOnError extends boolean = false>(options?: Options<GetMfaSettingsData, ThrowOnError>) => (options?.client ?? client).get<GetMfaSettingsResponses, GetMfaSettingsErrors, ThrowOnError>({ url: '/auth/mfa', ...options });
+
+export const passkeyDelete = <ThrowOnError extends boolean = false>(options: Options<PasskeyDeleteData, ThrowOnError>) => (options.client ?? client).delete<PasskeyDeleteResponses, PasskeyDeleteErrors, ThrowOnError>({ url: '/auth/passkeys/{passkeyId}', ...options });

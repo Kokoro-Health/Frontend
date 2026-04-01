@@ -69,6 +69,38 @@ export type PasswordResetRequestDto = {
     password: string;
 };
 
+export type RegisterPasskeyStartResponse = {
+    options: string;
+};
+
+export type RegisterPasskeyFinishRequest = {
+    credential: string;
+    deviceName: string;
+};
+
+export type RegisterPasskeyFinishResponse = {
+    id: string;
+    deviceName: string;
+    createdAt: string;
+};
+
+export type AuthPasskeyStartRequest = {
+    email: string;
+};
+
+export type AuthPasskeyStartResponse = {
+    options: string;
+};
+
+export type AuthPasskeyFinishRequest = {
+    email: string;
+    credential: string;
+};
+
+export type AuthPasskeyFinishResponse = {
+    token: string;
+};
+
 export type VerifyMfaRequest = {
     code: string;
 };
@@ -140,6 +172,13 @@ export type ReasonAmount = {
 
 export type ReasonsResponseDto = {
     reasons: Array<string>;
+};
+
+export type PasskeyResponse = {
+    id: string;
+    deviceName: string;
+    createdAt: string;
+    lastUsedAt: string;
 };
 
 export type MfaSettings = {
@@ -491,6 +530,106 @@ export type ResetPasswordResponses = {
 
 export type ResetPasswordResponse = ResetPasswordResponses[keyof ResetPasswordResponses];
 
+export type PasskeyRegisterStartData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/auth/passkeys/register/start';
+};
+
+export type PasskeyRegisterStartErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+};
+
+export type PasskeyRegisterStartError = PasskeyRegisterStartErrors[keyof PasskeyRegisterStartErrors];
+
+export type PasskeyRegisterStartResponses = {
+    /**
+     * OK
+     */
+    200: RegisterPasskeyStartResponse;
+};
+
+export type PasskeyRegisterStartResponse = PasskeyRegisterStartResponses[keyof PasskeyRegisterStartResponses];
+
+export type PasskeyRegisterFinishData = {
+    body: RegisterPasskeyFinishRequest;
+    path?: never;
+    query?: never;
+    url: '/auth/passkeys/register/finish';
+};
+
+export type PasskeyRegisterFinishErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+};
+
+export type PasskeyRegisterFinishError = PasskeyRegisterFinishErrors[keyof PasskeyRegisterFinishErrors];
+
+export type PasskeyRegisterFinishResponses = {
+    /**
+     * OK
+     */
+    200: RegisterPasskeyFinishResponse;
+};
+
+export type PasskeyRegisterFinishResponse = PasskeyRegisterFinishResponses[keyof PasskeyRegisterFinishResponses];
+
+export type PasskeyAuthStartData = {
+    body: AuthPasskeyStartRequest;
+    path?: never;
+    query?: never;
+    url: '/auth/passkeys/auth/start';
+};
+
+export type PasskeyAuthStartErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+};
+
+export type PasskeyAuthStartError = PasskeyAuthStartErrors[keyof PasskeyAuthStartErrors];
+
+export type PasskeyAuthStartResponses = {
+    /**
+     * OK
+     */
+    200: AuthPasskeyStartResponse;
+};
+
+export type PasskeyAuthStartResponse = PasskeyAuthStartResponses[keyof PasskeyAuthStartResponses];
+
+export type PasskeyAuthFinishData = {
+    body: AuthPasskeyFinishRequest;
+    path?: never;
+    query?: never;
+    url: '/auth/passkeys/auth/finish';
+};
+
+export type PasskeyAuthFinishErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+};
+
+export type PasskeyAuthFinishError = PasskeyAuthFinishErrors[keyof PasskeyAuthFinishErrors];
+
+export type PasskeyAuthFinishResponses = {
+    /**
+     * OK
+     */
+    200: AuthPasskeyFinishResponse;
+};
+
+export type PasskeyAuthFinishResponse = PasskeyAuthFinishResponses[keyof PasskeyAuthFinishResponses];
+
 export type VerifyMfaCodeAndEnableData = {
     body: VerifyMfaRequest;
     path?: never;
@@ -777,6 +916,31 @@ export type ValidatePasswordResetCodeResponses = {
 
 export type ValidatePasswordResetCodeResponse = ValidatePasswordResetCodeResponses[keyof ValidatePasswordResetCodeResponses];
 
+export type PasskeyListData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/auth/passkeys';
+};
+
+export type PasskeyListErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+};
+
+export type PasskeyListError = PasskeyListErrors[keyof PasskeyListErrors];
+
+export type PasskeyListResponses = {
+    /**
+     * OK
+     */
+    200: Array<PasskeyResponse>;
+};
+
+export type PasskeyListResponse = PasskeyListResponses[keyof PasskeyListResponses];
+
 export type DisableMfaData = {
     body: DisableMfaRequest;
     path?: never;
@@ -826,3 +990,30 @@ export type GetMfaSettingsResponses = {
 };
 
 export type GetMfaSettingsResponse = GetMfaSettingsResponses[keyof GetMfaSettingsResponses];
+
+export type PasskeyDeleteData = {
+    body?: never;
+    path: {
+        passkeyId: string;
+    };
+    query?: never;
+    url: '/auth/passkeys/{passkeyId}';
+};
+
+export type PasskeyDeleteErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+};
+
+export type PasskeyDeleteError = PasskeyDeleteErrors[keyof PasskeyDeleteErrors];
+
+export type PasskeyDeleteResponses = {
+    /**
+     * OK
+     */
+    200: Unit;
+};
+
+export type PasskeyDeleteResponse = PasskeyDeleteResponses[keyof PasskeyDeleteResponses];

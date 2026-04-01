@@ -289,6 +289,110 @@
 				}
 			}
 		},
+		"/auth/passkeys/register/start": {
+			"post": {
+				"tags": ["passkey-controller"],
+				"operationId": "passkeyRegisterStart",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": { "schema": { "$ref": "#/components/schemas/RegisterPasskeyStartResponse" } }
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+						}
+					}
+				}
+			}
+		},
+		"/auth/passkeys/register/finish": {
+			"post": {
+				"tags": ["passkey-controller"],
+				"operationId": "passkeyRegisterFinish",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/RegisterPasskeyFinishRequest" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": { "schema": { "$ref": "#/components/schemas/RegisterPasskeyFinishResponse" } }
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+						}
+					}
+				}
+			}
+		},
+		"/auth/passkeys/auth/start": {
+			"post": {
+				"tags": ["passkey-controller"],
+				"operationId": "passkeyAuthStart",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/AuthPasskeyStartRequest" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": { "schema": { "$ref": "#/components/schemas/AuthPasskeyStartResponse" } }
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+						}
+					}
+				}
+			}
+		},
+		"/auth/passkeys/auth/finish": {
+			"post": {
+				"tags": ["passkey-controller"],
+				"operationId": "passkeyAuthFinish",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/AuthPasskeyFinishRequest" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": { "schema": { "$ref": "#/components/schemas/AuthPasskeyFinishResponse" } }
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+						}
+					}
+				}
+			}
+		},
 		"/auth/mfa/verify": {
 			"post": {
 				"tags": ["mfa-controller"],
@@ -530,6 +634,31 @@
 				}
 			}
 		},
+		"/auth/passkeys": {
+			"get": {
+				"tags": ["passkey-controller"],
+				"operationId": "passkeyList",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": {
+								"schema": {
+									"type": "array",
+									"items": { "$ref": "#/components/schemas/PasskeyResponse" }
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+						}
+					}
+				}
+			}
+		},
 		"/auth/mfa": {
 			"get": {
 				"tags": ["mfa-controller"],
@@ -556,6 +685,32 @@
 					},
 					"required": true
 				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": { "*/*": { "schema": { "$ref": "#/components/schemas/Unit" } } }
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+						}
+					}
+				}
+			}
+		},
+		"/auth/passkeys/{passkeyId}": {
+			"delete": {
+				"tags": ["passkey-controller"],
+				"operationId": "passkeyDelete",
+				"parameters": [
+					{
+						"name": "passkeyId",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "string", "format": "uuid" }
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "OK",
@@ -659,6 +814,48 @@
 				"required": ["code", "password"],
 				"type": "object",
 				"properties": { "code": { "type": "string" }, "password": { "type": "string" } }
+			},
+			"RegisterPasskeyStartResponse": {
+				"required": ["options"],
+				"type": "object",
+				"properties": { "options": { "type": "string" } }
+			},
+			"RegisterPasskeyFinishRequest": {
+				"required": ["credential", "deviceName"],
+				"type": "object",
+				"properties": {
+					"credential": { "type": "string" },
+					"deviceName": { "maxLength": 100, "minLength": 0, "type": "string" }
+				}
+			},
+			"RegisterPasskeyFinishResponse": {
+				"required": ["createdAt", "deviceName", "id"],
+				"type": "object",
+				"properties": {
+					"id": { "type": "string", "format": "uuid" },
+					"deviceName": { "type": "string" },
+					"createdAt": { "type": "string", "format": "date-time" }
+				}
+			},
+			"AuthPasskeyStartRequest": {
+				"required": ["email"],
+				"type": "object",
+				"properties": { "email": { "type": "string" } }
+			},
+			"AuthPasskeyStartResponse": {
+				"required": ["options"],
+				"type": "object",
+				"properties": { "options": { "type": "string" } }
+			},
+			"AuthPasskeyFinishRequest": {
+				"required": ["credential", "email"],
+				"type": "object",
+				"properties": { "email": { "type": "string" }, "credential": { "type": "string" } }
+			},
+			"AuthPasskeyFinishResponse": {
+				"required": ["token"],
+				"type": "object",
+				"properties": { "token": { "type": "string" } }
 			},
 			"VerifyMfaRequest": {
 				"required": ["code"],
@@ -782,6 +979,16 @@
 				"required": ["reasons"],
 				"type": "object",
 				"properties": { "reasons": { "type": "array", "items": { "type": "string" } } }
+			},
+			"PasskeyResponse": {
+				"required": ["createdAt", "deviceName", "id", "lastUsedAt"],
+				"type": "object",
+				"properties": {
+					"id": { "type": "string", "format": "uuid" },
+					"deviceName": { "type": "string" },
+					"createdAt": { "type": "string", "format": "date-time" },
+					"lastUsedAt": { "type": "string", "format": "date-time" }
+				}
 			},
 			"MfaSettings": {
 				"required": ["mfaEnabled"],

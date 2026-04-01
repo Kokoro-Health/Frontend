@@ -5,11 +5,11 @@
 		updateCurrentJournal1,
 		type JournalEntryDto,
 		type ProfileResponseDto
-	} from '$lib/api';
+	} from '$api';
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 	import { Check, AlertCircle, Loader2, Lock, Save } from '@lucide/svelte';
-	import { toAmPmTime } from '$lib/util/timeUtil';
+	import { toAmPmTime } from '$util/timeUtil';
 
 	const SAVE_DELAY = 1500;
 	let { profile }: { profile: ProfileResponseDto } = $props();

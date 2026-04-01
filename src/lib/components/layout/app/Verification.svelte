@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { requestVerificationCode, verifyCode } from '$lib/api';
+	import { requestVerificationCode, verifyCode } from '$api';
 	import { Code, X, RefreshCw, CheckCircle } from '@lucide/svelte';
 
 	const CODE_LENGTH = 6;

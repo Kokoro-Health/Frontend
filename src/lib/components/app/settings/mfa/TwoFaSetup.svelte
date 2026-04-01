@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { setupMfa, verifyMfaCodeAndEnable } from '$lib/api';
+	import { setupMfa, verifyMfaCodeAndEnable } from '$api';
 	import { Clipboard } from '@capacitor/clipboard';
 	import { CopyIcon } from '@lucide/svelte';
 

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { passkeyList, type PasskeyResponse } from '$lib/api';
+	import { passkeyList, type PasskeyResponse } from '$api';
 	import { onMount } from 'svelte';
 	import PasskeyList from './passkey/PasskeyList.svelte';
 	import { PlusIcon } from '@lucide/svelte';
-	import { checkPasskeySupport } from '$lib/util/passkey';
+	import { checkPasskeySupport } from '$util/passkey';
 
 	let passkeys: PasskeyResponse[] = $state([]);
 	let passkeyEnabled = $state(true);
@@ -14,7 +14,7 @@
 			passkeys = res.data;
 		});
 		await checkPasskeySupport().then((res) => {
-			passkeyEnabled = res.isSupported;
+			passkeyEnabled = res;
 		});
 	});
 </script>

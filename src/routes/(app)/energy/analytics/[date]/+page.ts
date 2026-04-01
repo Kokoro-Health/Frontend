@@ -1,4 +1,4 @@
-import { getEnergyEntriesForDay, type EnergyDetailsDto } from '$lib/api';
+import { getEnergyEntriesForDay, type EnergyDetailsDto } from '$api';
 import type { PageLoad } from './$types';
 
 export const prerender = false;

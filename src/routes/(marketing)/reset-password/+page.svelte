@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { requestPasswordReset, resetPassword, validatePasswordResetCode } from '$lib/api';
+	import { requestPasswordReset, resetPassword, validatePasswordResetCode } from '$api';
 	import {
 		HouseIcon,
 		Loader2Icon,

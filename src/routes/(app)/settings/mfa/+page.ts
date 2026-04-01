@@ -1,5 +1,5 @@
 import type { PageLoad } from './$types';
-import { getMfaSettings, getSettings, type MfaSettings, type SettingsResponseDto } from '$lib/api';
+import { getMfaSettings, getSettings, type MfaSettings, type SettingsResponseDto } from '$api';
 
 export const load: PageLoad = async () => {
 	let mfaSettings: MfaSettings = {

@@ -1,4 +1,4 @@
-import { AuthGuardBuilder } from '$lib/security/authGuard';
+import { AuthGuardBuilder } from '$security/authGuard';
 import type { LayoutLoad } from '../$types';
 
 export const load: LayoutLoad = ({ data }) => {

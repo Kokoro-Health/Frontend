@@ -1,6 +1,6 @@
 <script lang="ts">
-	import DailyJournal from '$lib/components/app/home/journal/DailyJournal.svelte';
-	import RecentJournalTable from '$lib/components/app/journal/RecentJournalTable.svelte';
+	import DailyJournal from '$components/app/home/journal/DailyJournal.svelte';
+	import RecentJournalTable from '$components/app/journal/RecentJournalTable.svelte';
 
 	let { data } = $props();
 	let profile = $derived(data.profile!);

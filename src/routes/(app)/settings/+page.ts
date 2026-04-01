@@ -1,5 +1,5 @@
 import type { PageLoad } from './$types';
-import { getSettings, type SettingsResponseDto } from '$lib/api';
+import { getSettings, type SettingsResponseDto } from '$api';
 
 export const load: PageLoad = async () => {
 	let settings: SettingsResponseDto = {
@@ -8,7 +8,9 @@ export const load: PageLoad = async () => {
 		marketingEmails: true,
 		securityAlerts: true,
 		reminderEmails: false,
-		updatedAt: ''
+		updatedAt: '',
+		timezone: '',
+		dateFormat: ''
 	};
 
 	await getSettings().then((res) => {

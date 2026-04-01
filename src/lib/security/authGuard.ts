@@ -1,4 +1,4 @@
-import type { ProfileResponseDto } from '$lib/api';
+import type { ProfileResponseDto } from '$api';
 import { redirect } from '@sveltejs/kit';
 
 export class AuthGuard {

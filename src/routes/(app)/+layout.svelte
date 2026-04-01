@@ -1,8 +1,8 @@
 <script lang="ts">
-	import ThemeLoader from '$lib/components/app/util/ThemeLoader.svelte';
-	import MobileDock from '$lib/components/layout/app/MobileDock.svelte';
-	import MobileHeader from '$lib/components/layout/app/MobileHeader.svelte';
-	import Verification from '$lib/components/layout/app/Verification.svelte';
+	import ThemeLoader from '$components/app/util/ThemeLoader.svelte';
+	import MobileDock from '$components/layout/app/MobileDock.svelte';
+	import MobileHeader from '$components/layout/app/MobileHeader.svelte';
+	import Verification from '$components/layout/app/Verification.svelte';
 	import { Chart } from 'chart.js';
 	import { onMount } from 'svelte';
 

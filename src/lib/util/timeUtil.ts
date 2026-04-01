@@ -1,4 +1,4 @@
-import type { ProfileResponseDto } from '$lib/api';
+import type { ProfileResponseDto } from '$api';
 import { getLocale } from './dateUtil';
 
 export function toAmPmTime(instantStr: string, user: ProfileResponseDto): string {

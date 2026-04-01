@@ -1,4 +1,4 @@
-import { getJournalById, type JournalEntryDto } from '$lib/api';
+import { getJournalById, type JournalEntryDto } from '$api';
 import type { PageLoad } from './$types';
 
 export const prerender = false;

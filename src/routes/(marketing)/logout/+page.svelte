@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { performLogout } from '$lib/security/authUtils';
+	import { performLogout } from '$security/authUtils';
 	import { onMount } from 'svelte';
 
 	onMount(() => {

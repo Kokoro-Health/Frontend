@@ -1,6 +1,6 @@
 <script lang="ts">
 	import './layout.css';
-	import favicon from '$lib/assets/favicon.svg';
+	import favicon from '$assets/favicon.svg';
 	import { ScreenOrientation } from '@capacitor/screen-orientation';
 	import { onMount } from 'svelte';
 

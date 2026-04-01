@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { signUp, type SignUpRequestDto } from '$lib/api';
-	import { tosUrl } from '$lib/util/webUrl';
+	import { signUp, type SignUpRequestDto } from '$api';
+	import { tosUrl } from '$util/webUrl';
 	import {
 		MailIcon,
 		KeyRoundIcon,

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { getEnergyForDateRange, type EnergyInfoDateDto } from '$lib/api';
+	import { getEnergyForDateRange, type EnergyInfoDateDto } from '$api';
 	import { onMount } from 'svelte';
-	import EnergyGraphDateRange from '$lib/components/app/energy/analytics/EnergyGraphDateRange.svelte';
-	import EnergyEntryTable from '$lib/components/app/energy/analytics/EnergyEntryTable.svelte';
-	import { toInstant } from '$lib/util/dateUtil.js';
+	import EnergyGraphDateRange from '$components/app/energy/analytics/EnergyGraphDateRange.svelte';
+	import EnergyEntryTable from '$components/app/energy/analytics/EnergyEntryTable.svelte';
+	import { toInstant } from '$util/dateUtil.js';
 	import { CircleX } from '@lucide/svelte';
 
 	const DATE_RANGE_PRESETS: string[] = ['7d', '14d', '30d'] as const;

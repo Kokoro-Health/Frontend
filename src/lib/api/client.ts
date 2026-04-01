@@ -1,5 +1,5 @@
 import { client } from './gen/client.gen';
-import { getBackendUrl } from '$lib/util/backend';
+import { getBackendUrl } from '$util/backend';
 
 client.setConfig({
 	baseUrl: getBackendUrl()

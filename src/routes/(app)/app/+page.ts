@@ -6,7 +6,7 @@ import {
 	type EnergyInfoDto,
 	type JournalEntryDto,
 	type StreakResponseDto
-} from '$lib/api';
+} from '$api';
 
 export const load: PageLoad = async () => {
 	let energyInfo: EnergyInfoDto = {

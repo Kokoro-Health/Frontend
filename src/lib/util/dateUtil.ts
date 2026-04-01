@@ -1,4 +1,4 @@
-import type { ProfileResponseDto } from '$lib/api';
+import type { ProfileResponseDto } from '$api';
 
 const PATTERN_MAP: Record<string, Intl.DateTimeFormatOptions> = {
 	'yyyy-MM-dd': { year: 'numeric', month: '2-digit', day: '2-digit' },

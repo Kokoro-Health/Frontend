@@ -1,5 +1,5 @@
-import type { ProfileResponseDto } from '$lib/api';
-import { AuthGuardBuilder } from '$lib/security/authGuard.js';
+import type { ProfileResponseDto } from '$api';
+import { AuthGuardBuilder } from '$security/authGuard.js';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ parent, cookies }) => {

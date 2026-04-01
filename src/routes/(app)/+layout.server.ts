@@ -1,4 +1,4 @@
-import { getMyProfile, type ProfileResponseDto } from '$lib/api';
+import { getMyProfile, type ProfileResponseDto } from '$api';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ cookies }) => {

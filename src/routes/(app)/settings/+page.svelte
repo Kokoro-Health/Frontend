@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { updateSettings, type SettingsRequestDto, type SettingsResponseDto } from '$lib/api';
+	import { updateSettings, type SettingsRequestDto, type SettingsResponseDto } from '$api';
 	import {
 		Sun,
 		Moon,

@@ -11,7 +11,18 @@ const config = {
 			fallback: null,
 			precompress: false,
 			strict: false
-		})
+		}),
+		alias: {
+			$components: 'src/lib/components',
+			$util: 'src/lib/util',
+			$api: 'src/lib/api',
+			$assets: 'src/lib/assets',
+			$security: 'src/lib/security'
+		},
+		env: {
+			publicPrefix: 'PUBLIC_',
+			dir: './'
+		}
 	}
 };
 

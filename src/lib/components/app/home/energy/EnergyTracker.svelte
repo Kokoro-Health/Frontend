@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { EnergyInfoDto } from '$lib/api';
-	import { addEnergyEntry, getEnergyInfoToday, getEnergyReasons } from '$lib/api';
+	import type { EnergyInfoDto } from '$api';
+	import { addEnergyEntry, getEnergyInfoToday, getEnergyReasons } from '$api';
 	import { Skull, Frown, Meh, Smile, Laugh, ChartPie } from '@lucide/svelte';
 	import EnergyBattery from './EnergyBattery.svelte';
 	import ReasonModal from './ReasonModal.svelte';

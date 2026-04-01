@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { formatInstant } from '$lib/util/dateUtil';
-	import { toAmPmTime } from '$lib/util/timeUtil.js';
+	import { formatInstant } from '$util/dateUtil';
+	import { toAmPmTime } from '$util/timeUtil.js';
 
 	let { data } = $props();
 </script>

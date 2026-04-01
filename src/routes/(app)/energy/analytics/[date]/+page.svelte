@@ -1,7 +1,7 @@
 <script lang="ts">
-	import EnergyBattery from '$lib/components/app/home/energy/EnergyBattery.svelte';
-	import { formatInstant } from '$lib/util/dateUtil.js';
-	import { toAmPmTime } from '$lib/util/timeUtil.js';
+	import EnergyBattery from '$components/app/home/energy/EnergyBattery.svelte';
+	import { formatInstant } from '$util/dateUtil.js';
+	import { toAmPmTime } from '$util/timeUtil.js';
 	import { ArrowUp, ArrowDown, Clock, ClockIcon } from '@lucide/svelte';
 
 	let { data } = $props();

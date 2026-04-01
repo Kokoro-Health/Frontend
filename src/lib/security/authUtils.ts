@@ -1,5 +1,5 @@
 import { invalidateAll } from '$app/navigation';
-import { logout, client } from '$lib/api';
+import { logout, client } from '$api';
 
 function performLogout() {
 	logout({

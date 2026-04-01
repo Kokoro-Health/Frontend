@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { StreakResponseDto } from '$lib/api';
+	import type { StreakResponseDto } from '$api';
 	import { FlameIcon } from '@lucide/svelte';
 
 	let { streak = $bindable() }: { streak: StreakResponseDto } = $props();

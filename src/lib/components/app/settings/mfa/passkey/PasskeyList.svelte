@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PasskeyResponse } from '$lib/api';
+	import type { PasskeyResponse } from '$api';
 
 	let { keys }: { keys: PasskeyResponse[] } = $props();
 </script>

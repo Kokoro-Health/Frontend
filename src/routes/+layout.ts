@@ -1,4 +1,4 @@
-import { client } from '$lib/api/client';
+import { client } from '$api/client';
 import type { LayoutLoad } from './$types';
 
 export const prerender = true;

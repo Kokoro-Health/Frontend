@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { signIn, type SignInRequestDto } from '$lib/api';
+	import { signIn, type SignInRequestDto } from '$api';
 	import { MailIcon, KeyRoundIcon, EyeOffIcon, EyeIcon, CircleXIcon } from '@lucide/svelte';
 
 	const iconSize = 16;

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { EnergyInfoDateDto, ProfileResponseDto } from '$lib/api';
-	import { formatInstant } from '$lib/util/dateUtil';
+	import type { EnergyInfoDateDto, ProfileResponseDto } from '$api';
+	import { formatInstant } from '$util/dateUtil';
 	import { EyeIcon } from '@lucide/svelte';
 
 	let {

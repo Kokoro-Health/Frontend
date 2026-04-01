@@ -4,7 +4,7 @@ import {
 	getRecentJournalsShort,
 	type JournalEntryDto,
 	type ShortJournalResponseDto
-} from '$lib/api';
+} from '$api';
 
 export const load: PageLoad = async () => {
 	let journal: JournalEntryDto = {

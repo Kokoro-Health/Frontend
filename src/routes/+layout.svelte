@@ -2,7 +2,7 @@
 	import './layout.css';
 	import favicon from '$assets/favicon.svg';
 	import { ScreenOrientation } from '@capacitor/screen-orientation';
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 
 	let { children } = $props();
 

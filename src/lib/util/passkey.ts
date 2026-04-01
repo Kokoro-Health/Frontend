@@ -1,6 +1,6 @@
 export async function checkPasskeySupport(): Promise<boolean> {
 	try {
-		const value = true;
+		const value = false;
 		return value;
 	} catch {
 		return false;

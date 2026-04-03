@@ -99,11 +99,7 @@
 		</div>
 
 		{#if currentStage === STAGE_CREDENTIALS}
-			<button
-				type="button"
-				onclick={goToPreviousStage}
-				class="btn gap-1 self-start btn-ghost btn-sm"
-			>
+			<button onclick={goToPreviousStage} class="btn gap-1 self-start btn-ghost btn-sm">
 				<ArrowLeftIcon size={iconSize} />
 				<span>Back</span>
 			</button>

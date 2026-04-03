@@ -9,7 +9,7 @@
 	let editVisual = $state(false);
 
 	let fileInput: File | null = $state(null);
-	let profilePictureUrl: string = $state('');
+	let profilePictureUrl: string = $derived(getProfilePictureToDisplay());
 
 	$effect(() => {
 		profilePictureUrl = getProfilePictureToDisplay();
@@ -62,7 +62,6 @@
 </svelte:head>
 
 <div class="flex flex-col space-y-4">
-	<!-- General section remains the same -->
 	<div class="card flex flex-col space-y-2 border border-base-200 p-4">
 		<span class="text-lg font-semibold">General</span>
 		<label class="input">

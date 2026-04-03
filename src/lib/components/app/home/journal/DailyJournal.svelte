@@ -12,7 +12,8 @@
 	import { toAmPmTime } from '$util/timeUtil';
 
 	const SAVE_DELAY = 1500;
-	let { profile }: { profile: ProfileResponseDto } = $props();
+	let { profile, showTitle = true }: { profile: ProfileResponseDto; showTitle?: boolean } =
+		$props();
 
 	let current = $state<JournalEntryDto | null>(null);
 	let contentInput = $state('');
@@ -166,7 +167,9 @@
 <div class="card border border-base-200 bg-base-100 p-4">
 	<div class="mb-3 flex items-center justify-between">
 		<div class="flex items-center gap-2">
-			<h2 class="text-sm font-semibold">Journal</h2>
+			{#if showTitle}
+				<h2 class="text-sm font-semibold">Journal</h2>
+			{/if}
 			{#if isLoading}
 				<Loader2 class="h-3 w-3 animate-spin text-primary" />
 			{/if}

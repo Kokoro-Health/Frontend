@@ -80,7 +80,7 @@
 				<p class="text-sm text-base-content/50">
 					Scan a QR code with your authenticator app to get started.
 				</p>
-				<button class="btn w-fit btn-primary" type="button" onclick={() => generateQRCode()}>
+				<button class="btn w-full btn-primary" type="button" onclick={() => generateQRCode()}>
 					Set up 2FA
 				</button>
 			</div>

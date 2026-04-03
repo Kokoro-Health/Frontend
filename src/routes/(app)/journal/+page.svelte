@@ -11,6 +11,6 @@
 </svelte:head>
 
 <div class="flex flex-col space-y-4">
-	<DailyJournal profile={data.profile!} />
+	<DailyJournal showTitle={false} profile={data.profile!} />
 	<RecentJournalTable {profile} recentsShort={data.recentJournals} />
 </div>

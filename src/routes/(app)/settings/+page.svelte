@@ -121,14 +121,18 @@
 
 <div class="w-full">
 	<div class="flex w-full max-w-xl flex-col">
-		<div class="flex items-center justify-end gap-2 text-sm font-medium">
+		<div class="absolute right-safe flex items-center justify-end gap-2 pr-4 text-sm font-medium">
 			{#if loading}
+				<span>Loading</span>
 				<div class="loading loading-xs loading-spinner text-primary"></div>
 			{:else if error}
+				<span>Error</span>
 				<AlertCircle class="h-4 w-4 text-error" />
 			{:else if hasChanges}
+				<span>Saving...</span>
 				<div class="loading loading-xs loading-spinner text-warning"></div>
 			{:else}
+				<span>Saved</span>
 				<Check class="h-4 w-4 text-success" />
 			{/if}
 		</div>

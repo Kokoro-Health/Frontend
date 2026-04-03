@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { ProfileResponseDto, ShortJournalResponseDto } from '$api';
 	import { formatInstant } from '$util/dateUtil';
-	import { EyeIcon } from '@lucide/svelte';
+	import { ChevronRight, EyeIcon } from '@lucide/svelte';
 	import { resolve } from '$app/paths';
 
 	let {
@@ -38,7 +38,7 @@
 							class="btn btn-square
 						shrink-0 btn-ghost btn-sm"
 						>
-							<EyeIcon size={16} />
+							<ChevronRight size={16} />
 						</a>
 					</div>
 				{/each}

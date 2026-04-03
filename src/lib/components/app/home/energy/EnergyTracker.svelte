@@ -27,7 +27,7 @@
 	const presets: Preset[] = [
 		{
 			icon: Skull,
-			label: 'Dead',
+			label: 'Drained',
 			value: PRESET_VALUES.DEAD,
 			style: 'text-error hover:bg-error/20'
 		},

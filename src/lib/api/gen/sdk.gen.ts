@@ -2,7 +2,7 @@
 
 import { type Client, formDataBodySerializer, type Options as Options2, type TDataShape } from './client';
 import { client } from './client.gen';
-import type { AddEnergyEntryData, AddEnergyEntryErrors, AddEnergyEntryResponses, DisableMfaData, DisableMfaErrors, DisableMfaResponses, GetCurrentJournalData, GetCurrentJournalErrors, GetCurrentJournalResponses, GetCurrentStreakData, GetCurrentStreakErrors, GetCurrentStreakResponses, GetEnergyEntriesForDayData, GetEnergyEntriesForDayErrors, GetEnergyEntriesForDayResponses, GetEnergyForDateRangeData, GetEnergyForDateRangeErrors, GetEnergyForDateRangeResponses, GetEnergyInfoTodayData, GetEnergyInfoTodayErrors, GetEnergyInfoTodayResponses, GetEnergyReasonsData, GetEnergyReasonsErrors, GetEnergyReasonsResponses, GetJournalByIdData, GetJournalByIdErrors, GetJournalByIdResponses, GetMfaSettingsData, GetMfaSettingsErrors, GetMfaSettingsResponses, GetMyProfileData, GetMyProfileErrors, GetMyProfileResponses, GetRecentJournalsShortData, GetRecentJournalsShortErrors, GetRecentJournalsShortResponses, GetSettingsData, GetSettingsErrors, GetSettingsResponses, LogoutData, LogoutErrors, LogoutResponses, PasskeyAuthFinishData, PasskeyAuthFinishErrors, PasskeyAuthFinishResponses, PasskeyAuthStartData, PasskeyAuthStartErrors, PasskeyAuthStartResponses, PasskeyDeleteData, PasskeyDeleteErrors, PasskeyDeleteResponses, PasskeyListData, PasskeyListErrors, PasskeyListResponses, PasskeyRegisterFinishData, PasskeyRegisterFinishErrors, PasskeyRegisterFinishResponses, PasskeyRegisterStartData, PasskeyRegisterStartErrors, PasskeyRegisterStartResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, RequestVerificationCodeData, RequestVerificationCodeErrors, RequestVerificationCodeResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, SetupMfaData, SetupMfaErrors, SetupMfaResponses, SignInData, SignInErrors, SignInResponses, SignUpData, SignUpErrors, SignUpResponses, UpdateCurrentJournal1Data, UpdateCurrentJournal1Errors, UpdateCurrentJournal1Responses, UpdateCurrentJournalData, UpdateCurrentJournalErrors, UpdateCurrentJournalResponses, UpdateSettingsData, UpdateSettingsErrors, UpdateSettingsResponses, UploadProfilePictureData, UploadProfilePictureErrors, UploadProfilePictureResponses, ValidatePasswordResetCodeData, ValidatePasswordResetCodeErrors, ValidatePasswordResetCodeResponses, VerifyCodeData, VerifyCodeErrors, VerifyCodeResponses, VerifyMfaCodeAndEnableData, VerifyMfaCodeAndEnableErrors, VerifyMfaCodeAndEnableResponses } from './types.gen';
+import type { AddEnergyEntryData, AddEnergyEntryErrors, AddEnergyEntryResponses, DisableMfaData, DisableMfaErrors, DisableMfaResponses, GetCurrentJournalData, GetCurrentJournalErrors, GetCurrentJournalResponses, GetCurrentStreakData, GetCurrentStreakErrors, GetCurrentStreakResponses, GetEnergyEntriesForDayData, GetEnergyEntriesForDayErrors, GetEnergyEntriesForDayResponses, GetEnergyForDateRangeData, GetEnergyForDateRangeErrors, GetEnergyForDateRangeResponses, GetEnergyInfoTodayData, GetEnergyInfoTodayErrors, GetEnergyInfoTodayResponses, GetEnergyReasonsData, GetEnergyReasonsErrors, GetEnergyReasonsResponses, GetJournalByIdData, GetJournalByIdErrors, GetJournalByIdResponses, GetMfaSettingsData, GetMfaSettingsErrors, GetMfaSettingsResponses, GetMyProfileData, GetMyProfileErrors, GetMyProfileResponses, GetRecentJournalsShortData, GetRecentJournalsShortErrors, GetRecentJournalsShortResponses, GetSettingsData, GetSettingsErrors, GetSettingsResponses, LogoutData, LogoutErrors, LogoutResponses, PasskeyAuthFinishData, PasskeyAuthFinishErrors, PasskeyAuthFinishResponses, PasskeyAuthStartData, PasskeyAuthStartErrors, PasskeyAuthStartResponses, PasskeyDeleteData, PasskeyDeleteErrors, PasskeyDeleteResponses, PasskeyListData, PasskeyListErrors, PasskeyListResponses, PasskeyRegisterFinishData, PasskeyRegisterFinishErrors, PasskeyRegisterFinishResponses, PasskeyRegisterStartData, PasskeyRegisterStartErrors, PasskeyRegisterStartResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, RequestVerificationCodeData, RequestVerificationCodeErrors, RequestVerificationCodeResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, SetupMfaData, SetupMfaErrors, SetupMfaResponses, SignInData, SignInErrors, SignInResponses, SignUpData, SignUpErrors, SignUpResponses, UpdateCurrentJournal1Data, UpdateCurrentJournal1Errors, UpdateCurrentJournal1Responses, UpdateCurrentJournalData, UpdateCurrentJournalErrors, UpdateCurrentJournalResponses, UpdateProfileData, UpdateProfileErrors, UpdateProfileResponses, UpdateSettingsData, UpdateSettingsErrors, UpdateSettingsResponses, UploadProfilePictureData, UploadProfilePictureErrors, UploadProfilePictureResponses, ValidatePasswordResetCodeData, ValidatePasswordResetCodeErrors, ValidatePasswordResetCodeResponses, VerifyCodeData, VerifyCodeErrors, VerifyCodeResponses, VerifyMfaCodeAndEnableData, VerifyMfaCodeAndEnableErrors, VerifyMfaCodeAndEnableResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -18,10 +18,10 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
     meta?: Record<string, unknown>;
 };
 
-export const getSettings = <ThrowOnError extends boolean = false>(options?: Options<GetSettingsData, ThrowOnError>) => (options?.client ?? client).get<GetSettingsResponses, GetSettingsErrors, ThrowOnError>({ url: '/user/settings', ...options });
+export const getSettings = <ThrowOnError extends boolean = false>(options?: Options<GetSettingsData, ThrowOnError>) => (options?.client ?? client).get<GetSettingsResponses, GetSettingsErrors, ThrowOnError>({ url: '/users/settings', ...options });
 
 export const updateSettings = <ThrowOnError extends boolean = false>(options: Options<UpdateSettingsData, ThrowOnError>) => (options.client ?? client).put<UpdateSettingsResponses, UpdateSettingsErrors, ThrowOnError>({
-    url: '/user/settings',
+    url: '/users/settings',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -29,13 +29,24 @@ export const updateSettings = <ThrowOnError extends boolean = false>(options: Op
     }
 });
 
-export const verifyCode = <ThrowOnError extends boolean = false>(options: Options<VerifyCodeData, ThrowOnError>) => (options.client ?? client).post<VerifyCodeResponses, VerifyCodeErrors, ThrowOnError>({ url: '/user/profile/verify', ...options });
+export const getMyProfile = <ThrowOnError extends boolean = false>(options?: Options<GetMyProfileData, ThrowOnError>) => (options?.client ?? client).get<GetMyProfileResponses, GetMyProfileErrors, ThrowOnError>({ url: '/users/profiles', ...options });
 
-export const requestVerificationCode = <ThrowOnError extends boolean = false>(options?: Options<RequestVerificationCodeData, ThrowOnError>) => (options?.client ?? client).post<RequestVerificationCodeResponses, RequestVerificationCodeErrors, ThrowOnError>({ url: '/user/profile/requestVerification', ...options });
+export const updateProfile = <ThrowOnError extends boolean = false>(options: Options<UpdateProfileData, ThrowOnError>) => (options.client ?? client).post<UpdateProfileResponses, UpdateProfileErrors, ThrowOnError>({
+    url: '/users/profiles',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+export const verifyCode = <ThrowOnError extends boolean = false>(options: Options<VerifyCodeData, ThrowOnError>) => (options.client ?? client).post<VerifyCodeResponses, VerifyCodeErrors, ThrowOnError>({ url: '/users/profiles/verify', ...options });
+
+export const requestVerificationCode = <ThrowOnError extends boolean = false>(options?: Options<RequestVerificationCodeData, ThrowOnError>) => (options?.client ?? client).post<RequestVerificationCodeResponses, RequestVerificationCodeErrors, ThrowOnError>({ url: '/users/profiles/verify/request', ...options });
 
 export const uploadProfilePicture = <ThrowOnError extends boolean = false>(options: Options<UploadProfilePictureData, ThrowOnError>) => (options.client ?? client).post<UploadProfilePictureResponses, UploadProfilePictureErrors, ThrowOnError>({
     ...formDataBodySerializer,
-    url: '/user/profile/profilePicure',
+    url: '/users/profiles/profilePicture',
     ...options,
     headers: {
         'Content-Type': null,
@@ -43,10 +54,10 @@ export const uploadProfilePicture = <ThrowOnError extends boolean = false>(optio
     }
 });
 
-export const getCurrentJournal = <ThrowOnError extends boolean = false>(options?: Options<GetCurrentJournalData, ThrowOnError>) => (options?.client ?? client).get<GetCurrentJournalResponses, GetCurrentJournalErrors, ThrowOnError>({ url: '/journal', ...options });
+export const getCurrentJournal = <ThrowOnError extends boolean = false>(options?: Options<GetCurrentJournalData, ThrowOnError>) => (options?.client ?? client).get<GetCurrentJournalResponses, GetCurrentJournalErrors, ThrowOnError>({ url: '/journals', ...options });
 
 export const updateCurrentJournal = <ThrowOnError extends boolean = false>(options: Options<UpdateCurrentJournalData, ThrowOnError>) => (options.client ?? client).post<UpdateCurrentJournalResponses, UpdateCurrentJournalErrors, ThrowOnError>({
-    url: '/journal',
+    url: '/journals',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -54,10 +65,10 @@ export const updateCurrentJournal = <ThrowOnError extends boolean = false>(optio
     }
 });
 
-export const getJournalById = <ThrowOnError extends boolean = false>(options: Options<GetJournalByIdData, ThrowOnError>) => (options.client ?? client).get<GetJournalByIdResponses, GetJournalByIdErrors, ThrowOnError>({ url: '/journal/{id}', ...options });
+export const getJournalById = <ThrowOnError extends boolean = false>(options: Options<GetJournalByIdData, ThrowOnError>) => (options.client ?? client).get<GetJournalByIdResponses, GetJournalByIdErrors, ThrowOnError>({ url: '/journals/{id}', ...options });
 
 export const updateCurrentJournal1 = <ThrowOnError extends boolean = false>(options: Options<UpdateCurrentJournal1Data, ThrowOnError>) => (options.client ?? client).post<UpdateCurrentJournal1Responses, UpdateCurrentJournal1Errors, ThrowOnError>({
-    url: '/journal/{id}',
+    url: '/journals/{id}',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -66,7 +77,7 @@ export const updateCurrentJournal1 = <ThrowOnError extends boolean = false>(opti
 });
 
 export const addEnergyEntry = <ThrowOnError extends boolean = false>(options: Options<AddEnergyEntryData, ThrowOnError>) => (options.client ?? client).post<AddEnergyEntryResponses, AddEnergyEntryErrors, ThrowOnError>({
-    url: '/energy/add',
+    url: '/energyEntries/add',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -145,19 +156,17 @@ export const setupMfa = <ThrowOnError extends boolean = false>(options?: Options
 
 export const logout = <ThrowOnError extends boolean = false>(options?: Options<LogoutData, ThrowOnError>) => (options?.client ?? client).post<LogoutResponses, LogoutErrors, ThrowOnError>({ url: '/auth/logout', ...options });
 
-export const getMyProfile = <ThrowOnError extends boolean = false>(options?: Options<GetMyProfileData, ThrowOnError>) => (options?.client ?? client).get<GetMyProfileResponses, GetMyProfileErrors, ThrowOnError>({ url: '/user/profile', ...options });
+export const getCurrentStreak = <ThrowOnError extends boolean = false>(options?: Options<GetCurrentStreakData, ThrowOnError>) => (options?.client ?? client).get<GetCurrentStreakResponses, GetCurrentStreakErrors, ThrowOnError>({ url: '/streaks', ...options });
 
-export const getCurrentStreak = <ThrowOnError extends boolean = false>(options?: Options<GetCurrentStreakData, ThrowOnError>) => (options?.client ?? client).get<GetCurrentStreakResponses, GetCurrentStreakErrors, ThrowOnError>({ url: '/streak', ...options });
+export const getRecentJournalsShort = <ThrowOnError extends boolean = false>(options?: Options<GetRecentJournalsShortData, ThrowOnError>) => (options?.client ?? client).get<GetRecentJournalsShortResponses, GetRecentJournalsShortErrors, ThrowOnError>({ url: '/journals/recent', ...options });
 
-export const getRecentJournalsShort = <ThrowOnError extends boolean = false>(options?: Options<GetRecentJournalsShortData, ThrowOnError>) => (options?.client ?? client).get<GetRecentJournalsShortResponses, GetRecentJournalsShortErrors, ThrowOnError>({ url: '/journal/recent', ...options });
+export const getEnergyInfoToday = <ThrowOnError extends boolean = false>(options?: Options<GetEnergyInfoTodayData, ThrowOnError>) => (options?.client ?? client).get<GetEnergyInfoTodayResponses, GetEnergyInfoTodayErrors, ThrowOnError>({ url: '/energyEntries', ...options });
 
-export const getEnergyInfoToday = <ThrowOnError extends boolean = false>(options?: Options<GetEnergyInfoTodayData, ThrowOnError>) => (options?.client ?? client).get<GetEnergyInfoTodayResponses, GetEnergyInfoTodayErrors, ThrowOnError>({ url: '/energy', ...options });
+export const getEnergyEntriesForDay = <ThrowOnError extends boolean = false>(options: Options<GetEnergyEntriesForDayData, ThrowOnError>) => (options.client ?? client).get<GetEnergyEntriesForDayResponses, GetEnergyEntriesForDayErrors, ThrowOnError>({ url: '/energyEntries/{date}', ...options });
 
-export const getEnergyEntriesForDay = <ThrowOnError extends boolean = false>(options: Options<GetEnergyEntriesForDayData, ThrowOnError>) => (options.client ?? client).get<GetEnergyEntriesForDayResponses, GetEnergyEntriesForDayErrors, ThrowOnError>({ url: '/energy/{date}', ...options });
+export const getEnergyForDateRange = <ThrowOnError extends boolean = false>(options: Options<GetEnergyForDateRangeData, ThrowOnError>) => (options.client ?? client).get<GetEnergyForDateRangeResponses, GetEnergyForDateRangeErrors, ThrowOnError>({ url: '/energyEntries/recent', ...options });
 
-export const getEnergyForDateRange = <ThrowOnError extends boolean = false>(options: Options<GetEnergyForDateRangeData, ThrowOnError>) => (options.client ?? client).get<GetEnergyForDateRangeResponses, GetEnergyForDateRangeErrors, ThrowOnError>({ url: '/energy/recent', ...options });
-
-export const getEnergyReasons = <ThrowOnError extends boolean = false>(options?: Options<GetEnergyReasonsData, ThrowOnError>) => (options?.client ?? client).get<GetEnergyReasonsResponses, GetEnergyReasonsErrors, ThrowOnError>({ url: '/energy/reasons', ...options });
+export const getEnergyReasons = <ThrowOnError extends boolean = false>(options?: Options<GetEnergyReasonsData, ThrowOnError>) => (options?.client ?? client).get<GetEnergyReasonsResponses, GetEnergyReasonsErrors, ThrowOnError>({ url: '/energyEntries/reasons', ...options });
 
 export const validatePasswordResetCode = <ThrowOnError extends boolean = false>(options: Options<ValidatePasswordResetCodeData, ThrowOnError>) => (options.client ?? client).get<ValidatePasswordResetCodeResponses, ValidatePasswordResetCodeErrors, ThrowOnError>({ url: '/auth/validate-code', ...options });
 

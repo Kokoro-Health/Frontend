@@ -25,7 +25,7 @@
 			</thead>
 			<tbody class="max-h-32 overflow-y-auto">
 				{#if loading}
-					{#each skeletonRows as row (row)}
+					{#each skeletonRows as _, i (i)}
 						<tr>
 							<td><div class="h-4 w-24 skeleton"></div></td>
 							<td class="text-right"><div class="ml-auto h-4 w-12 skeleton"></div></td>
@@ -35,7 +35,7 @@
 						</tr>
 					{/each}
 				{:else}
-					{#each entries.toReversed() as entry (entry.date)}
+					{#each entries.toReversed() as entry (entry)}
 						<tr>
 							<td class="font-medium">{formatInstant(entry.date, profile)}</td>
 							<td class="text-right">{entry.amount}%</td>

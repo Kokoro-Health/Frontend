@@ -21,17 +21,16 @@
 		const days = parseInt(preset.replace('d', ''), 10);
 		const now = new Date();
 		const from = new Date(now.getTime() - (days - 1) * 86400000);
-
 		fromInput = toInstant(from);
 		toInput = toInstant(now);
+		fetchData(fromInput, toInput);
 	}
 
-	async function fetchData(): Promise<void> {
-		if (!fromInput || !toInput) return;
+	async function fetchData(from = fromInput, to = toInput) {
+		if (!from || !to) return;
 		error = null;
-		const fromDate = new Date(fromInput);
-		const toDate = new Date(toInput);
-
+		const fromDate = new Date(from);
+		const toDate = new Date(to);
 		if (fromDate > toDate) return;
 
 		loading = true;
@@ -45,19 +44,14 @@
 				entries = [];
 				error = res.error.message;
 			}
-		} catch {
+		} catch (e) {
+			console.error(e);
 			entries = [];
-			error = 'An unexpected error occured.';
+			error = 'An unexpected error occurred.';
 		} finally {
 			loading = false;
 		}
 	}
-
-	$effect(() => {
-		if (fromInput && toInput) {
-			fetchData();
-		}
-	});
 
 	onMount(() => {
 		applyPreset('7d');
@@ -84,8 +78,9 @@
 			bind:toInput
 			profile={data.profile!}
 			{applyPreset}
-			{fetchData}
+			fetchData={(from, to) => fetchData(from, to)}
 			{entries}
+			{loading}
 			{selectedPreset}
 			dateRangePresets={DATE_RANGE_PRESETS}
 		/>

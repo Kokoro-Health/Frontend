@@ -25,6 +25,13 @@ export type Unit = {
     [key: string]: unknown;
 };
 
+export type ProfileRequestDto = {
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    email: string;
+};
+
 export type VerificationRequestResponseDto = {
     nextCodeAllowedAt: string;
 };
@@ -162,7 +169,7 @@ export type EnergyDetailsDto = {
 export type EnergyInfoDateDto = {
     date: string;
     amount: number;
-    reason: string;
+    reason?: string | null;
 };
 
 export type ReasonAmount = {
@@ -193,7 +200,7 @@ export type GetSettingsData = {
     body?: never;
     path?: never;
     query?: never;
-    url: '/user/settings';
+    url: '/users/settings';
 };
 
 export type GetSettingsErrors = {
@@ -218,7 +225,7 @@ export type UpdateSettingsData = {
     body: SettingsRequestDto;
     path?: never;
     query?: never;
-    url: '/user/settings';
+    url: '/users/settings';
 };
 
 export type UpdateSettingsErrors = {
@@ -239,13 +246,63 @@ export type UpdateSettingsResponses = {
 
 export type UpdateSettingsResponse = UpdateSettingsResponses[keyof UpdateSettingsResponses];
 
+export type GetMyProfileData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/users/profiles';
+};
+
+export type GetMyProfileErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+};
+
+export type GetMyProfileError = GetMyProfileErrors[keyof GetMyProfileErrors];
+
+export type GetMyProfileResponses = {
+    /**
+     * OK
+     */
+    200: ProfileResponseDto;
+};
+
+export type GetMyProfileResponse = GetMyProfileResponses[keyof GetMyProfileResponses];
+
+export type UpdateProfileData = {
+    body: ProfileRequestDto;
+    path?: never;
+    query?: never;
+    url: '/users/profiles';
+};
+
+export type UpdateProfileErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+};
+
+export type UpdateProfileError = UpdateProfileErrors[keyof UpdateProfileErrors];
+
+export type UpdateProfileResponses = {
+    /**
+     * OK
+     */
+    200: Unit;
+};
+
+export type UpdateProfileResponse = UpdateProfileResponses[keyof UpdateProfileResponses];
+
 export type VerifyCodeData = {
     body?: never;
     path?: never;
     query: {
         code: string;
     };
-    url: '/user/profile/verify';
+    url: '/users/profiles/verify';
 };
 
 export type VerifyCodeErrors = {
@@ -272,7 +329,7 @@ export type RequestVerificationCodeData = {
     body?: never;
     path?: never;
     query?: never;
-    url: '/user/profile/requestVerification';
+    url: '/users/profiles/verify/request';
 };
 
 export type RequestVerificationCodeErrors = {
@@ -299,7 +356,7 @@ export type UploadProfilePictureData = {
     };
     path?: never;
     query?: never;
-    url: '/user/profile/profilePicure';
+    url: '/users/profiles/profilePicture';
 };
 
 export type UploadProfilePictureErrors = {
@@ -324,7 +381,7 @@ export type GetCurrentJournalData = {
     body?: never;
     path?: never;
     query?: never;
-    url: '/journal';
+    url: '/journals';
 };
 
 export type GetCurrentJournalErrors = {
@@ -349,7 +406,7 @@ export type UpdateCurrentJournalData = {
     body: JournalRequestDto;
     path?: never;
     query?: never;
-    url: '/journal';
+    url: '/journals';
 };
 
 export type UpdateCurrentJournalErrors = {
@@ -376,7 +433,7 @@ export type GetJournalByIdData = {
         id: string;
     };
     query?: never;
-    url: '/journal/{id}';
+    url: '/journals/{id}';
 };
 
 export type GetJournalByIdErrors = {
@@ -403,7 +460,7 @@ export type UpdateCurrentJournal1Data = {
         id: string | null;
     };
     query?: never;
-    url: '/journal/{id}';
+    url: '/journals/{id}';
 };
 
 export type UpdateCurrentJournal1Errors = {
@@ -428,7 +485,7 @@ export type AddEnergyEntryData = {
     body: EnergyRequestDto;
     path?: never;
     query?: never;
-    url: '/energy/add';
+    url: '/energyEntries/add';
 };
 
 export type AddEnergyEntryErrors = {
@@ -734,36 +791,11 @@ export type LogoutResponses = {
 
 export type LogoutResponse = LogoutResponses[keyof LogoutResponses];
 
-export type GetMyProfileData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/user/profile';
-};
-
-export type GetMyProfileErrors = {
-    /**
-     * Bad Request
-     */
-    400: ErrorResponse;
-};
-
-export type GetMyProfileError = GetMyProfileErrors[keyof GetMyProfileErrors];
-
-export type GetMyProfileResponses = {
-    /**
-     * OK
-     */
-    200: ProfileResponseDto;
-};
-
-export type GetMyProfileResponse = GetMyProfileResponses[keyof GetMyProfileResponses];
-
 export type GetCurrentStreakData = {
     body?: never;
     path?: never;
     query?: never;
-    url: '/streak';
+    url: '/streaks';
 };
 
 export type GetCurrentStreakErrors = {
@@ -788,7 +820,7 @@ export type GetRecentJournalsShortData = {
     body?: never;
     path?: never;
     query?: never;
-    url: '/journal/recent';
+    url: '/journals/recent';
 };
 
 export type GetRecentJournalsShortErrors = {
@@ -813,7 +845,7 @@ export type GetEnergyInfoTodayData = {
     body?: never;
     path?: never;
     query?: never;
-    url: '/energy';
+    url: '/energyEntries';
 };
 
 export type GetEnergyInfoTodayErrors = {
@@ -840,7 +872,7 @@ export type GetEnergyEntriesForDayData = {
         date: string;
     };
     query?: never;
-    url: '/energy/{date}';
+    url: '/energyEntries/{date}';
 };
 
 export type GetEnergyEntriesForDayErrors = {
@@ -868,7 +900,7 @@ export type GetEnergyForDateRangeData = {
         from: string;
         to: string;
     };
-    url: '/energy/recent';
+    url: '/energyEntries/recent';
 };
 
 export type GetEnergyForDateRangeErrors = {
@@ -893,7 +925,7 @@ export type GetEnergyReasonsData = {
     body?: never;
     path?: never;
     query?: never;
-    url: '/energy/reasons';
+    url: '/energyEntries/reasons';
 };
 
 export type GetEnergyReasonsErrors = {

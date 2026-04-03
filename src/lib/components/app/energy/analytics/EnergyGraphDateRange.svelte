@@ -1,52 +1,70 @@
 <script lang="ts">
-	import { ArrowDown, ArrowUp, RefreshCw } from '@lucide/svelte';
-	import type { ChartConfiguration, ChartOptions } from 'chart.js';
-	import { Chart, registerables } from 'chart.js';
-	import { formatInstant, toIsoDateFromString } from '$util/dateUtil';
 	import type { EnergyInfoDateDto, ProfileResponseDto } from '$api';
+	import { formatInstant } from '$util/dateUtil.js';
+	import type { ChartConfiguration, ChartData } from 'chart.js';
+	import { ArrowUp, ArrowDown, RefreshCw } from '@lucide/svelte';
 	import ChartWrapper from '$components/ui/ChartWrapper.svelte';
 
-	Chart.register(...registerables);
-
-	const CHART_CONFIG = {
-		maxValue: 100,
-		lineTension: 0.4,
-		borderWidth: 2,
-		pointRadius: 4,
-		pointHitRadius: 10,
-		pointHoverRadius: 6
-	};
-
 	let {
-		dateRangePresets,
 		fromInput = $bindable(),
 		toInput = $bindable(),
-		selectedPreset,
-		entries,
-		fetchData,
+		profile,
 		applyPreset,
-		profile
+		fetchData,
+		entries,
+		loading,
+		selectedPreset,
+		dateRangePresets
 	}: {
-		dateRangePresets: string[];
 		fromInput: string;
 		toInput: string;
-		selectedPreset: string | null;
-		entries: EnergyInfoDateDto[];
-		fetchData: () => void;
-		applyPreset: (preset: string) => void;
 		profile: ProfileResponseDto;
+		applyPreset: (preset: string) => void;
+		fetchData: (from?: string, to?: string) => Promise<void>;
+		entries: EnergyInfoDateDto[];
+		loading: boolean;
+		selectedPreset: string | null;
+		dateRangePresets: string[];
 	} = $props();
 
-	let isLoading = $state(false);
 	let showAdvancedDateRange = $state(false);
 
-	let fromInputDateString = $derived(fromInput ? toIsoDateFromString(fromInput) : '');
-	let toInputDateString = $derived(toInput ? toIsoDateFromString(toInput) : '');
+	const chartOptions: ChartConfiguration['options'] = {
+		responsive: true,
+		maintainAspectRatio: false,
+		plugins: {
+			legend: {
+				display: false
+			}
+		},
+		scales: {
+			x: {
+				grid: { display: false }
+			},
+			y: {
+				beginAtZero: true
+			}
+		}
+	};
+
+	let chartData = $derived<ChartData>({
+		labels: entries.map((d) => formatInstant(d.date, profile)),
+		datasets: [
+			{
+				label: 'Energy',
+				data: entries.map((d) => d.amount)
+			}
+		]
+	});
+
+	let fromInputDateString = $derived(fromInput ? fromInput.slice(0, 10) : '');
+	let toInputDateString = $derived(toInput ? toInput.slice(0, 10) : '');
 
 	function handleFromDateChange(e: Event): void {
 		const value = (e.target as HTMLInputElement).value;
 		if (value) {
 			fromInput = new Date(`${value}T00:00:00`).toISOString();
+			fetchData(fromInput, toInput);
 		}
 	}
 
@@ -54,83 +72,7 @@
 		const value = (e.target as HTMLInputElement).value;
 		if (value) {
 			toInput = new Date(`${value}T00:00:00`).toISOString();
-		}
-	}
-
-	let chartData = $state<{
-		labels: string[];
-		datasets: Array<{
-			label: string;
-			data: number[];
-		}>;
-	}>({ labels: [], datasets: [] });
-
-	let chartOptions: ChartOptions<'line'> = {
-		responsive: true,
-		maintainAspectRatio: false,
-		plugins: {
-			legend: { display: false },
-			tooltip: {
-				mode: 'index',
-				intersect: false,
-				backgroundColor: 'rgba(0, 0, 0, 0.8)',
-				titleColor: '#fff',
-				bodyColor: '#fff',
-				padding: 10
-			}
-		},
-		scales: {
-			x: {
-				grid: { display: false },
-				ticks: { color: '#9ca3af' }
-			},
-			y: {
-				grid: { color: 'rgba(0, 0, 0, 0.05)' },
-				ticks: { color: '#9ca3af' },
-				beginAtZero: true,
-				max: CHART_CONFIG.maxValue
-			}
-		},
-		elements: {
-			line: { tension: CHART_CONFIG.lineTension, borderWidth: CHART_CONFIG.borderWidth },
-			point: {
-				radius: CHART_CONFIG.pointRadius,
-				hitRadius: CHART_CONFIG.pointHitRadius,
-				hoverRadius: CHART_CONFIG.pointHoverRadius
-			}
-		}
-	};
-	function updateChart(data: { date: string; amount: number }[]): void {
-		chartData = {
-			labels: data.map((d) => formatInstant(d.date, profile)),
-			datasets: [
-				{
-					label: 'Energy',
-					data: data.map((d) => d.amount)
-				}
-			]
-		};
-	}
-
-	$effect(() => {
-		updateChart(entries);
-	});
-
-	async function handleFetchData(): Promise<void> {
-		isLoading = true;
-		try {
-			await fetchData();
-		} finally {
-			isLoading = false;
-		}
-	}
-
-	async function handleApplyPreset(preset: string): Promise<void> {
-		isLoading = true;
-		try {
-			await applyPreset(preset);
-		} finally {
-			isLoading = false;
+			fetchData(fromInput, toInput);
 		}
 	}
 </script>
@@ -140,8 +82,8 @@
 		<button
 			class="btn shrink-0 text-xs btn-sm"
 			class:btn-primary={selectedPreset === preset}
-			onclick={() => handleApplyPreset(preset)}
-			disabled={isLoading}
+			onclick={() => applyPreset(preset)}
+			disabled={loading}
 		>
 			{preset}
 		</button>
@@ -150,7 +92,7 @@
 		class="btn shrink-0 text-xs btn-sm"
 		class:btn-primary={showAdvancedDateRange}
 		onclick={() => (showAdvancedDateRange = !showAdvancedDateRange)}
-		disabled={isLoading}
+		disabled={loading}
 	>
 		{#if showAdvancedDateRange}
 			<ArrowUp size={18} />
@@ -159,7 +101,7 @@
 		{/if}
 	</button>
 	<div class="grow"></div>
-	<button class="btn shrink-0 btn-sm" onclick={handleFetchData} disabled={isLoading}>
+	<button class="btn shrink-0 btn-sm" onclick={() => fetchData()} disabled={loading}>
 		<RefreshCw class="h-4 w-4" />
 	</button>
 </div>
@@ -195,7 +137,7 @@
 {/if}
 
 <div class="h-64 w-full">
-	{#if isLoading}
+	{#if loading}
 		<div class="flex h-full items-center justify-center">
 			<span class="loading loading-md loading-spinner text-primary"></span>
 		</div>

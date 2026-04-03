@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { ProfileResponseDto, ShortJournalResponseDto } from '$api';
 	import { formatInstant } from '$util/dateUtil';
-	import { ChevronRight, EyeIcon } from '@lucide/svelte';
+	import { ChevronRight } from '@lucide/svelte';
 	import { resolve } from '$app/paths';
 
 	let {

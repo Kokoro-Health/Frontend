@@ -1,17 +1,8 @@
 <script lang="ts">
 	import { requestPasswordReset, resetPassword, validatePasswordResetCode } from '$api';
-	import {
-		HouseIcon,
-		Loader2Icon,
-		AlertCircleIcon,
-		ArrowRightIcon,
-		LockIcon,
-		ShieldCheckIcon
-	} from '@lucide/svelte';
+	import { AlertCircle, ArrowLeft, Lock, ShieldCheck, Mail } from '@lucide/svelte';
 	import { resolve } from '$app/paths';
-	import { onMount } from 'svelte';
-
-	let { data } = $props();
+	import { hapticImpact, hapticNotification } from '$util/haptics';
 
 	const STAGE_REQUEST = 'request';
 	const STAGE_CODE = 'code';
@@ -21,12 +12,6 @@
 	const MIN_PASSWORD_LENGTH = 8;
 	const CODE_LENGTH = 6;
 
-	const ERROR_INVALID_EMAIL = 'Invalid email format';
-	const ERROR_INVALID_CODE = 'Invalid verification code';
-	const ERROR_PASSWORD_TOO_SHORT = 'Password must be at least 8 characters';
-	const ERROR_PASSWORD_MISMATCH = 'Passwords do not match';
-	const ERROR_API_GENERIC = 'An unexpected error occurred';
-
 	let stage = $state(STAGE_REQUEST);
 	let code = $state('');
 	let newPassword = $state('');
@@ -34,12 +19,6 @@
 	let email = $state('');
 	let loading = $state(false);
 	let error = $state<string | null>(null);
-
-	onMount(() => {
-		if (data.profile?.email) {
-			email = data.profile.email;
-		}
-	});
 
 	function isValidEmail(value: string): boolean {
 		return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -56,7 +35,7 @@
 	async function handleRequestSubmit(e: Event) {
 		e.preventDefault();
 		if (!isValidEmail(email)) {
-			error = ERROR_INVALID_EMAIL;
+			error = 'Please enter a valid email address';
 			return;
 		}
 
@@ -64,12 +43,12 @@
 		error = null;
 
 		try {
-			await requestPasswordReset({
-				query: { email }
-			});
+			await requestPasswordReset({ query: { email } });
 			stage = STAGE_CODE;
+			hapticImpact('medium');
 		} catch (err) {
-			error = err instanceof Error ? err.message : ERROR_API_GENERIC;
+			error = err instanceof Error ? err.message : 'Something went wrong';
+			await hapticNotification('error');
 		} finally {
 			loading = false;
 		}
@@ -77,9 +56,8 @@
 
 	async function handleCodeSubmit(e: Event) {
 		e.preventDefault();
-
 		if (!isValidCode(code)) {
-			error = ERROR_INVALID_CODE;
+			error = 'Please enter the 6-digit code';
 			return;
 		}
 
@@ -87,16 +65,14 @@
 		error = null;
 
 		try {
-			await validatePasswordResetCode({
-				query: { code }
-			}).then((res) => {
-				if (res.error?.message) {
-					throw Error(res.error.message);
-				}
+			await validatePasswordResetCode({ query: { code } }).then((res) => {
+				if (res.error?.message) throw Error(res.error.message);
 			});
 			stage = STAGE_PASSWORD;
+			hapticImpact('medium');
 		} catch (err) {
-			error = err instanceof Error ? err.message : ERROR_API_GENERIC;
+			error = err instanceof Error ? err.message : 'Invalid code';
+			await hapticNotification('error');
 		} finally {
 			loading = false;
 		}
@@ -105,11 +81,11 @@
 	async function handlePasswordSubmit(e: Event) {
 		e.preventDefault();
 		if (!isValidPassword(newPassword)) {
-			error = ERROR_PASSWORD_TOO_SHORT;
+			error = 'Password must be at least 8 characters';
 			return;
 		}
 		if (newPassword !== confirmPassword) {
-			error = ERROR_PASSWORD_MISMATCH;
+			error = 'Passwords do not match';
 			return;
 		}
 
@@ -117,14 +93,14 @@
 		error = null;
 
 		try {
-			await resetPassword({
-				body: { code, password: newPassword }
-			}).then((res) => {
+			await resetPassword({ body: { code, password: newPassword } }).then((res) => {
 				if (res.error?.message) throw Error(res.error.message);
 			});
 			stage = STAGE_SUCCESS;
+			await hapticNotification('success');
 		} catch (err) {
-			error = err instanceof Error ? err.message : ERROR_API_GENERIC;
+			error = err instanceof Error ? err.message : 'Something went wrong';
+			await hapticNotification('error');
 		} finally {
 			loading = false;
 		}
@@ -139,160 +115,160 @@
 	}
 </script>
 
-<div class="flex flex-col justify-center gap-6 px-4 pt-safe">
-	<div class="flex flex-row items-center justify-between">
-		<span class="text-xl font-bold tracking-tight text-base-content sm:text-2xl"
-			>Reset Password</span
-		>
-		<button
-			class="btn btn-circle btn-ghost btn-sm"
-			onclick={() => (window.location.href = '/')}
-			aria-label="Go home"
-		>
-			<HouseIcon size={18} />
-		</button>
-	</div>
-
-	{#if error}
-		<div role="alert" class="mb-2 alert alert-error shadow-sm">
-			<AlertCircleIcon size={18} class="shrink-0" />
-			<span class="text-sm">{error}</span>
-		</div>
-	{/if}
-
-	{#if stage === STAGE_REQUEST}
-		<div class="flex flex-col gap-4">
-			<p class="text-sm text-base-content/70">
-				Enter your email address and we'll send you a verification code.
+<div class="flex min-h-screen w-full flex-col items-center justify-center px-4">
+	{#if stage === STAGE_SUCCESS}
+		<div class="flex w-full max-w-sm flex-col items-center gap-4 text-center">
+			<div class="flex h-20 w-20 items-center justify-center rounded-full bg-success/10">
+				<ShieldCheck class="h-10 w-10 text-success" />
+			</div>
+			<h1 class="text-2xl font-bold">Password Reset</h1>
+			<p class="text-sm text-base-content/60">
+				Your password has been successfully reset. You can now sign in with your new password.
 			</p>
-			<form onsubmit={handleRequestSubmit} class="flex flex-col gap-3">
-				<div class="form-control w-full">
-					<div class="join w-full">
+			<a href={resolve('/login')} class="btn mt-4 w-full max-w-sm gap-2 btn-primary">
+				<Lock class="h-4 w-4" />
+				Back to Sign in
+			</a>
+		</div>
+	{:else}
+		<div class="mb-8 w-full max-w-sm text-center">
+			<div class="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
+				<Lock class="h-8 w-8 text-primary" />
+			</div>
+			<h1 class="text-2xl font-bold tracking-tight">Reset Password</h1>
+			<p class="mt-2 text-sm text-base-content/60">
+				{#if stage === STAGE_REQUEST}
+					Enter your email and we'll send you a code
+				{:else if stage === STAGE_CODE}
+					Check your email for the code
+				{:else}
+					Create a new strong password
+				{/if}
+			</p>
+		</div>
+
+		{#if error}
+			<div
+				class="mb-4 flex w-full max-w-sm items-center gap-2 rounded-xl border border-error/20 bg-error/5 p-3"
+			>
+				<AlertCircle class="h-5 w-5 shrink-0 text-error" />
+				<span class="text-sm text-error">{error}</span>
+			</div>
+		{/if}
+
+		<form
+			class="flex w-full max-w-sm flex-col gap-4"
+			onsubmit={(e) => {
+				if (stage === STAGE_REQUEST) handleRequestSubmit(e);
+				else if (stage === STAGE_CODE) handleCodeSubmit(e);
+				else handlePasswordSubmit(e);
+			}}
+		>
+			{#if stage === STAGE_REQUEST}
+				<div class="flex w-full flex-col gap-1">
+					<label class="text-xs font-medium text-base-content/60" for="reset-email">Email</label>
+					<div class="input-bordered input flex h-12 w-full items-center gap-2 bg-base-100 px-3">
+						<Mail class="h-4 w-4 shrink-0 text-base-content/40" />
 						<input
-							id="email-input"
+							id="reset-email"
 							type="email"
-							class="input-bordered input join-item w-full focus:outline-none"
+							class="grow bg-transparent outline-none"
 							placeholder="you@example.com"
 							bind:value={email}
-							required
 							autocomplete="email"
 							disabled={loading}
 						/>
-						<button type="submit" class="btn join-item btn-primary" disabled={loading || !email}>
-							{#if loading}
-								<Loader2Icon class="animate-spin" size={18} />
-							{:else}
-								<ArrowRightIcon size={18} />
-							{/if}
-						</button>
 					</div>
 				</div>
-			</form>
-		</div>
-	{:else if stage === STAGE_CODE}
-		<div class="flex flex-col gap-4">
-			<p class="text-sm text-base-content/70">
-				We sent a code to <strong>{email}</strong>. Enter it below.
-			</p>
-			<form onsubmit={handleCodeSubmit} class="flex flex-col gap-3">
-				<div class="form-control w-full">
-					<div class="join w-full">
-						<input
-							id="code-input"
-							type="text"
-							inputmode="numeric"
-							class="input-bordered input join-item w-full text-center tracking-widest focus:outline-none"
-							placeholder="123456"
-							bind:value={code}
-							required
-							autocomplete="one-time-code"
-							disabled={loading}
-						/>
-						<button
-							type="submit"
-							class="btn join-item btn-primary"
-							disabled={loading || code.length != CODE_LENGTH}
-						>
-							{#if loading}
-								<Loader2Icon class="animate-spin" size={18} />
-							{:else}
-								<ArrowRightIcon size={18} />
-							{/if}
-						</button>
-					</div>
-				</div>
-				<button type="button" class="btn self-start btn-ghost btn-xs" onclick={resetFlow}>
-					Wrong email?
+				<button
+					type="submit"
+					class="btn h-12 gap-2 text-base font-medium btn-primary"
+					disabled={loading || !email}
+				>
+					{#if loading}
+						<span class="loading loading-sm loading-spinner"></span>
+					{/if}
+					Send Code
 				</button>
-			</form>
-		</div>
-	{:else if stage === STAGE_PASSWORD}
-		<div class="flex flex-col gap-4">
-			<p class="text-sm text-base-content/70">Choose a strong password for your account.</p>
-			<form onsubmit={handlePasswordSubmit} class="flex flex-col gap-3">
-				<div class="form-control w-full">
-					<label class="label" for="newPassword">
-						<span class="label-text-alt">New Password</span>
-					</label>
-					<div class="join w-full">
-						<input
-							name="newPassword"
-							id="new-password"
-							type="password"
-							class="input-bordered input join-item w-full focus:outline-none"
-							placeholder="Password"
-							autocomplete="new-password"
-							bind:value={newPassword}
-							required
-							disabled={loading}
-						/>
-						<button
-							type="submit"
-							class="btn join-item btn-primary"
-							disabled={loading || !newPassword}
-						>
-							{#if loading}
-								<Loader2Icon class="animate-spin" size={18} />
-							{:else}
-								<LockIcon size={18} />
-							{/if}
-						</button>
-					</div>
-				</div>
-
-				<div class="form-control w-full">
-					<label class="label" for="confirmPassword">
-						<span class="label-text-alt">Confirm Password</span>
-					</label>
+			{:else if stage === STAGE_CODE}
+				<div class="flex flex-col gap-1">
+					<label class="text-xs font-medium text-base-content/60" for="reset-code"
+						>Verification Code</label
+					>
 					<input
-						name="confirmPassword"
-						id="confirm-password"
-						type="password"
-						class="input-bordered input w-full focus:outline-none"
-						placeholder="Password"
-						autocomplete="current-password"
-						bind:value={confirmPassword}
-						required
+						id="reset-code"
+						type="text"
+						inputmode="numeric"
+						class="input-bordered input h-12 w-full text-center font-mono text-lg tracking-widest"
+						placeholder="123456"
+						bind:value={code}
+						autocomplete="one-time-code"
 						disabled={loading}
 					/>
 				</div>
-			</form>
-		</div>
-	{:else if stage === STAGE_SUCCESS}
-		<div
-			class="animate-in fade-in zoom-in flex flex-col items-center justify-center gap-4 py-6 text-center duration-300"
-		>
-			<div class="rounded-full bg-success/10 p-4 ring-4 ring-success/20">
-				<ShieldCheckIcon class="text-success" size={48} />
-			</div>
-			<h2 class="text-xl font-bold">Password Updated</h2>
-			<p class="max-w-xs text-sm text-base-content/70">
-				Your password has been successfully reset. You can now log in with your new credentials.
-			</p>
-			<a href={resolve('/')} class="btn mt-2 w-full max-w-xs btn-primary">
-				<LockIcon size={16} />
-				Back to Login
-			</a>
-		</div>
+				<div class="flex items-center justify-between text-sm">
+					<button type="button" class="btn btn-ghost btn-sm" onclick={resetFlow}>
+						<ArrowLeft class="h-4 w-4" /> Back
+					</button>
+					<span class="text-xs text-base-content/50">Sent to {email}</span>
+				</div>
+				<button
+					type="submit"
+					class="btn h-12 gap-2 text-base font-medium btn-primary"
+					disabled={loading || code.length !== 6}
+				>
+					{#if loading}
+						<span class="loading loading-sm loading-spinner"></span>
+					{/if}
+					Verify Code
+				</button>
+			{:else}
+				<div class="flex flex-col gap-3">
+					<div class="flex flex-col gap-1">
+						<label class="text-xs font-medium text-base-content/60" for="new-password"
+							>New Password</label
+						>
+						<input
+							id="new-password"
+							type="password"
+							class="input-bordered input h-12 bg-base-100"
+							placeholder="At least 8 characters"
+							bind:value={newPassword}
+							autocomplete="new-password"
+							disabled={loading}
+						/>
+					</div>
+					<div class="flex flex-col gap-1">
+						<label class="text-xs font-medium text-base-content/60" for="confirm-password"
+							>Confirm Password</label
+						>
+						<input
+							id="confirm-password"
+							type="password"
+							class="input-bordered input h-12 bg-base-100"
+							placeholder="Confirm password"
+							bind:value={confirmPassword}
+							autocomplete="new-password"
+							disabled={loading}
+						/>
+					</div>
+				</div>
+				<button
+					type="submit"
+					class="btn h-12 gap-2 text-base font-medium btn-primary"
+					disabled={loading}
+				>
+					{#if loading}
+						<span class="loading loading-sm loading-spinner"></span>
+					{/if}
+					Reset Password
+				</button>
+			{/if}
+		</form>
+
+		<p class="mt-6 text-sm text-base-content/60">
+			Remember your password?
+			<a href={resolve('/login')} class="font-medium text-primary">Sign in</a>
+		</p>
 	{/if}
 </div>

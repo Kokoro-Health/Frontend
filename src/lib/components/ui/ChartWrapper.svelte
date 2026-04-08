@@ -1,7 +1,35 @@
 <script lang="ts">
-	import { Chart, registerables, type ChartConfiguration, type ChartOptions } from 'chart.js';
+	import {
+		Chart,
+		registerables,
+		type ChartConfiguration,
+		type ChartData,
+		type ChartDataset
+	} from 'chart.js';
 
 	Chart.register(...registerables);
+
+	type DatasetData = {
+		label?: string;
+		data: number[];
+		borderColor?: string;
+		backgroundColor?: string;
+		fill?: boolean;
+		tension?: number;
+	};
+
+	type ChartDataInput = {
+		labels?: (string | undefined)[];
+		datasets: DatasetData[];
+	};
+
+	type ChartOptionsInput = {
+		responsive?: boolean;
+		maintainAspectRatio?: boolean;
+		plugins?: Record<string, unknown>;
+		scales?: Record<string, unknown>;
+		elements?: Record<string, unknown>;
+	};
 
 	let {
 		type,
@@ -9,36 +37,36 @@
 		options
 	}: {
 		type: ChartConfiguration['type'];
-		data: ChartConfiguration['data'];
-		options?: ChartOptions;
+		data: ChartDataInput;
+		options?: ChartOptionsInput;
 	} = $props();
 
 	let canvas = $state<HTMLCanvasElement>();
 	let chart: Chart | null = null;
 
-	function buildData() {
+	function buildData(): ChartData<ChartConfiguration['type'], number[], string> {
 		return {
-			labels: [...(data.labels ?? [])],
-			datasets: (data.datasets ?? []).map((d: any) => ({
+			labels: (data.labels ?? []) as string[],
+			datasets: (data.datasets ?? []).map((d) => ({
 				label: d.label,
-				data: [...d.data],
+				data: d.data,
 				borderColor: d.borderColor,
 				backgroundColor: d.backgroundColor,
 				fill: d.fill,
 				tension: d.tension
-			}))
+			})) as ChartDataset<ChartConfiguration['type'], number[]>[]
 		};
 	}
 
-	function buildOptions() {
-		if (!options) return {};
+	function buildOptions(): ChartConfiguration['options'] {
+		if (!options) return undefined;
 		return {
 			responsive: true,
 			maintainAspectRatio: false,
 			plugins: options.plugins,
 			scales: options.scales,
 			elements: options.elements
-		};
+		} as ChartConfiguration['options'];
 	}
 
 	$effect(() => {
@@ -46,8 +74,8 @@
 
 		chart = new Chart(canvas, {
 			type,
-			data: buildData() as any,
-			options: buildOptions() as any
+			data: buildData(),
+			options: buildOptions()
 		});
 
 		return () => {
@@ -59,8 +87,8 @@
 	$effect(() => {
 		if (!chart) return;
 
-		chart.data = buildData() as any;
-		chart.options = buildOptions() as any;
+		chart.data = buildData();
+		chart.options = buildOptions() ?? {};
 	});
 </script>
 

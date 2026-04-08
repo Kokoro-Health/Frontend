@@ -91,3 +91,62 @@
 	--depth: 1;
 	--noise: 0;
 }
+
+* {
+	-webkit-tap-highlight-color: transparent;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+}
+
+::selection {
+	background-color: oklch(var(--p) / 0.2);
+}
+
+input[type='date']::-webkit-calendar-picker-indicator {
+	opacity: 0.5;
+	transition: opacity 0.2s;
+}
+
+input[type='date']::-webkit-calendar-picker-indicator:hover {
+	opacity: 1;
+}
+
+.card {
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+.btn {
+	transition: all 0.2s ease;
+}
+
+.toggle {
+	transition: all 0.2s ease;
+}
+
+.textarea:focus,
+.input:focus {
+	transition:
+		border-color 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}

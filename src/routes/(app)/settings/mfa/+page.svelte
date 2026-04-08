@@ -5,7 +5,15 @@
 	let { data } = $props();
 </script>
 
-<div class="flex flex-col space-y-4">
+<svelte:head>
+	<title>Security</title>
+</svelte:head>
+
+<div class="flex w-full flex-col gap-4">
+	<div class="mb-2">
+		<p class="text-sm font-medium text-base-content/60">Protect your account</p>
+	</div>
+
 	<TwoFaSetup mfaEnabled={data.settings.mfaEnabled} />
 	<Passkey />
 </div>

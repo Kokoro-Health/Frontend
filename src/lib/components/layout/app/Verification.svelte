@@ -140,11 +140,19 @@
 </script>
 
 <div
-	class="card flex h-16 w-full flex-row items-center justify-between bg-warning/30 px-4 text-warning-content/70"
+	class="card flex h-auto w-full flex-row items-center justify-between gap-3 rounded-xl border border-warning/30 bg-warning/10 px-4 py-3 backdrop-blur-sm transition-all duration-300"
 >
-	<span class="truncate text-sm font-medium">Please verify your email address.</span>
-	<button class="btn btn-sm btn-warning" onclick={showModal} aria-label="Open verification modal">
-		<Code size={16} />
+	<div class="flex min-w-0 items-center gap-2">
+		<div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-warning/20">
+			<Code size={16} class="text-warning" />
+		</div>
+		<span class="truncate text-sm font-medium text-warning-content/90">Verify your email</span>
+	</div>
+	<button
+		class="btn shrink-0 gap-1.5 shadow-sm btn-sm btn-warning"
+		onclick={showModal}
+		aria-label="Open verification modal"
+	>
 		Verify
 	</button>
 </div>

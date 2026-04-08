@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { EnergyInfoDateDto, ProfileResponseDto } from '$api';
 	import { formatInstant } from '$util/dateUtil';
-	import { EyeIcon } from '@lucide/svelte';
+	import { ChevronRight } from '@lucide/svelte';
 	import { resolve } from '$app/paths';
 
 	let {
@@ -10,47 +10,45 @@
 		profile
 	}: { entries: EnergyInfoDateDto[]; loading: boolean; profile: ProfileResponseDto } = $props();
 
-	const skeletonRows = Array(5).fill(null);
+	const skeletonCount = 5;
 </script>
 
-<div class="rounded-xl border border-base-200">
-	<div>
-		<table class="table w-full table-zebra text-sm">
-			<thead>
-				<tr>
-					<th class="font-medium">Date</th>
-					<th class="text-right font-medium">Average</th>
-					<th class="w-fit text-center font-medium">View</th>
-				</tr>
-			</thead>
-			<tbody class="max-h-32 overflow-y-auto">
-				{#if loading}
-					{#each skeletonRows as _, i (i)}
-						<tr>
-							<td><div class="h-4 w-24 skeleton"></div></td>
-							<td class="text-right"><div class="ml-auto h-4 w-12 skeleton"></div></td>
-							<td class="w-fit text-center"
-								><div class="rounded-btn mx-auto h-8 w-8 skeleton"></div></td
-							>
-						</tr>
-					{/each}
-				{:else}
-					{#each entries.toReversed() as entry (entry)}
-						<tr>
-							<td class="font-medium">{formatInstant(entry.date, profile)}</td>
-							<td class="text-right">{entry.amount}%</td>
-							<td class="w-fit text-center">
-								<a
-									href={resolve(`/energy/analytics/${entry.date}`)}
-									class="btn opacity-70 btn-ghost btn-sm"
-								>
-									<EyeIcon size={18} />
-								</a>
-							</td>
-						</tr>
-					{/each}
-				{/if}
-			</tbody>
-		</table>
-	</div>
+<div class="flex flex-col gap-2">
+	{#if loading}
+		{#each { length: skeletonCount }, i (i)}
+			<div
+				class="flex items-center justify-between rounded-xl border border-base-200/60 bg-base-100/40 p-4"
+			>
+				<div class="h-4 w-24 skeleton rounded"></div>
+				<div class="h-4 w-12 skeleton rounded"></div>
+			</div>
+		{/each}
+	{:else if entries.length === 0}
+		<div class="rounded-xl border border-base-200/60 bg-base-100/40 p-8 text-center">
+			<p class="text-sm text-base-content/50">No entries yet</p>
+		</div>
+	{:else}
+		{#each entries.toReversed() as entry (entry)}
+			<a
+				href={resolve(`/energy/analytics/${entry.date}`)}
+				class="flex items-center justify-between rounded-xl border border-base-200/60 bg-base-100/60 p-4 transition-all active:scale-[0.99]"
+			>
+				<div class="flex flex-col gap-0.5">
+					<span class="text-sm font-medium">{formatInstant(entry.date, profile)}</span>
+				</div>
+				<div class="flex items-center gap-3">
+					<div
+						class="badge {entry.amount >= 50
+							? 'badge-success'
+							: entry.amount >= 25
+								? 'badge-warning'
+								: 'badge-error'}"
+					>
+						{entry.amount}%
+					</div>
+					<ChevronRight size={18} class="text-base-content/30" />
+				</div>
+			</a>
+		{/each}
+	{/if}
 </div>

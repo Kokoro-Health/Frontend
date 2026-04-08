@@ -1,18 +1,11 @@
 <script lang="ts">
 	import { signUp, type SignUpRequestDto } from '$api';
 	import { tosUrl } from '$util/webUrl';
-	import {
-		MailIcon,
-		KeyRoundIcon,
-		EyeOffIcon,
-		EyeIcon,
-		CircleXIcon,
-		ArrowLeftIcon
-	} from '@lucide/svelte';
+	import { Mail, Lock, EyeOff, Eye, CircleX, ArrowLeft, ArrowRight, Check } from '@lucide/svelte';
 	import { resolve } from '$app/paths';
+	import { hapticImpact, hapticNotification } from '$util/haptics';
 	import Confetti from 'svelte-confetti';
 
-	const iconSize = 16;
 	const STAGE_NAMES = 1;
 	const STAGE_CREDENTIALS = 2;
 
@@ -26,7 +19,7 @@
 	});
 	let currentStage = $state(STAGE_NAMES);
 	let showPassword = $state(false);
-	let error: string | null = $state(null);
+	let error = $state<string | null>(null);
 	let loading = $state(false);
 	let emailInput: HTMLInputElement | null = $state(null);
 	let showConfetti = $state(false);
@@ -36,6 +29,13 @@
 	);
 
 	const loginEnabled = $derived(inputsValid() && !loading);
+
+	function inputsValid(): boolean {
+		if (!signUpData.email || !signUpData.password || !signUpData.tosAccepted) return false;
+		if (signUpData.password.length < 8) return false;
+		if (!emailInput || !emailInput.validity.valid) return false;
+		return true;
+	}
 
 	async function submitForm(e: SubmitEvent) {
 		e.preventDefault();
@@ -50,11 +50,13 @@
 				throw new Error(res.error.message);
 			}
 			showConfetti = true;
+			await hapticNotification('success');
 			setTimeout(() => {
 				location.reload();
 			}, 2000);
 		} catch (err: unknown) {
 			error = err instanceof Error ? err.message : 'An unexpected error occurred';
+			await hapticNotification('error');
 		} finally {
 			loading = false;
 		}
@@ -64,6 +66,7 @@
 		if (canProceedToCredentials) {
 			currentStage = STAGE_CREDENTIALS;
 			error = null;
+			hapticImpact('light');
 		}
 	}
 
@@ -71,162 +74,169 @@
 		currentStage = STAGE_NAMES;
 		error = null;
 	}
-
-	function inputsValid(): boolean {
-		if (!signUpData.email || !signUpData.password || !signUpData.tosAccepted) return false;
-		if (signUpData.password.length < 8) return false;
-		if (!emailInput || !emailInput.validity.valid) return false;
-		return true;
-	}
 </script>
 
-<div class="flex min-h-screen w-full items-center justify-center py-6">
+<div class="flex min-h-screen w-full flex-col items-center justify-center px-4">
 	{#if showConfetti}
 		<div class="pointer-events-none fixed inset-0 z-50 flex items-center justify-center">
-			<Confetti amount={150} xSpread={70} />
+			<Confetti amount={100} xSpread={70} />
 		</div>
 	{/if}
 
-	<form
-		onsubmit={(e) => submitForm(e)}
-		class="card flex w-full max-w-lg flex-col gap-6 rounded-xl p-6 sm:p-8"
-	>
-		<div class="flex flex-col items-center text-center">
-			<h1 class="text-2xl font-bold tracking-tight text-base-content sm:text-3xl">
-				Welcome to Kokoro!
-			</h1>
-			<p class="mt-2 text-sm text-base-content/70">Create your secure account</p>
-		</div>
+	<div class="mb-8 w-full max-w-sm text-center">
+		<h1 class="text-2xl font-bold tracking-tight text-base-content">Create account</h1>
+		<p class="mt-2 text-sm text-base-content/60">Start tracking your energy today</p>
+	</div>
 
-		{#if currentStage === STAGE_CREDENTIALS}
-			<button onclick={goToPreviousStage} class="btn gap-1 self-start btn-ghost btn-sm">
-				<ArrowLeftIcon size={iconSize} />
-				<span>Back</span>
-			</button>
-		{/if}
+	{#if currentStage === STAGE_CREDENTIALS}
+		<button onclick={goToPreviousStage} class="btn mb-4 gap-1 btn-ghost btn-sm">
+			<ArrowLeft class="h-4 w-4" /> Back
+		</button>
+	{/if}
 
-		<div class="flex flex-col gap-4">
-			{#if currentStage === STAGE_NAMES}
-				<div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-					<label class="input-bordered input flex w-full items-center gap-2">
-						<input
-							type="text"
-							bind:value={signUpData.firstName}
-							placeholder="First name"
-							class="grow"
-							autocomplete="name"
-						/>
+	<form onsubmit={(e) => submitForm(e)} class="flex w-full max-w-sm flex-col gap-4">
+		{#if currentStage === STAGE_NAMES}
+			<div class="flex w-full flex-col gap-3">
+				<div class="grid grid-cols-2 gap-3">
+					<div class="flex flex-col gap-1">
+						<label class="text-xs font-medium text-base-content/60" for="firstName"
+							>First name</label
+						>
+						<div class="input-bordered input flex h-12 w-full items-center gap-2 bg-base-100 px-3">
+							<input
+								id="firstName"
+								type="text"
+								bind:value={signUpData.firstName}
+								placeholder="John"
+								class="grow bg-transparent outline-none"
+								autocomplete="given-name"
+							/>
+						</div>
+					</div>
+					<div class="flex flex-col gap-1">
+						<label class="text-xs font-medium text-base-content/60" for="lastName">Last name</label>
+						<div class="input-bordered input flex h-12 w-full items-center gap-2 bg-base-100 px-3">
+							<input
+								id="lastName"
+								type="text"
+								bind:value={signUpData.lastName}
+								placeholder="Doe"
+								class="grow bg-transparent outline-none"
+								autocomplete="family-name"
+							/>
+						</div>
+					</div>
+				</div>
+
+				<div class="flex flex-col gap-1">
+					<label class="text-xs font-medium text-base-content/60" for="middleName">
+						Middle name <span class="text-base-content/40">(optional)</span>
 					</label>
-					<label class="input-bordered input flex w-full items-center gap-2">
+					<div class="input-bordered input flex h-12 w-full items-center gap-2 bg-base-100 px-3">
 						<input
+							id="middleName"
 							type="text"
 							bind:value={signUpData.middleName}
 							placeholder="Middle name"
-							class="grow"
+							class="grow bg-transparent outline-none"
 						/>
-					</label>
-					<label class="input-bordered input flex w-full items-center gap-2">
-						<input
-							type="text"
-							bind:value={signUpData.lastName}
-							placeholder="Last name"
-							class="grow"
-							autocomplete="family-name"
-						/>
-					</label>
+					</div>
 				</div>
 
 				<button
 					type="button"
 					disabled={!canProceedToCredentials}
 					onclick={goToNextStage}
-					class="btn w-full font-medium transition-opacity btn-primary disabled:cursor-not-allowed disabled:opacity-70"
+					class="btn h-12 w-full gap-2 text-base font-medium btn-primary"
 				>
 					Continue
+					<ArrowRight class="h-4 w-4" />
 				</button>
-			{:else}
-				<label
-					class="input-bordered input flex w-full items-center gap-2 focus-within:ring-2 focus-within:ring-primary"
-				>
-					<MailIcon size={iconSize} class="shrink-0 text-base-content/60" />
+			</div>
+		{:else}
+			{#if error}
+				<div class="flex items-center gap-2 rounded-xl border border-error/20 bg-error/5 p-3">
+					<CircleX class="h-5 w-5 shrink-0 text-error" />
+					<span class="text-sm text-error">{error}</span>
+				</div>
+			{/if}
+
+			<div class="flex flex-col gap-1">
+				<label class="text-xs font-medium text-base-content/60" for="email">Email</label>
+				<div class="input-bordered input flex h-12 w-full items-center gap-2 bg-base-100 px-3">
+					<Mail class="h-4 w-4 shrink-0 text-base-content/40" />
 					<input
+						id="email"
 						type="email"
 						bind:this={emailInput}
 						bind:value={signUpData.email}
-						placeholder="someone@example.com"
+						placeholder="you@example.com"
 						class="grow bg-transparent outline-none"
 						autocomplete="email"
 					/>
-				</label>
+				</div>
+			</div>
 
-				<label
-					class="input-bordered input flex w-full items-center gap-2 focus-within:ring-2 focus-within:ring-primary"
-				>
-					<KeyRoundIcon size={iconSize} class="shrink-0 text-base-content/60" />
+			<div class="flex flex-col gap-1">
+				<label class="text-xs font-medium text-base-content/60" for="password">Password</label>
+				<div class="input-bordered input flex h-12 w-full items-center gap-2 bg-base-100 px-3">
+					<Lock class="h-4 w-4 shrink-0 text-base-content/40" />
 					<input
+						id="password"
 						type={showPassword ? 'text' : 'password'}
 						bind:value={signUpData.password}
-						placeholder="Password"
+						placeholder="At least 8 characters"
 						class="grow bg-transparent outline-none"
 						autocomplete="new-password"
 					/>
 					<button
 						type="button"
 						onclick={() => (showPassword = !showPassword)}
-						class="btn shrink-0 btn-ghost btn-xs"
-						aria-label={showPassword ? 'Hide password' : 'Show password'}
+						class="btn btn-square btn-ghost btn-sm"
 					>
 						{#if showPassword}
-							<EyeIcon size={iconSize} />
+							<EyeOff class="h-4 w-4" />
 						{:else}
-							<EyeOffIcon size={iconSize} />
+							<Eye class="h-4 w-4" />
 						{/if}
 					</button>
-				</label>
-
-				{#if error}
-					<div class="alert flex items-center gap-3 rounded-lg p-4 text-sm alert-error">
-						<CircleXIcon size={iconSize} />
-						<span>{error}</span>
-					</div>
-				{/if}
-
-				<div class="flex items-center gap-2">
-					<input
-						type="checkbox"
-						bind:checked={signUpData.tosAccepted}
-						class="checkbox h-5 w-5 checkbox-primary"
-						name="tosAccepted"
-					/>
-					<label for="tosAccepted" class="m-0 label cursor-pointer p-0 text-sm">
-						<span class="label-text">
-							I accept the
-							<a target="_blank" href={resolve(tosUrl as any)} class="link link-primary"
-								>Terms of Service</a
-							>.
-						</span>
-					</label>
 				</div>
+			</div>
 
-				<button
-					disabled={!loginEnabled}
-					type="submit"
-					class="btn w-full font-medium transition-opacity btn-primary disabled:cursor-not-allowed disabled:opacity-70"
-				>
-					{#if loading}
-						<span class="loading loading-sm loading-spinner"></span>
-						<span>Creating Account...</span>
-					{:else}
-						<span>Sign Up</span>
-					{/if}
-				</button>
-			{/if}
-		</div>
+			<div class="flex items-start gap-2">
+				<input
+					type="checkbox"
+					bind:checked={signUpData.tosAccepted}
+					class="checkbox mt-0.5 checkbox-sm checkbox-primary"
+					id="tosAccepted"
+				/>
+				<label for="tosAccepted" class="cursor-pointer text-sm text-base-content/70">
+					I agree to the <a
+						target="_blank"
+						rel="noopener noreferrer"
+						href={tosUrl}
+						class="text-primary">Terms of Service</a
+					>
+				</label>
+			</div>
 
-		<div class="divider my-2">OR</div>
-
-		<div>
-			<a href={resolve('/login')} class="btn w-full btn-outline btn-secondary">Login instead</a>
-		</div>
+			<button
+				disabled={!loginEnabled}
+				type="submit"
+				class="btn h-12 w-full gap-2 text-base font-medium btn-primary"
+			>
+				{#if loading}
+					<span class="loading loading-sm loading-spinner"></span>
+				{:else}
+					Create Account
+					<Check class="h-4 w-4" />
+				{/if}
+			</button>
+		{/if}
 	</form>
+
+	<p class="mt-6 text-sm text-base-content/60">
+		Already have an account?
+		<a href={resolve('/login')} class="font-medium text-primary">Sign in</a>
+	</p>
 </div>

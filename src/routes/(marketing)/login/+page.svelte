@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { signIn, type SignInRequestDto } from '$api';
-	import { MailIcon, KeyRoundIcon, EyeOffIcon, EyeIcon, CircleXIcon } from '@lucide/svelte';
+	import { Mail, Lock, EyeOff, Eye, CircleX, ArrowRight } from '@lucide/svelte';
 	import { resolve } from '$app/paths';
-
-	const iconSize = 16;
+	import { hapticImpact, hapticNotification } from '$util/haptics';
 
 	let signInData: SignInRequestDto = $state({
 		email: '',
@@ -12,7 +11,7 @@
 		mfaCode: ''
 	});
 	let showPassword = $state(false);
-	let error: string | null = $state(null);
+	let error = $state<string | null>(null);
 	let loading = $state(false);
 	let emailInput: HTMLInputElement | null = $state(null);
 	let mfaRequired = $state(false);
@@ -48,17 +47,20 @@
 		e.preventDefault();
 		loading = true;
 		error = null;
+
 		await signIn({ body: signInData, credentials: 'include' })
 			.then((res) => {
 				if (res.error) throw Error(res.error.message);
 				else if (res.data.mfaRequired) {
 					mfaRequired = true;
+					hapticImpact('medium');
 					return;
 				}
 				location.reload();
 			})
 			.catch((e: Error) => {
 				error = e.message;
+				hapticNotification('error');
 			})
 			.finally(() => {
 				loading = false;
@@ -80,68 +82,71 @@
 	const loginEnabled = $derived(inputsValid() && !loading);
 </script>
 
-<div class="flex min-h-screen w-full items-center justify-center py-6">
-	<form
-		onsubmit={(e) => submitForm(e)}
-		class="card flex w-full max-w-lg flex-col gap-6 rounded-xl p-6 sm:p-8"
-	>
-		<div class="flex flex-col items-center text-center">
-			<h1 class="text-2xl font-bold tracking-tight text-base-content sm:text-3xl">Welcome back!</h1>
-			<p class="mt-2 text-sm text-base-content/70">Sign in to your account.</p>
-		</div>
+<div class="flex min-h-screen w-full flex-col items-center justify-center px-4">
+	<div class="mb-8 w-full max-w-sm text-center">
+		<h1 class="text-3xl font-bold tracking-tight text-base-content">Welcome back</h1>
+		<p class="mt-2 text-sm text-base-content/60">Sign in to your account</p>
+	</div>
 
-		<div class="flex flex-col gap-4">
-			<label
-				class="input-bordered input flex w-full items-center gap-2 focus-within:ring-2 focus-within:ring-primary"
-			>
-				<MailIcon size={iconSize} class="shrink-0 text-base-content/60" />
+	<form onsubmit={(e) => submitForm(e)} class="flex w-full max-w-sm flex-col gap-5">
+		{#if error}
+			<div class="flex items-center gap-2 rounded-xl border border-error/20 bg-error/5 p-3">
+				<CircleX class="h-5 w-5 shrink-0 text-error" />
+				<span class="text-sm text-error">{error}</span>
+			</div>
+		{/if}
+
+		<div class="flex w-full flex-col gap-1">
+			<label class="text-xs font-medium text-base-content/60" for="email">Email</label>
+			<div class="input-bordered input flex h-12 w-full items-center gap-2 bg-base-100 px-3">
+				<Mail class="h-4 w-4 shrink-0 text-base-content/40" />
 				<input
+					id="email"
 					type="email"
 					bind:this={emailInput}
 					bind:value={signInData.email}
 					disabled={mfaRequired}
-					placeholder="someone@example.com"
-					class="w-full grow bg-transparent outline-none"
+					placeholder="you@example.com"
+					class="grow bg-transparent outline-none"
 					autocomplete="email"
 				/>
-			</label>
+			</div>
+		</div>
 
-			<label
-				class="input-bordered input flex w-full items-center gap-2 focus-within:ring-2 focus-within:ring-primary"
-			>
-				<KeyRoundIcon size={iconSize} class="shrink-0 text-base-content/60" />
+		<div class="flex w-full flex-col gap-1">
+			<label class="text-xs font-medium text-base-content/60" for="password">Password</label>
+			<div class="input-bordered input flex h-12 w-full items-center gap-2 bg-base-100 px-3">
+				<Lock class="h-4 w-4 shrink-0 text-base-content/40" />
 				<input
+					id="password"
 					type={showPassword ? 'text' : 'password'}
 					bind:value={signInData.password}
 					disabled={mfaRequired}
 					placeholder="Password"
-					class="w-full grow bg-transparent outline-none"
+					class="grow bg-transparent outline-none"
 					autocomplete="current-password"
 				/>
 				<button
 					type="button"
 					onclick={() => (showPassword = !showPassword)}
-					class="btn shrink-0 btn-ghost btn-xs"
-					aria-label={showPassword ? 'Hide password' : 'Show password'}
+					class="btn btn-square btn-ghost btn-sm"
 				>
 					{#if showPassword}
-						<EyeIcon size={iconSize} />
+						<EyeOff class="h-4 w-4" />
 					{:else}
-						<EyeOffIcon size={iconSize} />
+						<Eye class="h-4 w-4" />
 					{/if}
 				</button>
-			</label>
+			</div>
 		</div>
 
 		{#if mfaRequired}
-			<div class="flex flex-col items-center gap-4 py-2">
-				<div class="space-y-1 text-center">
-					<p class="font-semibold">Two-factor authentication</p>
-					<p class="text-sm text-base-content/70">
-						Enter the 6-digit code from your authenticator app.
-					</p>
+			<div class="flex w-full flex-col gap-3 py-2">
+				<div class="text-center">
+					<p class="text-sm font-medium">Two-factor authentication</p>
+					<p class="mt-1 text-xs text-base-content/50">Enter the 6-digit code from your app</p>
 				</div>
-				<div class="flex gap-2">
+				<div class="flex w-full justify-center gap-2">
 					{#each mfaDigits as digit, i (digit)}
 						<input
 							type="text"
@@ -152,56 +157,45 @@
 							oninput={(e) => handleMfaInput(e, i)}
 							onkeydown={(e) => handleMfaKeydown(e, i)}
 							onpaste={(e) => handleMfaPaste(e)}
-							class="input-bordered input h-14 w-12 text-center font-mono text-xl font-semibold"
+							class="input-bordered input h-12 w-10 text-center font-mono text-lg"
 						/>
 					{/each}
 				</div>
 			</div>
 		{/if}
 
-		{#if error}
-			<div class="alert flex items-center gap-3 rounded-lg p-4 text-sm alert-error">
-				<CircleXIcon size={iconSize} />
-				<span>{error}</span>
-			</div>
-		{/if}
-
 		{#if !mfaRequired}
-			<div class="flex justify-between">
-				<div class="flex items-center gap-2">
+			<div class="flex w-full items-center justify-between">
+				<label class="flex w-auto items-center gap-2">
 					<input
 						type="checkbox"
 						bind:checked={signInData.rememberMe}
-						class="checkbox h-5 w-5 checkbox-primary"
+						class="checkbox checkbox-sm checkbox-primary"
 						name="rememberMe"
 					/>
-					<label for="rememberMe" class="m-0 label cursor-pointer p-0 text-sm">
-						<span class="label-text">Remember me</span>
-					</label>
-				</div>
-				<span class="text-sm">
-					<a href={resolve('/reset-password')} class="link link-primary">Forgot password?</a>
-				</span>
+					<span class="text-sm text-base-content/70">Remember me</span>
+				</label>
+				<a href={resolve('/reset-password')} class="text-sm text-primary">Forgot password?</a>
 			</div>
 		{/if}
 
 		<button
 			disabled={!loginEnabled}
 			type="submit"
-			class="btn w-full font-medium transition-opacity btn-primary disabled:cursor-not-allowed disabled:opacity-70"
+			class="btn h-12 w-full gap-2 text-base font-medium btn-primary"
 		>
 			{#if loading}
 				<span class="loading loading-sm loading-spinner"></span>
-				<span>{mfaRequired ? 'Verifying...' : 'Logging in...'}</span>
-			{:else}
-				<span>{mfaRequired ? 'Verify' : 'Login'}</span>
+			{/if}
+			{mfaRequired ? 'Verify' : 'Sign in'}
+			{#if !loading}
+				<ArrowRight class="h-4 w-4" />
 			{/if}
 		</button>
-
-		<div class="divider my-2">OR</div>
-
-		<div>
-			<a href={resolve('/signup')} class="btn w-full btn-outline btn-secondary">Create account</a>
-		</div>
 	</form>
+
+	<p class="mt-6 text-sm text-base-content/60">
+		Don't have an account?
+		<a href={resolve('/signup')} class="font-medium text-primary">Create one</a>
+	</p>
 </div>

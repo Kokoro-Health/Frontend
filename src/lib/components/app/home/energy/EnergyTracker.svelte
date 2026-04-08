@@ -5,6 +5,7 @@
 	import EnergyBattery from './EnergyBattery.svelte';
 	import ReasonModal from './ReasonModal.svelte';
 	import { resolve } from '$app/paths';
+	import { hapticImpact, hapticNotification } from '$util/haptics';
 
 	interface Preset {
 		icon: typeof Skull;
@@ -61,7 +62,7 @@
 	let pendingAmount = $state<number | null>(null);
 	let reasons = $state<string[]>([]);
 
-	let reasonModalInstance: InstanceType<any> | null = null;
+	let reasonModalInstance: ReasonModal | null = null;
 
 	function formatCooldown(seconds: number): string {
 		const minutes = Math.floor(seconds / SECONDS_IN_MINUTE);
@@ -127,6 +128,7 @@
 
 		loading = true;
 		loggedValue = amount;
+		await hapticImpact('medium');
 
 		try {
 			await addEnergyEntry({ body: { amount, reason: reason ?? '' } });
@@ -134,7 +136,10 @@
 			if (response.data) {
 				displayInfo = response.data;
 				loggedValue = null;
+				await hapticNotification('success');
 			}
+		} catch {
+			await hapticNotification('error');
 		} finally {
 			loading = false;
 			onChange();
@@ -149,46 +154,55 @@
 	}
 </script>
 
-<div class="card w-full rounded-box border border-base-200">
-	<div class="card-body gap-5 p-5">
-		<div class="flex items-center justify-between">
-			<h2 class="text-sm font-semibold tracking-wide">Energy</h2>
-			<div class="flex flex-row items-center justify-center space-x-3">
-				<span class="text-xs text-base-content/40">Today</span>
-				<a href={resolve('/energy/analytics')} class="btn btn-soft btn-sm">
-					<ChartPie size={18} />
-				</a>
-			</div>
+<div class="card w-full rounded-2xl border border-base-200/60 bg-base-100/80 p-5 backdrop-blur-sm">
+	<div class="mb-4 flex items-center justify-between">
+		<h2 class="text-base font-semibold text-base-content">Energy</h2>
+		<div class="flex items-center gap-3">
+			<span class="text-xs font-medium text-base-content/50">Today</span>
+			<a href={resolve('/energy/analytics')} class="btn btn-square btn-ghost btn-sm">
+				<ChartPie size={18} class="text-base-content/60" />
+			</a>
 		</div>
+	</div>
 
-		<div class="flex justify-center py-2">
-			<EnergyBattery level={displayInfo.energy} />
-		</div>
+	<div class="flex justify-center py-3">
+		<EnergyBattery level={displayInfo.energy} />
+	</div>
 
-		<div class="divider my-0 text-xs text-base-content/40">How are you feeling?</div>
+	<div class="mb-4 text-center">
+		<p class="text-xs font-medium tracking-wider text-base-content/40 uppercase">
+			How are you feeling?
+		</p>
+	</div>
 
-		<div class="grid grid-cols-5 gap-1.5">
-			{#each presets as preset (preset.value)}
-				<button
-					class="flex flex-col items-center gap-1.5 rounded-xl py-3 transition-all duration-150 {preset.style} {loggedValue ===
-					preset.value
-						? 'ring-2 ring-current ring-offset-2 ring-offset-base-200'
-						: ''} disabled:opacity-40"
-					onclick={() => handleLog(preset.value)}
-					disabled={loading || cooldownSeconds > 0}
-				>
-					<preset.icon size={20} strokeWidth={2} />
-					<span class="text-[10px] leading-none font-medium">{preset.label}</span>
-				</button>
-			{/each}
-		</div>
+	<div class="grid grid-cols-5 gap-1">
+		{#each presets as preset (preset.value)}
+			<button
+				class="group relative flex flex-col items-center gap-1 rounded-xl py-2 transition-all duration-200 active:scale-90 {preset.style} {loggedValue ===
+				preset.value
+					? 'bg-base-200/50 ring-2 ring-current ring-offset-2 ring-offset-base-100'
+					: 'hover:bg-base-200/30'} disabled:cursor-not-allowed disabled:opacity-40"
+				onclick={() => handleLog(preset.value)}
+				disabled={loading || cooldownSeconds > 0}
+			>
+				<preset.icon
+					size={18}
+					strokeWidth={loggedValue === preset.value ? 2.5 : 2}
+					class="transition-transform duration-200 group-hover:scale-110"
+				/>
+				<span class="text-xs font-medium">{preset.label}</span>
+			</button>
+		{/each}
+	</div>
 
-		{#if cooldownSeconds > 0}
-			<p class="text-center text-xs text-base-content/40">
+	{#if cooldownSeconds > 0}
+		<div class="mt-4 flex items-center justify-center gap-2 rounded-lg bg-base-200/40 py-2">
+			<div class="h-1.5 w-1.5 animate-pulse rounded-full bg-base-content/40"></div>
+			<p class="text-xs font-medium text-base-content/50">
 				Next entry in {formatCooldown(cooldownSeconds)}
 			</p>
-		{/if}
-	</div>
+		</div>
+	{/if}
 </div>
 
 <ReasonModal bind:this={reasonModalInstance} {reasons} onSelect={handleReasonSelect} />

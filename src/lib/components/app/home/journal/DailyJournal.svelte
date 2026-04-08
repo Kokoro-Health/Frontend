@@ -10,6 +10,7 @@
 	import { browser } from '$app/environment';
 	import { Check, AlertCircle, Loader2, Lock, Save } from '@lucide/svelte';
 	import { toAmPmTime } from '$util/timeUtil';
+	import { hapticNotification } from '$util/haptics';
 
 	const SAVE_DELAY = 1500;
 	let { profile, showTitle = true }: { profile: ProfileResponseDto; showTitle?: boolean } =
@@ -97,6 +98,7 @@
 				} else {
 					error = 'Session expired or conflict. Reloading...';
 					saveStatus = 'error';
+					await hapticNotification('error');
 					await loadCurrent();
 				}
 				return;
@@ -113,6 +115,7 @@
 		} catch (e) {
 			error = e instanceof Error ? e.message : 'Failed to save';
 			saveStatus = 'error';
+			await hapticNotification('error');
 			console.error('Journal save error:', e);
 		} finally {
 			isSaving = false;
@@ -164,14 +167,16 @@
 	});
 </script>
 
-<div class="card border border-base-200 bg-base-100 p-4">
+<div
+	class="card border border-base-200/80 bg-base-100/80 p-4 backdrop-blur-sm transition-all duration-300"
+>
 	<div class="mb-3 flex items-center justify-between">
 		<div class="flex items-center gap-2">
 			{#if showTitle}
-				<h2 class="text-sm font-semibold">Journal</h2>
+				<h2 class="text-sm font-semibold tracking-wide">Journal</h2>
 			{/if}
 			{#if isLoading}
-				<Loader2 class="h-3 w-3 animate-spin text-primary" />
+				<Loader2 class="h-3.5 w-3.5 animate-spin text-primary" />
 			{/if}
 		</div>
 
@@ -182,19 +187,22 @@
 					Read-only
 				</span>
 			{:else if saveStatus === 'saving'}
-				<span class="flex items-center gap-1 text-info">
-					<Loader2 class="h-3 w-3 animate-spin" />
+				<span class="flex items-center gap-1.5 text-info">
+					<div class="h-1.5 w-1.5 animate-pulse rounded-full bg-info"></div>
 					Saving...
 				</span>
 			{:else if saveStatus === 'scheduled'}
-				<span class="text-warning">Unsaved changes</span>
+				<span class="flex items-center gap-1.5 text-base-content/50">
+					<div class="h-1.5 w-1.5 animate-pulse rounded-full bg-base-content/30"></div>
+					Editing...
+				</span>
 			{:else if saveStatus === 'error'}
 				<span class="flex items-center gap-1 text-error">
 					<AlertCircle class="h-3 w-3" />
 					Save failed
 				</span>
 			{:else if lastSaved && !isDirty}
-				<span class="flex items-center gap-1 text-success">
+				<span class="flex items-center gap-1 text-success/80">
 					<Check class="h-3 w-3" />
 					Saved {toAmPmTime(lastSaved.toISOString(), profile)}
 				</span>
@@ -204,10 +212,10 @@
 
 	{#if error}
 		<div class="mb-3 alert py-2 alert-error">
-			<AlertCircle class="h-4 w-4" />
+			<AlertCircle class="h-4 w-4 shrink-0" />
 			<span class="text-xs">{error}</span>
 			<button
-				class="btn btn-ghost btn-xs"
+				class="btn ml-auto btn-ghost btn-xs"
 				onclick={() => {
 					error = null;
 					loadCurrent();
@@ -220,16 +228,16 @@
 
 	<textarea
 		bind:value={contentInput}
-		class="textarea-bordered textarea min-h-32 w-full text-sm"
+		class="textarea-bordered textarea min-h-36 w-full resize-none rounded-xl text-sm transition-all duration-200 focus:border-primary/50 focus:ring-2 focus:ring-primary/20"
 		class:textarea-disabled={!canEdit || !initialLoad}
 		placeholder={isLoading ? 'Loading...' : "How's your day going?"}
 		disabled={!canEdit || !initialLoad}
 		aria-label="Journal entry"
 	></textarea>
 
-	<div class="mt-2 flex items-center justify-between text-xs text-base-content/60">
-		<span>{contentInput.length} characters</span>
-		<div class="flex items-center gap-2">
+	<div class="mt-2 flex items-center justify-between text-xs text-base-content/50">
+		<span class="tabular-nums">{contentInput.length} chars</span>
+		<div class="flex items-center gap-3">
 			{#if current?.availableUntil}
 				<span class:text-error={!checkAvailable()}>
 					{#if checkAvailable()}
@@ -239,16 +247,16 @@
 					{/if}
 				</span>
 			{/if}
-			{#if canEdit && isDirty}
+			{#if canEdit && isDirty && saveStatus === 'scheduled'}
 				<button
-					class="btn gap-1 btn-ghost btn-xs"
+					class="btn gap-1.5 btn-ghost btn-sm"
 					onclick={() => {
 						if (saveTimeout) clearTimeout(saveTimeout);
 						save();
 					}}
 					disabled={isSaving}
 				>
-					<Save class="h-3 w-3" />
+					<Save class="h-3.5 w-3.5" />
 					Save
 				</button>
 			{/if}

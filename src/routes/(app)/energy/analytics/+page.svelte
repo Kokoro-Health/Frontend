@@ -4,7 +4,7 @@
 	import EnergyGraphDateRange from '$components/app/energy/analytics/EnergyGraphDateRange.svelte';
 	import EnergyEntryTable from '$components/app/energy/analytics/EnergyEntryTable.svelte';
 	import { toInstant } from '$util/dateUtil.js';
-	import { CircleX } from '@lucide/svelte';
+	import { CircleX, TrendingUp } from '@lucide/svelte';
 
 	const DATE_RANGE_PRESETS: string[] = ['7d', '14d', '30d'] as const;
 
@@ -47,7 +47,7 @@
 		} catch (e) {
 			console.error(e);
 			entries = [];
-			error = 'An unexpected error occurred.';
+			error = 'Something went wrong';
 		} finally {
 			loading = false;
 		}
@@ -59,20 +59,23 @@
 </script>
 
 <svelte:head>
-	<title>Review Energy</title>
-	<meta name="description" content="View your energy consumption over time." />
+	<title>Energy Analytics</title>
 </svelte:head>
 
-<div class="flex w-full flex-col">
+<div class="flex w-full flex-col gap-4">
 	{#if error}
-		<div
-			class="justify-cent card mb-4 flex w-full flex-row items-center space-x-3 bg-error p-3 text-error-content"
-		>
-			<CircleX size={26} />
-			<span>{error}</span>
+		<div class="flex items-center gap-2 rounded-xl border border-error/20 bg-error/5 p-3">
+			<CircleX class="h-5 w-5 shrink-0 text-error" />
+			<span class="text-sm text-error">{error}</span>
 		</div>
 	{/if}
-	<section class="flex flex-col gap-4">
+
+	<div class="flex items-center gap-2">
+		<TrendingUp class="h-5 w-5 text-primary" />
+		<h2 class="text-sm font-semibold text-base-content/70">Energy Trends</h2>
+	</div>
+
+	<div class="rounded-2xl border border-base-200/60 bg-base-100/60 p-4">
 		<EnergyGraphDateRange
 			bind:fromInput
 			bind:toInput
@@ -84,6 +87,11 @@
 			{selectedPreset}
 			dateRangePresets={DATE_RANGE_PRESETS}
 		/>
-		<EnergyEntryTable {loading} {entries} profile={data.profile!} />
-	</section>
+	</div>
+
+	<div class="flex items-center gap-2">
+		<span class="text-sm font-semibold text-base-content/70">Daily Breakdown</span>
+	</div>
+
+	<EnergyEntryTable {loading} {entries} profile={data.profile!} />
 </div>

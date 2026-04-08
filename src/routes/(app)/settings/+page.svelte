@@ -4,13 +4,17 @@
 		Sun,
 		Moon,
 		Laptop,
-		Check,
 		AlertCircle,
 		LogOut,
 		ChevronRight,
-		RefreshCcw
+		RefreshCcw,
+		Bell,
+		Palette,
+		User,
+		Shield
 	} from '@lucide/svelte';
 	import { resolve } from '$app/paths';
+	import { hapticImpact } from '$util/haptics';
 
 	let { data }: { data: { settings: SettingsResponseDto } } = $props();
 
@@ -95,6 +99,12 @@
 
 	function setTheme(theme: (typeof AVAILABLE_THEMES)[number]) {
 		settings.theme = theme;
+		hapticImpact('light');
+	}
+
+	function toggleSetting(key: 'marketingEmails' | 'securityAlerts' | 'reminderEmails') {
+		settings[key] = !settings[key];
+		hapticImpact('light');
 	}
 
 	$effect(() => {
@@ -119,22 +129,10 @@
 	<meta name="description" content="Manage your account preferences and notifications." />
 </svelte:head>
 
-<div class="w-full">
-	<div class="flex w-full max-w-xl flex-col">
-		<div class="absolute right-safe flex items-center justify-end gap-2 pr-4 text-sm font-medium">
-			{#if loading}
-				<span>Loading</span>
-				<div class="loading loading-xs loading-spinner text-primary"></div>
-			{:else if error}
-				<span>Error</span>
-				<AlertCircle class="h-4 w-4 text-error" />
-			{:else if hasChanges}
-				<span>Saving...</span>
-				<div class="loading loading-xs loading-spinner text-warning"></div>
-			{:else}
-				<span>Saved</span>
-				<Check class="h-4 w-4 text-success" />
-			{/if}
+<div class="w-full pb-4">
+	<div class="flex w-full max-w-xl flex-col gap-6">
+		<div class="mb-2">
+			<p class="text-sm font-medium text-base-content/60">Manage your preferences</p>
 		</div>
 
 		{#if error}
@@ -144,127 +142,157 @@
 			</div>
 		{/if}
 
-		<section class="flex flex-col gap-4">
-			<h2 class="px-1 text-lg font-semibold">Notifications</h2>
+		<section class="flex flex-col gap-3">
+			<div class="mb-1 flex items-center gap-2">
+				<Bell class="h-4 w-4 text-base-content/50" />
+				<h2 class="text-xs font-semibold tracking-wider text-base-content/50 uppercase">
+					Notifications
+				</h2>
+			</div>
 
-			<label
-				class="group flex items-center justify-between gap-4 rounded-xl border border-base-200 bg-base-100 p-4 transition-colors hover:border-base-300 active:bg-base-200"
+			<button
+				onclick={() => toggleSetting('reminderEmails')}
+				class="flex items-center justify-between rounded-xl border border-base-200/60 bg-base-100/60 p-4 text-left transition-all active:scale-[0.98]"
 			>
-				<div class="flex flex-col gap-1">
-					<span class="font-medium">Marketing emails</span>
-					<span class="text-xs text-base-content/70">Receive product updates and helpful tips.</span
-					>
+				<div class="flex flex-col gap-0.5">
+					<span class="text-sm font-medium">Daily reminders</span>
+					<span class="text-xs text-base-content/50">Get gentle nudges to log your energy.</span>
 				</div>
 				<input
 					type="checkbox"
-					class="toggle h-6 w-10 toggle-primary"
-					bind:checked={settings.marketingEmails}
+					class="toggle toggle-primary toggle-sm"
+					checked={settings.reminderEmails}
+					onchange={() => toggleSetting('reminderEmails')}
 				/>
-			</label>
+			</button>
 
-			<label
-				class="group flex items-center justify-between gap-4 rounded-xl border border-base-200 bg-base-100 p-4 transition-colors hover:border-base-300 active:bg-base-200"
+			<button
+				onclick={() => toggleSetting('marketingEmails')}
+				class="flex items-center justify-between rounded-xl border border-base-200/60 bg-base-100/60 p-4 text-left transition-all active:scale-[0.98]"
 			>
-				<div class="flex flex-col gap-1">
-					<span class="font-medium">Security alerts</span>
-					<span class="text-xs text-base-content/70"
-						>Get notified when important security events occur.</span
-					>
+				<div class="flex flex-col gap-0.5">
+					<span class="text-sm font-medium">Product updates</span>
+					<span class="text-xs text-base-content/50">News about new features.</span>
 				</div>
 				<input
 					type="checkbox"
-					class="toggle h-6 w-10 toggle-primary"
-					bind:checked={settings.securityAlerts}
+					class="toggle toggle-primary toggle-sm"
+					checked={settings.marketingEmails}
+					onchange={() => toggleSetting('marketingEmails')}
 				/>
-			</label>
+			</button>
 
-			<label
-				class="group flex items-center justify-between gap-4 rounded-xl border border-base-200 bg-base-100 p-4 transition-colors hover:border-base-300 active:bg-base-200"
+			<button
+				onclick={() => toggleSetting('securityAlerts')}
+				class="flex items-center justify-between rounded-xl border border-base-200/60 bg-base-100/60 p-4 text-left transition-all active:scale-[0.98]"
 			>
-				<div class="flex flex-col gap-1">
-					<span class="font-medium">Reminder emails</span>
-					<span class="text-xs text-base-content/70"
-						>Get gentle reminders to keep your routine on track.</span
-					>
+				<div class="flex flex-col gap-0.5">
+					<span class="text-sm font-medium">Security alerts</span>
+					<span class="text-xs text-base-content/50">Important account notifications.</span>
 				</div>
 				<input
 					type="checkbox"
-					class="toggle h-6 w-10 toggle-primary"
-					bind:checked={settings.reminderEmails}
+					class="toggle toggle-primary toggle-sm"
+					checked={settings.securityAlerts}
+					onchange={() => toggleSetting('securityAlerts')}
 				/>
-			</label>
+			</button>
 		</section>
 
-		<section class="flex flex-col gap-4 pt-6">
-			<h2 class="px-1 text-lg font-semibold">App preferences</h2>
+		<section class="flex flex-col gap-3">
+			<div class="mb-1 flex items-center gap-2">
+				<Palette class="h-4 w-4 text-base-content/50" />
+				<h2 class="text-xs font-semibold tracking-wider text-base-content/50 uppercase">
+					Appearance
+				</h2>
+			</div>
 
-			<div class="flex flex-col gap-3">
-				<div class="rounded-xl border border-base-200 bg-base-100 p-4">
-					<span class="text-xs font-medium tracking-wide text-base-content/60 uppercase">Theme</span
-					>
-					<div class="mt-3 grid grid-cols-3 gap-2">
-						{#each AVAILABLE_THEMES as themeOption (themeOption)}
-							<button
-								onclick={() => setTheme(themeOption)}
-								class="flex flex-col items-center justify-center gap-1 rounded-lg border p-2 transition-all {settings.theme ===
-								themeOption
-									? 'border-primary bg-primary/10 text-primary'
-									: 'border-base-200 bg-base-100 text-base-content hover:bg-base-200'}"
-							>
-								{#if themeOption === 'LIGHT'}
-									<Sun class="h-5 w-5" />
-								{:else if themeOption === 'DARK'}
-									<Moon class="h-5 w-5" />
-								{:else}
-									<Laptop class="h-5 w-5" />
-								{/if}
-								<span class="text-[10px] font-medium">{themeOption}</span>
-							</button>
-						{/each}
+			<div class="rounded-xl border border-base-200/60 bg-base-100/60 p-4">
+				<p class="mb-3 text-xs font-medium text-base-content/50">Theme</p>
+				<div class="grid grid-cols-3 gap-2">
+					{#each AVAILABLE_THEMES as themeOption (themeOption)}
+						<button
+							onclick={() => setTheme(themeOption)}
+							class="flex flex-col items-center justify-center gap-2 rounded-xl border p-3 transition-all active:scale-95 {settings.theme ===
+							themeOption
+								? 'border-primary bg-primary/10 text-primary'
+								: 'border-base-200/80 text-base-content hover:bg-base-200/30'}"
+						>
+							{#if themeOption === 'LIGHT'}
+								<Sun class="h-5 w-5" />
+							{:else if themeOption === 'DARK'}
+								<Moon class="h-5 w-5" />
+							{:else}
+								<Laptop class="h-5 w-5" />
+							{/if}
+							<span class="text-xs font-medium">{themeOption}</span>
+						</button>
+					{/each}
+				</div>
+			</div>
+		</section>
+
+		<section class="flex flex-col gap-3">
+			<div class="mb-1 flex items-center gap-2">
+				<User class="h-4 w-4 text-base-content/50" />
+				<h2 class="text-xs font-semibold tracking-wider text-base-content/50 uppercase">Account</h2>
+			</div>
+
+			<a
+				href={resolve('/settings/profile')}
+				class="flex items-center justify-between rounded-xl border border-base-200/60 bg-base-100/60 p-4 transition-all active:scale-[0.98]"
+			>
+				<div class="flex items-center gap-3">
+					<div class="flex h-10 w-10 items-center justify-center rounded-full bg-base-200">
+						<User class="h-5 w-5 text-base-content/60" />
+					</div>
+					<div class="flex flex-col gap-0.5">
+						<span class="text-sm font-medium">Profile & Data</span>
+						<span class="text-xs text-base-content/50">Manage your personal info</span>
 					</div>
 				</div>
+				<ChevronRight class="h-5 w-5 text-base-content/30" />
+			</a>
 
-				<div class="rounded-xl border border-base-200 bg-base-100 p-4">
-					<span class="text-xs font-medium tracking-wide text-base-content/60 uppercase"
-						>Language</span
-					>
-					<div class="mt-1 font-medium">{settings.language}</div>
+			<a
+				href={resolve('/settings/mfa')}
+				class="flex items-center justify-between rounded-xl border border-base-200/60 bg-base-100/60 p-4 transition-all active:scale-[0.98]"
+			>
+				<div class="flex items-center gap-3">
+					<div class="flex h-10 w-10 items-center justify-center rounded-full bg-base-200">
+						<Shield class="h-5 w-5 text-base-content/60" />
+					</div>
+					<div class="flex flex-col gap-0.5">
+						<span class="text-sm font-medium">Security</span>
+						<span class="text-xs text-base-content/50">2FA and passkeys</span>
+					</div>
 				</div>
-			</div>
+				<ChevronRight class="h-5 w-5 text-base-content/30" />
+			</a>
+
+			<a
+				href={resolve('/reset-password')}
+				class="flex items-center justify-between rounded-xl border border-base-200/60 bg-base-100/60 p-4 transition-all active:scale-[0.98]"
+			>
+				<div class="flex items-center gap-3">
+					<div class="flex h-10 w-10 items-center justify-center rounded-full bg-base-200">
+						<RefreshCcw class="h-5 w-5 text-base-content/60" />
+					</div>
+					<div class="flex flex-col gap-0.5">
+						<span class="text-sm font-medium">Password</span>
+						<span class="text-xs text-base-content/50">Change your password</span>
+					</div>
+				</div>
+				<ChevronRight class="h-5 w-5 text-base-content/30" />
+			</a>
 		</section>
 
-		<section class="flex flex-col gap-4 pt-6">
-			<h2 class="px-1 text-lg font-semibold">Account Security</h2>
-			<div class="flex flex-col gap-3">
-				<a
-					href={resolve('/settings/profile')}
-					class="hover:bg-primary-focus btn w-full justify-between rounded-xl border-none bg-primary px-4 py-3 font-medium shadow-sm btn-primary"
-				>
-					<span>Manage Your Profile & Data</span>
-					<ChevronRight class="h-5 w-5 opacity-70" />
-				</a>
-				<a
-					href={resolve('/settings/mfa')}
-					class="hover:bg-primary-focus btn w-full justify-between rounded-xl border-none bg-primary px-4 py-3 font-medium shadow-sm btn-primary"
-				>
-					<span>Manage Multi-Factor Authentication</span>
-					<ChevronRight class="h-5 w-5 opacity-70" />
-				</a>
-				<a
-					href={resolve('/reset-password')}
-					class="hover:bg-primary-focus btn w-full justify-between rounded-xl border-none bg-primary px-4 py-3 font-medium shadow-sm btn-primary"
-				>
-					<span>Reset Password</span>
-					<RefreshCcw class="h-5 w-5 opacity-70" />
-				</a>
-				<a
-					href={resolve('/logout')}
-					class="hover:bg-error-focus btn w-full justify-between rounded-xl border-none px-4 py-3 font-medium shadow-sm btn-error"
-				>
-					<span>Logout</span>
-					<LogOut class="h-5 w-5 opacity-70" />
-				</a>
-			</div>
-		</section>
+		<a
+			href={resolve('/logout')}
+			class="mt-4 flex items-center justify-center gap-2 rounded-xl border border-error/20 bg-error/5 p-4 font-medium text-error transition-all active:scale-[0.98]"
+		>
+			<LogOut class="h-5 w-5" />
+			<span>Sign out</span>
+		</a>
 	</div>
 </div>

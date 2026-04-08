@@ -5,6 +5,7 @@
 	import Verification from '$components/layout/app/Verification.svelte';
 	import { Chart } from 'chart.js';
 	import { onMount } from 'svelte';
+	import gsap from 'gsap';
 
 	let { children, data } = $props();
 
@@ -15,6 +16,7 @@
 
 	onMount(() => {
 		setupChartJs();
+		setupPageAnimations();
 	});
 
 	function setupChartJs() {
@@ -28,17 +30,28 @@
 	function resolveCssVar(name: string): string {
 		return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 	}
+
+	function setupPageAnimations() {
+		const main = document.querySelector('main');
+		if (main) {
+			gsap.fromTo(main, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power2.out' });
+		}
+	}
 </script>
 
 <MobileHeader />
 
-<main class="overflow-x-hidden overflow-y-auto px-4 transition-all duration-500 ease-out">
+<main
+	class="relative flex flex-1 flex-col overflow-x-hidden overflow-y-auto px-4 transition-all duration-300 ease-out"
+>
 	{#if data.profile && !data.profile.verified}
-		<div class="animate-fade-in-up mb-4">
+		<div class="-mx-4 mb-4 px-4">
 			<Verification onSuccess={() => onVerificationSuccess()} email={data.profile.email} />
 		</div>
 	{/if}
-	{@render children()}
+	<div class="flex flex-1 flex-col pb-20">
+		{@render children()}
+	</div>
 </main>
 
 <MobileDock />

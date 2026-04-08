@@ -10,21 +10,8 @@ COPY . .
 
 RUN bun run build
 
-RUN bun prune --production
+FROM nginx:alpine
 
-FROM oven/bun:1.1.4-alpine
-
-WORKDIR /app
-
-COPY --from=builder /app/build ./build
-COPY --from=builder /app/node_modules ./node_modules
-COPY package.json .
+COPY --from=builder /app/build /usr/share/nginx/html
 
 EXPOSE 3000
-
-ENV NODE_ENV=production
-ENV DEV_HOST=${DEV_HOST}
-ENV VITE_API_URL=${API_URL}
-ENV WEB_URL=${WEB_URL}
-
-CMD ["bun", "run", "build"]

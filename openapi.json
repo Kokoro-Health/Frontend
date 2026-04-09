@@ -257,7 +257,7 @@
 				}
 			}
 		},
-		"/energyEntries/add": {
+		"/energy/add": {
 			"post": {
 				"tags": ["energy-controller"],
 				"operationId": "addEnergyEntry",
@@ -577,7 +577,7 @@
 				}
 			}
 		},
-		"/energyEntries": {
+		"/energy": {
 			"get": {
 				"tags": ["energy-controller"],
 				"operationId": "getEnergyInfoToday",
@@ -597,7 +597,7 @@
 				}
 			}
 		},
-		"/energyEntries/{date}": {
+		"/energy/{date}": {
 			"get": {
 				"tags": ["energy-controller"],
 				"operationId": "getEnergyEntriesForDay",
@@ -625,7 +625,7 @@
 				}
 			}
 		},
-		"/energyEntries/recent": {
+		"/energy/recent": {
 			"get": {
 				"tags": ["energy-controller"],
 				"operationId": "getEnergyForDateRange",
@@ -664,7 +664,7 @@
 				}
 			}
 		},
-		"/energyEntries/reasons": {
+		"/energy/reasons": {
 			"get": {
 				"tags": ["energy-controller"],
 				"operationId": "getEnergyReasons",

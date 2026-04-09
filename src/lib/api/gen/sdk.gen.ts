@@ -77,7 +77,7 @@ export const updateCurrentJournal1 = <ThrowOnError extends boolean = false>(opti
 });
 
 export const addEnergyEntry = <ThrowOnError extends boolean = false>(options: Options<AddEnergyEntryData, ThrowOnError>) => (options.client ?? client).post<AddEnergyEntryResponses, AddEnergyEntryErrors, ThrowOnError>({
-    url: '/energyEntries/add',
+    url: '/energy/add',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -160,13 +160,13 @@ export const getCurrentStreak = <ThrowOnError extends boolean = false>(options?:
 
 export const getRecentJournalsShort = <ThrowOnError extends boolean = false>(options?: Options<GetRecentJournalsShortData, ThrowOnError>) => (options?.client ?? client).get<GetRecentJournalsShortResponses, GetRecentJournalsShortErrors, ThrowOnError>({ url: '/journals/recent', ...options });
 
-export const getEnergyInfoToday = <ThrowOnError extends boolean = false>(options?: Options<GetEnergyInfoTodayData, ThrowOnError>) => (options?.client ?? client).get<GetEnergyInfoTodayResponses, GetEnergyInfoTodayErrors, ThrowOnError>({ url: '/energyEntries', ...options });
+export const getEnergyInfoToday = <ThrowOnError extends boolean = false>(options?: Options<GetEnergyInfoTodayData, ThrowOnError>) => (options?.client ?? client).get<GetEnergyInfoTodayResponses, GetEnergyInfoTodayErrors, ThrowOnError>({ url: '/energy', ...options });
 
-export const getEnergyEntriesForDay = <ThrowOnError extends boolean = false>(options: Options<GetEnergyEntriesForDayData, ThrowOnError>) => (options.client ?? client).get<GetEnergyEntriesForDayResponses, GetEnergyEntriesForDayErrors, ThrowOnError>({ url: '/energyEntries/{date}', ...options });
+export const getEnergyEntriesForDay = <ThrowOnError extends boolean = false>(options: Options<GetEnergyEntriesForDayData, ThrowOnError>) => (options.client ?? client).get<GetEnergyEntriesForDayResponses, GetEnergyEntriesForDayErrors, ThrowOnError>({ url: '/energy/{date}', ...options });
 
-export const getEnergyForDateRange = <ThrowOnError extends boolean = false>(options: Options<GetEnergyForDateRangeData, ThrowOnError>) => (options.client ?? client).get<GetEnergyForDateRangeResponses, GetEnergyForDateRangeErrors, ThrowOnError>({ url: '/energyEntries/recent', ...options });
+export const getEnergyForDateRange = <ThrowOnError extends boolean = false>(options: Options<GetEnergyForDateRangeData, ThrowOnError>) => (options.client ?? client).get<GetEnergyForDateRangeResponses, GetEnergyForDateRangeErrors, ThrowOnError>({ url: '/energy/recent', ...options });
 
-export const getEnergyReasons = <ThrowOnError extends boolean = false>(options?: Options<GetEnergyReasonsData, ThrowOnError>) => (options?.client ?? client).get<GetEnergyReasonsResponses, GetEnergyReasonsErrors, ThrowOnError>({ url: '/energyEntries/reasons', ...options });
+export const getEnergyReasons = <ThrowOnError extends boolean = false>(options?: Options<GetEnergyReasonsData, ThrowOnError>) => (options?.client ?? client).get<GetEnergyReasonsResponses, GetEnergyReasonsErrors, ThrowOnError>({ url: '/energy/reasons', ...options });
 
 export const validatePasswordResetCode = <ThrowOnError extends boolean = false>(options: Options<ValidatePasswordResetCodeData, ThrowOnError>) => (options.client ?? client).get<ValidatePasswordResetCodeResponses, ValidatePasswordResetCodeErrors, ThrowOnError>({ url: '/auth/validate-code', ...options });
 

@@ -485,7 +485,7 @@ export type AddEnergyEntryData = {
     body: EnergyRequestDto;
     path?: never;
     query?: never;
-    url: '/energyEntries/add';
+    url: '/energy/add';
 };
 
 export type AddEnergyEntryErrors = {
@@ -845,7 +845,7 @@ export type GetEnergyInfoTodayData = {
     body?: never;
     path?: never;
     query?: never;
-    url: '/energyEntries';
+    url: '/energy';
 };
 
 export type GetEnergyInfoTodayErrors = {
@@ -872,7 +872,7 @@ export type GetEnergyEntriesForDayData = {
         date: string;
     };
     query?: never;
-    url: '/energyEntries/{date}';
+    url: '/energy/{date}';
 };
 
 export type GetEnergyEntriesForDayErrors = {
@@ -900,7 +900,7 @@ export type GetEnergyForDateRangeData = {
         from: string;
         to: string;
     };
-    url: '/energyEntries/recent';
+    url: '/energy/recent';
 };
 
 export type GetEnergyForDateRangeErrors = {
@@ -925,7 +925,7 @@ export type GetEnergyReasonsData = {
     body?: never;
     path?: never;
     query?: never;
-    url: '/energyEntries/reasons';
+    url: '/energy/reasons';
 };
 
 export type GetEnergyReasonsErrors = {

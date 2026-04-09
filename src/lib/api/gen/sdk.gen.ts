@@ -29,34 +29,9 @@ export const updateSettings = <ThrowOnError extends boolean = false>(options: Op
     }
 });
 
-export const getMyProfile = <ThrowOnError extends boolean = false>(options?: Options<GetMyProfileData, ThrowOnError>) => (options?.client ?? client).get<GetMyProfileResponses, GetMyProfileErrors, ThrowOnError>({ url: '/users/profiles', ...options });
-
-export const updateProfile = <ThrowOnError extends boolean = false>(options: Options<UpdateProfileData, ThrowOnError>) => (options.client ?? client).post<UpdateProfileResponses, UpdateProfileErrors, ThrowOnError>({
-    url: '/users/profiles',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-export const verifyCode = <ThrowOnError extends boolean = false>(options: Options<VerifyCodeData, ThrowOnError>) => (options.client ?? client).post<VerifyCodeResponses, VerifyCodeErrors, ThrowOnError>({ url: '/users/profiles/verify', ...options });
-
-export const requestVerificationCode = <ThrowOnError extends boolean = false>(options?: Options<RequestVerificationCodeData, ThrowOnError>) => (options?.client ?? client).post<RequestVerificationCodeResponses, RequestVerificationCodeErrors, ThrowOnError>({ url: '/users/profiles/verify/request', ...options });
-
-export const uploadProfilePicture = <ThrowOnError extends boolean = false>(options: Options<UploadProfilePictureData, ThrowOnError>) => (options.client ?? client).post<UploadProfilePictureResponses, UploadProfilePictureErrors, ThrowOnError>({
-    ...formDataBodySerializer,
-    url: '/users/profiles/profilePicture',
-    ...options,
-    headers: {
-        'Content-Type': null,
-        ...options.headers
-    }
-});
-
 export const getCurrentJournal = <ThrowOnError extends boolean = false>(options?: Options<GetCurrentJournalData, ThrowOnError>) => (options?.client ?? client).get<GetCurrentJournalResponses, GetCurrentJournalErrors, ThrowOnError>({ url: '/journals', ...options });
 
-export const updateCurrentJournal = <ThrowOnError extends boolean = false>(options: Options<UpdateCurrentJournalData, ThrowOnError>) => (options.client ?? client).post<UpdateCurrentJournalResponses, UpdateCurrentJournalErrors, ThrowOnError>({
+export const updateCurrentJournal = <ThrowOnError extends boolean = false>(options: Options<UpdateCurrentJournalData, ThrowOnError>) => (options.client ?? client).put<UpdateCurrentJournalResponses, UpdateCurrentJournalErrors, ThrowOnError>({
     url: '/journals',
     ...options,
     headers: {
@@ -67,7 +42,7 @@ export const updateCurrentJournal = <ThrowOnError extends boolean = false>(optio
 
 export const getJournalById = <ThrowOnError extends boolean = false>(options: Options<GetJournalByIdData, ThrowOnError>) => (options.client ?? client).get<GetJournalByIdResponses, GetJournalByIdErrors, ThrowOnError>({ url: '/journals/{id}', ...options });
 
-export const updateCurrentJournal1 = <ThrowOnError extends boolean = false>(options: Options<UpdateCurrentJournal1Data, ThrowOnError>) => (options.client ?? client).post<UpdateCurrentJournal1Responses, UpdateCurrentJournal1Errors, ThrowOnError>({
+export const updateCurrentJournal1 = <ThrowOnError extends boolean = false>(options: Options<UpdateCurrentJournal1Data, ThrowOnError>) => (options.client ?? client).put<UpdateCurrentJournal1Responses, UpdateCurrentJournal1Errors, ThrowOnError>({
     url: '/journals/{id}',
     ...options,
     headers: {
@@ -76,8 +51,46 @@ export const updateCurrentJournal1 = <ThrowOnError extends boolean = false>(opti
     }
 });
 
+export const getMyProfile = <ThrowOnError extends boolean = false>(options?: Options<GetMyProfileData, ThrowOnError>) => (options?.client ?? client).get<GetMyProfileResponses, GetMyProfileErrors, ThrowOnError>({ url: '/users/profile', ...options });
+
+export const updateProfile = <ThrowOnError extends boolean = false>(options: Options<UpdateProfileData, ThrowOnError>) => (options.client ?? client).post<UpdateProfileResponses, UpdateProfileErrors, ThrowOnError>({
+    url: '/users/profile',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+export const verifyCode = <ThrowOnError extends boolean = false>(options: Options<VerifyCodeData, ThrowOnError>) => (options.client ?? client).post<VerifyCodeResponses, VerifyCodeErrors, ThrowOnError>({ url: '/users/profile/verify', ...options });
+
+export const requestVerificationCode = <ThrowOnError extends boolean = false>(options?: Options<RequestVerificationCodeData, ThrowOnError>) => (options?.client ?? client).post<RequestVerificationCodeResponses, RequestVerificationCodeErrors, ThrowOnError>({ url: '/users/profile/verify/request', ...options });
+
+export const uploadProfilePicture = <ThrowOnError extends boolean = false>(options: Options<UploadProfilePictureData, ThrowOnError>) => (options.client ?? client).post<UploadProfilePictureResponses, UploadProfilePictureErrors, ThrowOnError>({
+    ...formDataBodySerializer,
+    url: '/users/profile/profilePicture',
+    ...options,
+    headers: {
+        'Content-Type': null,
+        ...options.headers
+    }
+});
+
+export const passkeyRegisterStart = <ThrowOnError extends boolean = false>(options?: Options<PasskeyRegisterStartData, ThrowOnError>) => (options?.client ?? client).post<PasskeyRegisterStartResponses, PasskeyRegisterStartErrors, ThrowOnError>({ url: '/passkeys/register/start', ...options });
+
+export const passkeyRegisterFinish = <ThrowOnError extends boolean = false>(options: Options<PasskeyRegisterFinishData, ThrowOnError>) => (options.client ?? client).post<PasskeyRegisterFinishResponses, PasskeyRegisterFinishErrors, ThrowOnError>({
+    url: '/passkeys/register/finish',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+export const getEnergyInfoToday = <ThrowOnError extends boolean = false>(options?: Options<GetEnergyInfoTodayData, ThrowOnError>) => (options?.client ?? client).get<GetEnergyInfoTodayResponses, GetEnergyInfoTodayErrors, ThrowOnError>({ url: '/energy', ...options });
+
 export const addEnergyEntry = <ThrowOnError extends boolean = false>(options: Options<AddEnergyEntryData, ThrowOnError>) => (options.client ?? client).post<AddEnergyEntryResponses, AddEnergyEntryErrors, ThrowOnError>({
-    url: '/energy/add',
+    url: '/energy',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -114,19 +127,8 @@ export const resetPassword = <ThrowOnError extends boolean = false>(options: Opt
     }
 });
 
-export const passkeyRegisterStart = <ThrowOnError extends boolean = false>(options?: Options<PasskeyRegisterStartData, ThrowOnError>) => (options?.client ?? client).post<PasskeyRegisterStartResponses, PasskeyRegisterStartErrors, ThrowOnError>({ url: '/auth/passkeys/register/start', ...options });
-
-export const passkeyRegisterFinish = <ThrowOnError extends boolean = false>(options: Options<PasskeyRegisterFinishData, ThrowOnError>) => (options.client ?? client).post<PasskeyRegisterFinishResponses, PasskeyRegisterFinishErrors, ThrowOnError>({
-    url: '/auth/passkeys/register/finish',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
 export const passkeyAuthStart = <ThrowOnError extends boolean = false>(options: Options<PasskeyAuthStartData, ThrowOnError>) => (options.client ?? client).post<PasskeyAuthStartResponses, PasskeyAuthStartErrors, ThrowOnError>({
-    url: '/auth/passkeys/auth/start',
+    url: '/auth/passkey-authentication/start',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -135,7 +137,7 @@ export const passkeyAuthStart = <ThrowOnError extends boolean = false>(options: 
 });
 
 export const passkeyAuthFinish = <ThrowOnError extends boolean = false>(options: Options<PasskeyAuthFinishData, ThrowOnError>) => (options.client ?? client).post<PasskeyAuthFinishResponses, PasskeyAuthFinishErrors, ThrowOnError>({
-    url: '/auth/passkeys/auth/finish',
+    url: '/auth/passkey-authentication/finish',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -158,9 +160,9 @@ export const logout = <ThrowOnError extends boolean = false>(options?: Options<L
 
 export const getCurrentStreak = <ThrowOnError extends boolean = false>(options?: Options<GetCurrentStreakData, ThrowOnError>) => (options?.client ?? client).get<GetCurrentStreakResponses, GetCurrentStreakErrors, ThrowOnError>({ url: '/streaks', ...options });
 
-export const getRecentJournalsShort = <ThrowOnError extends boolean = false>(options?: Options<GetRecentJournalsShortData, ThrowOnError>) => (options?.client ?? client).get<GetRecentJournalsShortResponses, GetRecentJournalsShortErrors, ThrowOnError>({ url: '/journals/recent', ...options });
+export const passkeyList = <ThrowOnError extends boolean = false>(options?: Options<PasskeyListData, ThrowOnError>) => (options?.client ?? client).get<PasskeyListResponses, PasskeyListErrors, ThrowOnError>({ url: '/passkeys', ...options });
 
-export const getEnergyInfoToday = <ThrowOnError extends boolean = false>(options?: Options<GetEnergyInfoTodayData, ThrowOnError>) => (options?.client ?? client).get<GetEnergyInfoTodayResponses, GetEnergyInfoTodayErrors, ThrowOnError>({ url: '/energy', ...options });
+export const getRecentJournalsShort = <ThrowOnError extends boolean = false>(options?: Options<GetRecentJournalsShortData, ThrowOnError>) => (options?.client ?? client).get<GetRecentJournalsShortResponses, GetRecentJournalsShortErrors, ThrowOnError>({ url: '/journals/recent', ...options });
 
 export const getEnergyEntriesForDay = <ThrowOnError extends boolean = false>(options: Options<GetEnergyEntriesForDayData, ThrowOnError>) => (options.client ?? client).get<GetEnergyEntriesForDayResponses, GetEnergyEntriesForDayErrors, ThrowOnError>({ url: '/energy/{date}', ...options });
 
@@ -169,8 +171,6 @@ export const getEnergyForDateRange = <ThrowOnError extends boolean = false>(opti
 export const getEnergyReasons = <ThrowOnError extends boolean = false>(options?: Options<GetEnergyReasonsData, ThrowOnError>) => (options?.client ?? client).get<GetEnergyReasonsResponses, GetEnergyReasonsErrors, ThrowOnError>({ url: '/energy/reasons', ...options });
 
 export const validatePasswordResetCode = <ThrowOnError extends boolean = false>(options: Options<ValidatePasswordResetCodeData, ThrowOnError>) => (options.client ?? client).get<ValidatePasswordResetCodeResponses, ValidatePasswordResetCodeErrors, ThrowOnError>({ url: '/auth/validate-code', ...options });
-
-export const passkeyList = <ThrowOnError extends boolean = false>(options?: Options<PasskeyListData, ThrowOnError>) => (options?.client ?? client).get<PasskeyListResponses, PasskeyListErrors, ThrowOnError>({ url: '/auth/passkeys', ...options });
 
 export const disableMfa = <ThrowOnError extends boolean = false>(options: Options<DisableMfaData, ThrowOnError>) => (options.client ?? client).delete<DisableMfaResponses, DisableMfaErrors, ThrowOnError>({
     url: '/auth/mfa',
@@ -183,4 +183,4 @@ export const disableMfa = <ThrowOnError extends boolean = false>(options: Option
 
 export const getMfaSettings = <ThrowOnError extends boolean = false>(options?: Options<GetMfaSettingsData, ThrowOnError>) => (options?.client ?? client).get<GetMfaSettingsResponses, GetMfaSettingsErrors, ThrowOnError>({ url: '/auth/mfa', ...options });
 
-export const passkeyDelete = <ThrowOnError extends boolean = false>(options: Options<PasskeyDeleteData, ThrowOnError>) => (options.client ?? client).delete<PasskeyDeleteResponses, PasskeyDeleteErrors, ThrowOnError>({ url: '/auth/passkeys/{passkeyId}', ...options });
+export const passkeyDelete = <ThrowOnError extends boolean = false>(options: Options<PasskeyDeleteData, ThrowOnError>) => (options.client ?? client).delete<PasskeyDeleteResponses, PasskeyDeleteErrors, ThrowOnError>({ url: '/passkeys/{passkeyId}', ...options });

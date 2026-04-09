@@ -9,6 +9,7 @@ export type ClientOptions = {
  */
 export type ErrorResponseDto = {
     message: string;
+    timeStamp: string;
 };
 
 export type SettingsRequestDto = {
@@ -25,6 +26,16 @@ export type Unit = {
     [key: string]: unknown;
 };
 
+export type JournalRequestDto = {
+    content: string;
+};
+
+export type JournalEntryResponseDto = {
+    id?: string | null;
+    content: string;
+    availableUntil?: string | null;
+};
+
 export type ProfileRequestDto = {
     firstName: string;
     middleName: string;
@@ -36,14 +47,19 @@ export type VerificationRequestResponseDto = {
     nextCodeAllowedAt: string;
 };
 
-export type JournalRequestDto = {
-    content: string;
+export type RegisterPasskeyStartResponseDto = {
+    options: string;
 };
 
-export type JournalEntryResponseDto = {
-    id?: string | null;
-    content: string;
-    availableUntil?: string | null;
+export type RegisterPasskeyFinishRequestDto = {
+    credential: string;
+    deviceName: string;
+};
+
+export type RegisterPasskeyFinishResponseDto = {
+    id: string;
+    deviceName: string;
+    createdAt: string;
 };
 
 export type EnergyRequestDto = {
@@ -74,21 +90,6 @@ export type SignInResponseDto = {
 export type PasswordResetRequestDto = {
     code: string;
     password: string;
-};
-
-export type RegisterPasskeyStartResponseDto = {
-    options: string;
-};
-
-export type RegisterPasskeyFinishRequestDto = {
-    credential: string;
-    deviceName: string;
-};
-
-export type RegisterPasskeyFinishResponseDto = {
-    id: string;
-    deviceName: string;
-    createdAt: string;
 };
 
 export type AuthPasskeyStartRequestDto = {
@@ -147,6 +148,13 @@ export type StreakResponseDto = {
     streakIncreasedToday: boolean;
 };
 
+export type PasskeyResponseDto = {
+    id: string;
+    deviceName: string;
+    createdAt: string;
+    lastUsedAt: string;
+};
+
 export type ShortJournalResponseDto = {
     id: string;
     content: string;
@@ -179,13 +187,6 @@ export type ReasonAmountResponseDto = {
 
 export type ReasonsResponseDto = {
     reasons: Array<string>;
-};
-
-export type PasskeyResponseDto = {
-    id: string;
-    deviceName: string;
-    createdAt: string;
-    lastUsedAt: string;
 };
 
 export type MfaSettingsResponseDto = {
@@ -245,137 +246,6 @@ export type UpdateSettingsResponses = {
 };
 
 export type UpdateSettingsResponse = UpdateSettingsResponses[keyof UpdateSettingsResponses];
-
-export type GetMyProfileData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/users/profiles';
-};
-
-export type GetMyProfileErrors = {
-    /**
-     * Bad Request
-     */
-    400: ErrorResponseDto;
-};
-
-export type GetMyProfileError = GetMyProfileErrors[keyof GetMyProfileErrors];
-
-export type GetMyProfileResponses = {
-    /**
-     * OK
-     */
-    200: ProfileResponseDto;
-};
-
-export type GetMyProfileResponse = GetMyProfileResponses[keyof GetMyProfileResponses];
-
-export type UpdateProfileData = {
-    body: ProfileRequestDto;
-    path?: never;
-    query?: never;
-    url: '/users/profiles';
-};
-
-export type UpdateProfileErrors = {
-    /**
-     * Bad Request
-     */
-    400: ErrorResponseDto;
-};
-
-export type UpdateProfileError = UpdateProfileErrors[keyof UpdateProfileErrors];
-
-export type UpdateProfileResponses = {
-    /**
-     * OK
-     */
-    200: Unit;
-};
-
-export type UpdateProfileResponse = UpdateProfileResponses[keyof UpdateProfileResponses];
-
-export type VerifyCodeData = {
-    body?: never;
-    path?: never;
-    query: {
-        code: string;
-    };
-    url: '/users/profiles/verify';
-};
-
-export type VerifyCodeErrors = {
-    /**
-     * Bad Request
-     */
-    400: ErrorResponseDto;
-};
-
-export type VerifyCodeError = VerifyCodeErrors[keyof VerifyCodeErrors];
-
-export type VerifyCodeResponses = {
-    /**
-     * OK
-     */
-    200: {
-        [key: string]: unknown;
-    };
-};
-
-export type VerifyCodeResponse = VerifyCodeResponses[keyof VerifyCodeResponses];
-
-export type RequestVerificationCodeData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/users/profiles/verify/request';
-};
-
-export type RequestVerificationCodeErrors = {
-    /**
-     * Bad Request
-     */
-    400: ErrorResponseDto;
-};
-
-export type RequestVerificationCodeError = RequestVerificationCodeErrors[keyof RequestVerificationCodeErrors];
-
-export type RequestVerificationCodeResponses = {
-    /**
-     * OK
-     */
-    200: VerificationRequestResponseDto;
-};
-
-export type RequestVerificationCodeResponse = RequestVerificationCodeResponses[keyof RequestVerificationCodeResponses];
-
-export type UploadProfilePictureData = {
-    body: {
-        file?: Blob | File;
-    };
-    path?: never;
-    query?: never;
-    url: '/users/profiles/profilePicture';
-};
-
-export type UploadProfilePictureErrors = {
-    /**
-     * Bad Request
-     */
-    400: ErrorResponseDto;
-};
-
-export type UploadProfilePictureError = UploadProfilePictureErrors[keyof UploadProfilePictureErrors];
-
-export type UploadProfilePictureResponses = {
-    /**
-     * OK
-     */
-    200: Unit;
-};
-
-export type UploadProfilePictureResponse = UploadProfilePictureResponses[keyof UploadProfilePictureResponses];
 
 export type GetCurrentJournalData = {
     body?: never;
@@ -481,11 +351,217 @@ export type UpdateCurrentJournal1Responses = {
 
 export type UpdateCurrentJournal1Response = UpdateCurrentJournal1Responses[keyof UpdateCurrentJournal1Responses];
 
+export type GetMyProfileData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/users/profile';
+};
+
+export type GetMyProfileErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponseDto;
+};
+
+export type GetMyProfileError = GetMyProfileErrors[keyof GetMyProfileErrors];
+
+export type GetMyProfileResponses = {
+    /**
+     * OK
+     */
+    200: ProfileResponseDto;
+};
+
+export type GetMyProfileResponse = GetMyProfileResponses[keyof GetMyProfileResponses];
+
+export type UpdateProfileData = {
+    body: ProfileRequestDto;
+    path?: never;
+    query?: never;
+    url: '/users/profile';
+};
+
+export type UpdateProfileErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponseDto;
+};
+
+export type UpdateProfileError = UpdateProfileErrors[keyof UpdateProfileErrors];
+
+export type UpdateProfileResponses = {
+    /**
+     * OK
+     */
+    200: Unit;
+};
+
+export type UpdateProfileResponse = UpdateProfileResponses[keyof UpdateProfileResponses];
+
+export type VerifyCodeData = {
+    body?: never;
+    path?: never;
+    query: {
+        code: string;
+    };
+    url: '/users/profile/verify';
+};
+
+export type VerifyCodeErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponseDto;
+};
+
+export type VerifyCodeError = VerifyCodeErrors[keyof VerifyCodeErrors];
+
+export type VerifyCodeResponses = {
+    /**
+     * OK
+     */
+    200: {
+        [key: string]: unknown;
+    };
+};
+
+export type VerifyCodeResponse = VerifyCodeResponses[keyof VerifyCodeResponses];
+
+export type RequestVerificationCodeData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/users/profile/verify/request';
+};
+
+export type RequestVerificationCodeErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponseDto;
+};
+
+export type RequestVerificationCodeError = RequestVerificationCodeErrors[keyof RequestVerificationCodeErrors];
+
+export type RequestVerificationCodeResponses = {
+    /**
+     * OK
+     */
+    200: VerificationRequestResponseDto;
+};
+
+export type RequestVerificationCodeResponse = RequestVerificationCodeResponses[keyof RequestVerificationCodeResponses];
+
+export type UploadProfilePictureData = {
+    body: {
+        file?: Blob | File;
+    };
+    path?: never;
+    query?: never;
+    url: '/users/profile/profilePicture';
+};
+
+export type UploadProfilePictureErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponseDto;
+};
+
+export type UploadProfilePictureError = UploadProfilePictureErrors[keyof UploadProfilePictureErrors];
+
+export type UploadProfilePictureResponses = {
+    /**
+     * OK
+     */
+    200: Unit;
+};
+
+export type UploadProfilePictureResponse = UploadProfilePictureResponses[keyof UploadProfilePictureResponses];
+
+export type PasskeyRegisterStartData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/passkeys/register/start';
+};
+
+export type PasskeyRegisterStartErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponseDto;
+};
+
+export type PasskeyRegisterStartError = PasskeyRegisterStartErrors[keyof PasskeyRegisterStartErrors];
+
+export type PasskeyRegisterStartResponses = {
+    /**
+     * OK
+     */
+    200: RegisterPasskeyStartResponseDto;
+};
+
+export type PasskeyRegisterStartResponse = PasskeyRegisterStartResponses[keyof PasskeyRegisterStartResponses];
+
+export type PasskeyRegisterFinishData = {
+    body: RegisterPasskeyFinishRequestDto;
+    path?: never;
+    query?: never;
+    url: '/passkeys/register/finish';
+};
+
+export type PasskeyRegisterFinishErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponseDto;
+};
+
+export type PasskeyRegisterFinishError = PasskeyRegisterFinishErrors[keyof PasskeyRegisterFinishErrors];
+
+export type PasskeyRegisterFinishResponses = {
+    /**
+     * OK
+     */
+    200: RegisterPasskeyFinishResponseDto;
+};
+
+export type PasskeyRegisterFinishResponse = PasskeyRegisterFinishResponses[keyof PasskeyRegisterFinishResponses];
+
+export type GetEnergyInfoTodayData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/energy';
+};
+
+export type GetEnergyInfoTodayErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponseDto;
+};
+
+export type GetEnergyInfoTodayError = GetEnergyInfoTodayErrors[keyof GetEnergyInfoTodayErrors];
+
+export type GetEnergyInfoTodayResponses = {
+    /**
+     * OK
+     */
+    200: EnergyInfoResponseDto;
+};
+
+export type GetEnergyInfoTodayResponse = GetEnergyInfoTodayResponses[keyof GetEnergyInfoTodayResponses];
+
 export type AddEnergyEntryData = {
     body: EnergyRequestDto;
     path?: never;
     query?: never;
-    url: '/energy/add';
+    url: '/energy';
 };
 
 export type AddEnergyEntryErrors = {
@@ -614,61 +690,11 @@ export type ResetPasswordResponses = {
 
 export type ResetPasswordResponse = ResetPasswordResponses[keyof ResetPasswordResponses];
 
-export type PasskeyRegisterStartData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/auth/passkeys/register/start';
-};
-
-export type PasskeyRegisterStartErrors = {
-    /**
-     * Bad Request
-     */
-    400: ErrorResponseDto;
-};
-
-export type PasskeyRegisterStartError = PasskeyRegisterStartErrors[keyof PasskeyRegisterStartErrors];
-
-export type PasskeyRegisterStartResponses = {
-    /**
-     * OK
-     */
-    200: RegisterPasskeyStartResponseDto;
-};
-
-export type PasskeyRegisterStartResponse = PasskeyRegisterStartResponses[keyof PasskeyRegisterStartResponses];
-
-export type PasskeyRegisterFinishData = {
-    body: RegisterPasskeyFinishRequestDto;
-    path?: never;
-    query?: never;
-    url: '/auth/passkeys/register/finish';
-};
-
-export type PasskeyRegisterFinishErrors = {
-    /**
-     * Bad Request
-     */
-    400: ErrorResponseDto;
-};
-
-export type PasskeyRegisterFinishError = PasskeyRegisterFinishErrors[keyof PasskeyRegisterFinishErrors];
-
-export type PasskeyRegisterFinishResponses = {
-    /**
-     * OK
-     */
-    200: RegisterPasskeyFinishResponseDto;
-};
-
-export type PasskeyRegisterFinishResponse = PasskeyRegisterFinishResponses[keyof PasskeyRegisterFinishResponses];
-
 export type PasskeyAuthStartData = {
     body: AuthPasskeyStartRequestDto;
     path?: never;
     query?: never;
-    url: '/auth/passkeys/auth/start';
+    url: '/auth/passkey-authentication/start';
 };
 
 export type PasskeyAuthStartErrors = {
@@ -693,7 +719,7 @@ export type PasskeyAuthFinishData = {
     body: AuthPasskeyFinishRequestDto;
     path?: never;
     query?: never;
-    url: '/auth/passkeys/auth/finish';
+    url: '/auth/passkey-authentication/finish';
 };
 
 export type PasskeyAuthFinishErrors = {
@@ -816,6 +842,31 @@ export type GetCurrentStreakResponses = {
 
 export type GetCurrentStreakResponse = GetCurrentStreakResponses[keyof GetCurrentStreakResponses];
 
+export type PasskeyListData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/passkeys';
+};
+
+export type PasskeyListErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponseDto;
+};
+
+export type PasskeyListError = PasskeyListErrors[keyof PasskeyListErrors];
+
+export type PasskeyListResponses = {
+    /**
+     * OK
+     */
+    200: Array<PasskeyResponseDto>;
+};
+
+export type PasskeyListResponse = PasskeyListResponses[keyof PasskeyListResponses];
+
 export type GetRecentJournalsShortData = {
     body?: never;
     path?: never;
@@ -840,31 +891,6 @@ export type GetRecentJournalsShortResponses = {
 };
 
 export type GetRecentJournalsShortResponse = GetRecentJournalsShortResponses[keyof GetRecentJournalsShortResponses];
-
-export type GetEnergyInfoTodayData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/energy';
-};
-
-export type GetEnergyInfoTodayErrors = {
-    /**
-     * Bad Request
-     */
-    400: ErrorResponseDto;
-};
-
-export type GetEnergyInfoTodayError = GetEnergyInfoTodayErrors[keyof GetEnergyInfoTodayErrors];
-
-export type GetEnergyInfoTodayResponses = {
-    /**
-     * OK
-     */
-    200: EnergyInfoResponseDto;
-};
-
-export type GetEnergyInfoTodayResponse = GetEnergyInfoTodayResponses[keyof GetEnergyInfoTodayResponses];
 
 export type GetEnergyEntriesForDayData = {
     body?: never;
@@ -975,31 +1001,6 @@ export type ValidatePasswordResetCodeResponses = {
 
 export type ValidatePasswordResetCodeResponse = ValidatePasswordResetCodeResponses[keyof ValidatePasswordResetCodeResponses];
 
-export type PasskeyListData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/auth/passkeys';
-};
-
-export type PasskeyListErrors = {
-    /**
-     * Bad Request
-     */
-    400: ErrorResponseDto;
-};
-
-export type PasskeyListError = PasskeyListErrors[keyof PasskeyListErrors];
-
-export type PasskeyListResponses = {
-    /**
-     * OK
-     */
-    200: Array<PasskeyResponseDto>;
-};
-
-export type PasskeyListResponse = PasskeyListResponses[keyof PasskeyListResponses];
-
 export type DisableMfaData = {
     body: DisableMfaRequestDto;
     path?: never;
@@ -1056,7 +1057,7 @@ export type PasskeyDeleteData = {
         passkeyId: string;
     };
     query?: never;
-    url: '/auth/passkeys/{passkeyId}';
+    url: '/passkeys/{passkeyId}';
 };
 
 export type PasskeyDeleteErrors = {

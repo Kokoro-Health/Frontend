@@ -1,11 +1,11 @@
-import { getEnergyEntriesForDay, type EnergyDetailsDto } from '$api';
+import { getEnergyEntriesForDay, type EnergyDetailsResponseDto } from '$api';
 import type { PageLoad } from './$types';
 
 export const prerender = false;
 
 export const load: PageLoad = async ({ params }) => {
 	const date = params.date;
-	let details: EnergyDetailsDto = {
+	let details: EnergyDetailsResponseDto = {
 		entries: [],
 		average: 0,
 		influentialNegative: {

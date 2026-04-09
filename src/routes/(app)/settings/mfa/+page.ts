@@ -1,8 +1,8 @@
 import type { PageLoad } from './$types';
-import { getMfaSettings, type MfaSettings } from '$api';
+import { getMfaSettings, type MfaSettingsResponseDto } from '$api';
 
 export const load: PageLoad = async () => {
-	let mfaSettings: MfaSettings = {
+	let mfaSettings: MfaSettingsResponseDto = {
 		mfaEnabled: false
 	};
 

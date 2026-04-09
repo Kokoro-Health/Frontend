@@ -2,12 +2,12 @@ import type { PageLoad } from './$types';
 import {
 	getCurrentJournal,
 	getRecentJournalsShort,
-	type JournalEntryDto,
+	type JournalEntryResponseDto,
 	type ShortJournalResponseDto
 } from '$api';
 
 export const load: PageLoad = async () => {
-	let journal: JournalEntryDto = {
+	let journal: JournalEntryResponseDto = {
 		content: '',
 		availableUntil: '',
 		id: ''

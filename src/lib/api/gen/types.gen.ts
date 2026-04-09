@@ -7,7 +7,7 @@ export type ClientOptions = {
 /**
  * Standard error structure
  */
-export type ErrorResponse = {
+export type ErrorResponseDto = {
     message: string;
 };
 
@@ -40,7 +40,7 @@ export type JournalRequestDto = {
     content: string;
 };
 
-export type JournalEntryDto = {
+export type JournalEntryResponseDto = {
     id?: string | null;
     content: string;
     availableUntil?: string | null;
@@ -76,43 +76,43 @@ export type PasswordResetRequestDto = {
     password: string;
 };
 
-export type RegisterPasskeyStartResponse = {
+export type RegisterPasskeyStartResponseDto = {
     options: string;
 };
 
-export type RegisterPasskeyFinishRequest = {
+export type RegisterPasskeyFinishRequestDto = {
     credential: string;
     deviceName: string;
 };
 
-export type RegisterPasskeyFinishResponse = {
+export type RegisterPasskeyFinishResponseDto = {
     id: string;
     deviceName: string;
     createdAt: string;
 };
 
-export type AuthPasskeyStartRequest = {
+export type AuthPasskeyStartRequestDto = {
     email: string;
 };
 
-export type AuthPasskeyStartResponse = {
+export type AuthPasskeyStartResponseDto = {
     options: string;
 };
 
-export type AuthPasskeyFinishRequest = {
+export type AuthPasskeyFinishRequestDto = {
     email: string;
     credential: string;
 };
 
-export type AuthPasskeyFinishResponse = {
+export type AuthPasskeyFinishResponseDto = {
     token: string;
 };
 
-export type VerifyMfaRequest = {
+export type VerifyMfaRequestDto = {
     code: string;
 };
 
-export type SetupMfaResponse = {
+export type SetupMfaResponseDto = {
     secret: string;
     qrCodeBase64: string;
 };
@@ -153,26 +153,26 @@ export type ShortJournalResponseDto = {
     lockedSince: string;
 };
 
-export type EnergyInfoDto = {
+export type EnergyInfoResponseDto = {
     energy: number;
     reason: string;
     nextEntryAllowed: string;
 };
 
-export type EnergyDetailsDto = {
-    influentialPositive: ReasonAmount;
-    influentialNegative: ReasonAmount;
+export type EnergyDetailsResponseDto = {
+    influentialPositive: ReasonAmountResponseDto;
+    influentialNegative: ReasonAmountResponseDto;
     average: number;
-    entries: Array<EnergyInfoDateDto>;
+    entries: Array<EnergyInfoDateResponseDto>;
 };
 
-export type EnergyInfoDateDto = {
+export type EnergyInfoDateResponseDto = {
     date: string;
     amount: number;
     reason?: string | null;
 };
 
-export type ReasonAmount = {
+export type ReasonAmountResponseDto = {
     reason: string;
     level: number;
 };
@@ -181,18 +181,18 @@ export type ReasonsResponseDto = {
     reasons: Array<string>;
 };
 
-export type PasskeyResponse = {
+export type PasskeyResponseDto = {
     id: string;
     deviceName: string;
     createdAt: string;
     lastUsedAt: string;
 };
 
-export type MfaSettings = {
+export type MfaSettingsResponseDto = {
     mfaEnabled: boolean;
 };
 
-export type DisableMfaRequest = {
+export type DisableMfaRequestDto = {
     password: string;
 };
 
@@ -207,7 +207,7 @@ export type GetSettingsErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type GetSettingsError = GetSettingsErrors[keyof GetSettingsErrors];
@@ -232,7 +232,7 @@ export type UpdateSettingsErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type UpdateSettingsError = UpdateSettingsErrors[keyof UpdateSettingsErrors];
@@ -257,7 +257,7 @@ export type GetMyProfileErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type GetMyProfileError = GetMyProfileErrors[keyof GetMyProfileErrors];
@@ -282,7 +282,7 @@ export type UpdateProfileErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type UpdateProfileError = UpdateProfileErrors[keyof UpdateProfileErrors];
@@ -309,7 +309,7 @@ export type VerifyCodeErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type VerifyCodeError = VerifyCodeErrors[keyof VerifyCodeErrors];
@@ -336,7 +336,7 @@ export type RequestVerificationCodeErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type RequestVerificationCodeError = RequestVerificationCodeErrors[keyof RequestVerificationCodeErrors];
@@ -363,7 +363,7 @@ export type UploadProfilePictureErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type UploadProfilePictureError = UploadProfilePictureErrors[keyof UploadProfilePictureErrors];
@@ -388,7 +388,7 @@ export type GetCurrentJournalErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type GetCurrentJournalError = GetCurrentJournalErrors[keyof GetCurrentJournalErrors];
@@ -397,7 +397,7 @@ export type GetCurrentJournalResponses = {
     /**
      * OK
      */
-    200: JournalEntryDto;
+    200: JournalEntryResponseDto;
 };
 
 export type GetCurrentJournalResponse = GetCurrentJournalResponses[keyof GetCurrentJournalResponses];
@@ -413,7 +413,7 @@ export type UpdateCurrentJournalErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type UpdateCurrentJournalError = UpdateCurrentJournalErrors[keyof UpdateCurrentJournalErrors];
@@ -422,7 +422,7 @@ export type UpdateCurrentJournalResponses = {
     /**
      * OK
      */
-    200: JournalEntryDto;
+    200: JournalEntryResponseDto;
 };
 
 export type UpdateCurrentJournalResponse = UpdateCurrentJournalResponses[keyof UpdateCurrentJournalResponses];
@@ -440,7 +440,7 @@ export type GetJournalByIdErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type GetJournalByIdError = GetJournalByIdErrors[keyof GetJournalByIdErrors];
@@ -449,7 +449,7 @@ export type GetJournalByIdResponses = {
     /**
      * OK
      */
-    200: JournalEntryDto;
+    200: JournalEntryResponseDto;
 };
 
 export type GetJournalByIdResponse = GetJournalByIdResponses[keyof GetJournalByIdResponses];
@@ -467,7 +467,7 @@ export type UpdateCurrentJournal1Errors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type UpdateCurrentJournal1Error = UpdateCurrentJournal1Errors[keyof UpdateCurrentJournal1Errors];
@@ -476,7 +476,7 @@ export type UpdateCurrentJournal1Responses = {
     /**
      * OK
      */
-    200: JournalEntryDto;
+    200: JournalEntryResponseDto;
 };
 
 export type UpdateCurrentJournal1Response = UpdateCurrentJournal1Responses[keyof UpdateCurrentJournal1Responses];
@@ -492,7 +492,7 @@ export type AddEnergyEntryErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type AddEnergyEntryError = AddEnergyEntryErrors[keyof AddEnergyEntryErrors];
@@ -519,7 +519,7 @@ export type SignUpErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type SignUpError = SignUpErrors[keyof SignUpErrors];
@@ -544,7 +544,7 @@ export type SignInErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type SignInError = SignInErrors[keyof SignInErrors];
@@ -571,7 +571,7 @@ export type RequestPasswordResetErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type RequestPasswordResetError = RequestPasswordResetErrors[keyof RequestPasswordResetErrors];
@@ -598,7 +598,7 @@ export type ResetPasswordErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type ResetPasswordError = ResetPasswordErrors[keyof ResetPasswordErrors];
@@ -625,7 +625,7 @@ export type PasskeyRegisterStartErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type PasskeyRegisterStartError = PasskeyRegisterStartErrors[keyof PasskeyRegisterStartErrors];
@@ -634,13 +634,13 @@ export type PasskeyRegisterStartResponses = {
     /**
      * OK
      */
-    200: RegisterPasskeyStartResponse;
+    200: RegisterPasskeyStartResponseDto;
 };
 
 export type PasskeyRegisterStartResponse = PasskeyRegisterStartResponses[keyof PasskeyRegisterStartResponses];
 
 export type PasskeyRegisterFinishData = {
-    body: RegisterPasskeyFinishRequest;
+    body: RegisterPasskeyFinishRequestDto;
     path?: never;
     query?: never;
     url: '/auth/passkeys/register/finish';
@@ -650,7 +650,7 @@ export type PasskeyRegisterFinishErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type PasskeyRegisterFinishError = PasskeyRegisterFinishErrors[keyof PasskeyRegisterFinishErrors];
@@ -659,13 +659,13 @@ export type PasskeyRegisterFinishResponses = {
     /**
      * OK
      */
-    200: RegisterPasskeyFinishResponse;
+    200: RegisterPasskeyFinishResponseDto;
 };
 
 export type PasskeyRegisterFinishResponse = PasskeyRegisterFinishResponses[keyof PasskeyRegisterFinishResponses];
 
 export type PasskeyAuthStartData = {
-    body: AuthPasskeyStartRequest;
+    body: AuthPasskeyStartRequestDto;
     path?: never;
     query?: never;
     url: '/auth/passkeys/auth/start';
@@ -675,7 +675,7 @@ export type PasskeyAuthStartErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type PasskeyAuthStartError = PasskeyAuthStartErrors[keyof PasskeyAuthStartErrors];
@@ -684,13 +684,13 @@ export type PasskeyAuthStartResponses = {
     /**
      * OK
      */
-    200: AuthPasskeyStartResponse;
+    200: AuthPasskeyStartResponseDto;
 };
 
 export type PasskeyAuthStartResponse = PasskeyAuthStartResponses[keyof PasskeyAuthStartResponses];
 
 export type PasskeyAuthFinishData = {
-    body: AuthPasskeyFinishRequest;
+    body: AuthPasskeyFinishRequestDto;
     path?: never;
     query?: never;
     url: '/auth/passkeys/auth/finish';
@@ -700,7 +700,7 @@ export type PasskeyAuthFinishErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type PasskeyAuthFinishError = PasskeyAuthFinishErrors[keyof PasskeyAuthFinishErrors];
@@ -709,13 +709,13 @@ export type PasskeyAuthFinishResponses = {
     /**
      * OK
      */
-    200: AuthPasskeyFinishResponse;
+    200: AuthPasskeyFinishResponseDto;
 };
 
 export type PasskeyAuthFinishResponse = PasskeyAuthFinishResponses[keyof PasskeyAuthFinishResponses];
 
 export type VerifyMfaCodeAndEnableData = {
-    body: VerifyMfaRequest;
+    body: VerifyMfaRequestDto;
     path?: never;
     query?: never;
     url: '/auth/mfa/verify';
@@ -725,7 +725,7 @@ export type VerifyMfaCodeAndEnableErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type VerifyMfaCodeAndEnableError = VerifyMfaCodeAndEnableErrors[keyof VerifyMfaCodeAndEnableErrors];
@@ -750,7 +750,7 @@ export type SetupMfaErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type SetupMfaError = SetupMfaErrors[keyof SetupMfaErrors];
@@ -759,10 +759,10 @@ export type SetupMfaResponses = {
     /**
      * OK
      */
-    200: SetupMfaResponse;
+    200: SetupMfaResponseDto;
 };
 
-export type SetupMfaResponse2 = SetupMfaResponses[keyof SetupMfaResponses];
+export type SetupMfaResponse = SetupMfaResponses[keyof SetupMfaResponses];
 
 export type LogoutData = {
     body?: never;
@@ -775,7 +775,7 @@ export type LogoutErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type LogoutError = LogoutErrors[keyof LogoutErrors];
@@ -802,7 +802,7 @@ export type GetCurrentStreakErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type GetCurrentStreakError = GetCurrentStreakErrors[keyof GetCurrentStreakErrors];
@@ -827,7 +827,7 @@ export type GetRecentJournalsShortErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type GetRecentJournalsShortError = GetRecentJournalsShortErrors[keyof GetRecentJournalsShortErrors];
@@ -852,7 +852,7 @@ export type GetEnergyInfoTodayErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type GetEnergyInfoTodayError = GetEnergyInfoTodayErrors[keyof GetEnergyInfoTodayErrors];
@@ -861,7 +861,7 @@ export type GetEnergyInfoTodayResponses = {
     /**
      * OK
      */
-    200: EnergyInfoDto;
+    200: EnergyInfoResponseDto;
 };
 
 export type GetEnergyInfoTodayResponse = GetEnergyInfoTodayResponses[keyof GetEnergyInfoTodayResponses];
@@ -879,7 +879,7 @@ export type GetEnergyEntriesForDayErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type GetEnergyEntriesForDayError = GetEnergyEntriesForDayErrors[keyof GetEnergyEntriesForDayErrors];
@@ -888,7 +888,7 @@ export type GetEnergyEntriesForDayResponses = {
     /**
      * OK
      */
-    200: EnergyDetailsDto;
+    200: EnergyDetailsResponseDto;
 };
 
 export type GetEnergyEntriesForDayResponse = GetEnergyEntriesForDayResponses[keyof GetEnergyEntriesForDayResponses];
@@ -907,7 +907,7 @@ export type GetEnergyForDateRangeErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type GetEnergyForDateRangeError = GetEnergyForDateRangeErrors[keyof GetEnergyForDateRangeErrors];
@@ -916,7 +916,7 @@ export type GetEnergyForDateRangeResponses = {
     /**
      * OK
      */
-    200: Array<EnergyInfoDateDto>;
+    200: Array<EnergyInfoDateResponseDto>;
 };
 
 export type GetEnergyForDateRangeResponse = GetEnergyForDateRangeResponses[keyof GetEnergyForDateRangeResponses];
@@ -932,7 +932,7 @@ export type GetEnergyReasonsErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type GetEnergyReasonsError = GetEnergyReasonsErrors[keyof GetEnergyReasonsErrors];
@@ -959,7 +959,7 @@ export type ValidatePasswordResetCodeErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type ValidatePasswordResetCodeError = ValidatePasswordResetCodeErrors[keyof ValidatePasswordResetCodeErrors];
@@ -986,7 +986,7 @@ export type PasskeyListErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type PasskeyListError = PasskeyListErrors[keyof PasskeyListErrors];
@@ -995,13 +995,13 @@ export type PasskeyListResponses = {
     /**
      * OK
      */
-    200: Array<PasskeyResponse>;
+    200: Array<PasskeyResponseDto>;
 };
 
 export type PasskeyListResponse = PasskeyListResponses[keyof PasskeyListResponses];
 
 export type DisableMfaData = {
-    body: DisableMfaRequest;
+    body: DisableMfaRequestDto;
     path?: never;
     query?: never;
     url: '/auth/mfa';
@@ -1011,7 +1011,7 @@ export type DisableMfaErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type DisableMfaError = DisableMfaErrors[keyof DisableMfaErrors];
@@ -1036,7 +1036,7 @@ export type GetMfaSettingsErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type GetMfaSettingsError = GetMfaSettingsErrors[keyof GetMfaSettingsErrors];
@@ -1045,7 +1045,7 @@ export type GetMfaSettingsResponses = {
     /**
      * OK
      */
-    200: MfaSettings;
+    200: MfaSettingsResponseDto;
 };
 
 export type GetMfaSettingsResponse = GetMfaSettingsResponses[keyof GetMfaSettingsResponses];
@@ -1063,7 +1063,7 @@ export type PasskeyDeleteErrors = {
     /**
      * Bad Request
      */
-    400: ErrorResponse;
+    400: ErrorResponseDto;
 };
 
 export type PasskeyDeleteError = PasskeyDeleteErrors[keyof PasskeyDeleteErrors];

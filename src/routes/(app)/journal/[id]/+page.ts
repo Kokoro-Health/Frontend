@@ -1,11 +1,11 @@
-import { getJournalById, type JournalEntryDto } from '$api';
+import { getJournalById, type JournalEntryResponseDto } from '$api';
 import type { PageLoad } from './$types';
 
 export const prerender = false;
 
 export const load: PageLoad = async ({ params }) => {
 	const id = params.id;
-	let entry: JournalEntryDto = {
+	let entry: JournalEntryResponseDto = {
 		content: ''
 	};
 	const res = await getJournalById({

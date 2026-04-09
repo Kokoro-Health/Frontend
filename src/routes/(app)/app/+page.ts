@@ -3,18 +3,18 @@ import {
 	getCurrentJournal,
 	getCurrentStreak,
 	getEnergyInfoToday,
-	type EnergyInfoDto,
-	type JournalEntryDto,
+	type EnergyInfoResponseDto,
+	type JournalEntryResponseDto,
 	type StreakResponseDto
 } from '$api';
 
 export const load: PageLoad = async () => {
-	let energyInfo: EnergyInfoDto = {
+	let energyInfo: EnergyInfoResponseDto = {
 		energy: 0,
 		nextEntryAllowed: '',
 		reason: ''
 	};
-	let journal: JournalEntryDto = {
+	let journal: JournalEntryResponseDto = {
 		id: '',
 		content: '',
 		availableUntil: ''

@@ -8,8 +8,9 @@ export type ClientOptions = {
  * Standard error structure
  */
 export type ErrorResponseDto = {
+    code: string;
     message: string;
-    timeStamp: string;
+    timestamp: string;
 };
 
 export type SettingsRequestDto = {
@@ -45,6 +46,10 @@ export type ProfileRequestDto = {
 
 export type VerificationRequestResponseDto = {
     nextCodeAllowedAt: string;
+};
+
+export type DataDeletionConfirmRequestDto = {
+    code: string;
 };
 
 export type RegisterPasskeyStartResponseDto = {
@@ -481,6 +486,81 @@ export type UploadProfilePictureResponses = {
 };
 
 export type UploadProfilePictureResponse = UploadProfilePictureResponses[keyof UploadProfilePictureResponses];
+
+export type AbortDataDeletionData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/users/profile/data-deletion';
+};
+
+export type AbortDataDeletionErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponseDto;
+};
+
+export type AbortDataDeletionError = AbortDataDeletionErrors[keyof AbortDataDeletionErrors];
+
+export type AbortDataDeletionResponses = {
+    /**
+     * OK
+     */
+    200: Unit;
+};
+
+export type AbortDataDeletionResponse = AbortDataDeletionResponses[keyof AbortDataDeletionResponses];
+
+export type RequestDataDeletionData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/users/profile/data-deletion';
+};
+
+export type RequestDataDeletionErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponseDto;
+};
+
+export type RequestDataDeletionError = RequestDataDeletionErrors[keyof RequestDataDeletionErrors];
+
+export type RequestDataDeletionResponses = {
+    /**
+     * OK
+     */
+    200: Unit;
+};
+
+export type RequestDataDeletionResponse = RequestDataDeletionResponses[keyof RequestDataDeletionResponses];
+
+export type ConfirmDataDeletionData = {
+    body: DataDeletionConfirmRequestDto;
+    path?: never;
+    query?: never;
+    url: '/users/profile/data-deletion/confirm';
+};
+
+export type ConfirmDataDeletionErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponseDto;
+};
+
+export type ConfirmDataDeletionError = ConfirmDataDeletionErrors[keyof ConfirmDataDeletionErrors];
+
+export type ConfirmDataDeletionResponses = {
+    /**
+     * OK
+     */
+    200: Unit;
+};
+
+export type ConfirmDataDeletionResponse = ConfirmDataDeletionResponses[keyof ConfirmDataDeletionResponses];
 
 export type PasskeyRegisterStartData = {
     body?: never;

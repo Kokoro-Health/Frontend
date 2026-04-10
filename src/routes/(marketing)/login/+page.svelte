@@ -147,7 +147,7 @@
 					<p class="mt-1 text-xs text-base-content/50">Enter the 6-digit code from your app</p>
 				</div>
 				<div class="flex w-full justify-center gap-2">
-					{#each mfaDigits as digit, i (digit)}
+					{#each mfaDigits as digit, i (i)}
 						<input
 							type="text"
 							inputmode="numeric"

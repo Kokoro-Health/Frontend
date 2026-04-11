@@ -3,6 +3,7 @@
 	import { invalidateAll } from '$app/navigation';
 	import { Pencil, X, Check, User, Mail, Camera } from '@lucide/svelte';
 	import { hapticImpact, hapticNotification } from '$util/haptics';
+	import ManageDataSection from '$components/app/settings/profile/ManageDataSection.svelte';
 
 	let { data } = $props();
 
@@ -264,4 +265,5 @@
 			{/if}
 		</div>
 	</div>
+	<ManageDataSection />
 </div>

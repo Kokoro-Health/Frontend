@@ -52,6 +52,13 @@ export type DataDeletionConfirmRequestDto = {
     code: string;
 };
 
+export type DataExportStatusResponseDto = {
+    exportId: string;
+    status: string;
+    requestedAt: string;
+    completedAt: string;
+};
+
 export type RegisterPasskeyStartResponseDto = {
     options: string;
 };
@@ -561,6 +568,31 @@ export type ConfirmDataDeletionResponses = {
 };
 
 export type ConfirmDataDeletionResponse = ConfirmDataDeletionResponses[keyof ConfirmDataDeletionResponses];
+
+export type RequestDataExportData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/users/privacy/data-export';
+};
+
+export type RequestDataExportErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponseDto;
+};
+
+export type RequestDataExportError = RequestDataExportErrors[keyof RequestDataExportErrors];
+
+export type RequestDataExportResponses = {
+    /**
+     * OK
+     */
+    200: DataExportStatusResponseDto;
+};
+
+export type RequestDataExportResponse = RequestDataExportResponses[keyof RequestDataExportResponses];
 
 export type PasskeyRegisterStartData = {
     body?: never;

@@ -1,1 +1,1184 @@
-{"openapi":"3.0.1","servers":[{"url":"/api/v1","description":"Request from the current instance."}],"paths":{"/users/settings":{"get":{"tags":["settings-controller"],"operationId":"getSettings","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/SettingsResponseDto"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}},"put":{"tags":["settings-controller"],"operationId":"updateSettings","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/SettingsRequestDto"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/Unit"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/journals":{"get":{"tags":["journal-controller"],"operationId":"getCurrentJournal","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/JournalEntryResponseDto"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}},"put":{"tags":["journal-controller"],"operationId":"updateCurrentJournal","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/JournalRequestDto"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/JournalEntryResponseDto"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/journals/{id}":{"get":{"tags":["journal-controller"],"operationId":"getJournalById","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/JournalEntryResponseDto"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}},"put":{"tags":["journal-controller"],"operationId":"updateCurrentJournal_1","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"string","format":"uuid","nullable":true}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/JournalRequestDto"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/JournalEntryResponseDto"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/users/profile":{"get":{"tags":["profile-controller"],"operationId":"getMyProfile","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ProfileResponseDto"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}},"post":{"tags":["profile-controller"],"operationId":"updateProfile","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/ProfileRequestDto"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/Unit"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/users/profile/verify":{"post":{"tags":["profile-controller"],"operationId":"verifyCode","parameters":[{"name":"code","in":"query","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/users/profile/verify/request":{"post":{"tags":["profile-controller"],"operationId":"requestVerificationCode","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/VerificationRequestResponseDto"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/users/profile/profilePicture":{"post":{"tags":["profile-controller"],"operationId":"uploadProfilePicture","requestBody":{"content":{"multipart/form-data":{"schema":{"type":"object","properties":{"file":{"type":"string","format":"binary"}}}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/Unit"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/users/profile/data-deletion":{"post":{"tags":["profile-controller"],"operationId":"requestDataDeletion","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/Unit"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}},"delete":{"tags":["profile-controller"],"operationId":"abortDataDeletion","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/Unit"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/users/profile/data-deletion/confirm":{"post":{"tags":["profile-controller"],"operationId":"confirmDataDeletion","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/DataDeletionConfirmRequestDto"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/Unit"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/passkeys/register/start":{"post":{"tags":["passkey-controller"],"operationId":"passkeyRegisterStart","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/RegisterPasskeyStartResponseDto"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/passkeys/register/finish":{"post":{"tags":["passkey-controller"],"operationId":"passkeyRegisterFinish","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/RegisterPasskeyFinishRequestDto"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/RegisterPasskeyFinishResponseDto"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/energy":{"get":{"tags":["energy-controller"],"operationId":"getEnergyInfoToday","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/EnergyInfoResponseDto"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}},"post":{"tags":["energy-controller"],"operationId":"addEnergyEntry","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/EnergyRequestDto"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/auth/signup":{"post":{"tags":["auth-controller"],"operationId":"signUp","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/SignUpRequestDto"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/Unit"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/auth/signin":{"post":{"tags":["auth-controller"],"operationId":"signIn","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/SignInRequestDto"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/SignInResponseDto"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/auth/reset-password":{"post":{"tags":["auth-controller"],"operationId":"requestPasswordReset","parameters":[{"name":"email","in":"query","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/auth/reset-password/confirm":{"post":{"tags":["auth-controller"],"operationId":"resetPassword","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/PasswordResetRequestDto"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/auth/passkey-authentication/start":{"post":{"tags":["passkey-auth-controller"],"operationId":"passkeyAuthStart","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/AuthPasskeyStartRequestDto"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/AuthPasskeyStartResponseDto"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/auth/passkey-authentication/finish":{"post":{"tags":["passkey-auth-controller"],"operationId":"passkeyAuthFinish","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/AuthPasskeyFinishRequestDto"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/AuthPasskeyFinishResponseDto"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/auth/mfa/verify":{"post":{"tags":["mfa-controller"],"operationId":"verifyMfaCodeAndEnable","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/VerifyMfaRequestDto"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/Unit"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/auth/mfa/setup":{"post":{"tags":["mfa-controller"],"operationId":"setupMfa","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/SetupMfaResponseDto"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/auth/logout":{"post":{"tags":["auth-controller"],"operationId":"logout","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/streaks":{"get":{"tags":["streak-controller"],"operationId":"getCurrentStreak","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/StreakResponseDto"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/passkeys":{"get":{"tags":["passkey-controller"],"operationId":"passkeyList","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/PasskeyResponseDto"}}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/journals/recent":{"get":{"tags":["journal-controller"],"operationId":"getRecentJournalsShort","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/ShortJournalResponseDto"}}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/energy/{date}":{"get":{"tags":["energy-controller"],"operationId":"getEnergyEntriesForDay","parameters":[{"name":"date","in":"path","required":true,"schema":{"type":"string","format":"date-time"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/EnergyDetailsResponseDto"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/energy/recent":{"get":{"tags":["energy-controller"],"operationId":"getEnergyForDateRange","parameters":[{"name":"from","in":"query","required":true,"schema":{"type":"string","format":"date-time"}},{"name":"to","in":"query","required":true,"schema":{"type":"string","format":"date-time"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/EnergyInfoDateResponseDto"}}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/energy/reasons":{"get":{"tags":["energy-controller"],"operationId":"getEnergyReasons","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ReasonsResponseDto"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/auth/validate-code":{"get":{"tags":["auth-controller"],"operationId":"validatePasswordResetCode","parameters":[{"name":"code","in":"query","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/auth/mfa":{"get":{"tags":["mfa-controller"],"operationId":"getMfaSettings","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/MfaSettingsResponseDto"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}},"delete":{"tags":["mfa-controller"],"operationId":"disableMfa","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/DisableMfaRequestDto"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/Unit"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}},"/passkeys/{passkeyId}":{"delete":{"tags":["passkey-controller"],"operationId":"passkeyDelete","parameters":[{"name":"passkeyId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/Unit"}}}},"400":{"description":"Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponseDto"}}}}}}}},"components":{"schemas":{"ErrorResponseDto":{"required":["code","message","timestamp"],"type":"object","properties":{"code":{"type":"string"},"message":{"type":"string"},"timestamp":{"type":"string","format":"date-time"}},"description":"Standard error structure"},"SettingsRequestDto":{"required":["dateFormat","language","marketingEmails","reminderEmails","securityAlerts","theme","timezone"],"type":"object","properties":{"theme":{"type":"string","enum":["LIGHT","DARK","SYSTEM"]},"language":{"type":"string","enum":["ENGLISH"]},"marketingEmails":{"type":"boolean"},"securityAlerts":{"type":"boolean"},"reminderEmails":{"type":"boolean"},"timezone":{"type":"string"},"dateFormat":{"type":"string"}}},"Unit":{"type":"object"},"JournalRequestDto":{"required":["content"],"type":"object","properties":{"content":{"type":"string"}}},"JournalEntryResponseDto":{"required":["content"],"type":"object","properties":{"id":{"type":"string","format":"uuid","nullable":true},"content":{"type":"string"},"availableUntil":{"type":"string","format":"date-time","nullable":true}}},"ProfileRequestDto":{"required":["email","firstName","lastName","middleName"],"type":"object","properties":{"firstName":{"type":"string"},"middleName":{"type":"string"},"lastName":{"type":"string"},"email":{"type":"string"}}},"VerificationRequestResponseDto":{"required":["nextCodeAllowedAt"],"type":"object","properties":{"nextCodeAllowedAt":{"type":"string","format":"date-time"}}},"DataDeletionConfirmRequestDto":{"required":["code"],"type":"object","properties":{"code":{"type":"string"}}},"RegisterPasskeyStartResponseDto":{"required":["options"],"type":"object","properties":{"options":{"type":"string"}}},"RegisterPasskeyFinishRequestDto":{"required":["credential","deviceName"],"type":"object","properties":{"credential":{"type":"string"},"deviceName":{"maxLength":100,"minLength":0,"type":"string"}}},"RegisterPasskeyFinishResponseDto":{"required":["createdAt","deviceName","id"],"type":"object","properties":{"id":{"type":"string","format":"uuid"},"deviceName":{"type":"string"},"createdAt":{"type":"string","format":"date-time"}}},"EnergyRequestDto":{"required":["amount"],"type":"object","properties":{"amount":{"maximum":100,"minimum":0,"type":"integer","format":"int32"},"reason":{"maxLength":220,"minLength":0,"type":"string","nullable":true}}},"SignUpRequestDto":{"required":["email","firstName","lastName","middleName","password","tosAccepted"],"type":"object","properties":{"firstName":{"maxLength":20,"minLength":2,"type":"string"},"middleName":{"maxLength":20,"minLength":0,"type":"string"},"lastName":{"maxLength":20,"minLength":2,"type":"string"},"email":{"type":"string"},"password":{"type":"string"},"tosAccepted":{"type":"boolean"}}},"SignInRequestDto":{"required":["email","password","rememberMe"],"type":"object","properties":{"email":{"type":"string"},"password":{"type":"string"},"rememberMe":{"type":"boolean"},"mfaCode":{"maxLength":2147483647,"minLength":0,"type":"string","nullable":true}}},"SignInResponseDto":{"required":["mfaRequired"],"type":"object","properties":{"mfaRequired":{"type":"boolean"}}},"PasswordResetRequestDto":{"required":["code","password"],"type":"object","properties":{"code":{"type":"string"},"password":{"type":"string"}}},"AuthPasskeyStartRequestDto":{"required":["email"],"type":"object","properties":{"email":{"type":"string"}}},"AuthPasskeyStartResponseDto":{"required":["options"],"type":"object","properties":{"options":{"type":"string"}}},"AuthPasskeyFinishRequestDto":{"required":["credential","email"],"type":"object","properties":{"email":{"type":"string"},"credential":{"type":"string"}}},"AuthPasskeyFinishResponseDto":{"required":["token"],"type":"object","properties":{"token":{"type":"string"}}},"VerifyMfaRequestDto":{"required":["code"],"type":"object","properties":{"code":{"maxLength":6,"minLength":6,"type":"string"}}},"SetupMfaResponseDto":{"required":["qrCodeBase64","secret"],"type":"object","properties":{"secret":{"type":"string"},"qrCodeBase64":{"type":"string"}}},"SettingsResponseDto":{"required":["dateFormat","language","marketingEmails","reminderEmails","securityAlerts","theme","timezone","updatedAt"],"type":"object","properties":{"theme":{"type":"string","enum":["LIGHT","DARK","SYSTEM"]},"language":{"type":"string","enum":["ENGLISH"]},"marketingEmails":{"type":"boolean"},"securityAlerts":{"type":"boolean"},"reminderEmails":{"type":"boolean"},"timezone":{"type":"string"},"dateFormat":{"type":"string"},"updatedAt":{"type":"string","format":"date-time"}}},"ProfileResponseDto":{"required":["createdAt","dateFormat","email","firstName","id","lastName","middleName","profilePictureUrl","theme","timezone","verified"],"type":"object","properties":{"id":{"type":"string"},"firstName":{"type":"string"},"middleName":{"type":"string"},"lastName":{"type":"string"},"email":{"type":"string"},"profilePictureUrl":{"type":"string"},"theme":{"type":"string","enum":["LIGHT","DARK","SYSTEM"]},"timezone":{"type":"string"},"dateFormat":{"type":"string"},"createdAt":{"type":"integer","format":"int64"},"verified":{"type":"boolean"}}},"StreakResponseDto":{"required":["streak","streakIncreasedToday"],"type":"object","properties":{"streak":{"type":"integer","format":"int32"},"streakIncreasedToday":{"type":"boolean"}}},"PasskeyResponseDto":{"required":["createdAt","deviceName","id","lastUsedAt"],"type":"object","properties":{"id":{"type":"string","format":"uuid"},"deviceName":{"type":"string"},"createdAt":{"type":"string","format":"date-time"},"lastUsedAt":{"type":"string","format":"date-time"}}},"ShortJournalResponseDto":{"required":["content","id","lockedSince"],"type":"object","properties":{"id":{"type":"string","format":"uuid"},"content":{"type":"string"},"lockedSince":{"type":"string","format":"date-time"}}},"EnergyInfoResponseDto":{"required":["energy","nextEntryAllowed","reason"],"type":"object","properties":{"energy":{"type":"integer","format":"int32"},"reason":{"type":"string"},"nextEntryAllowed":{"type":"string","format":"date-time"}}},"EnergyDetailsResponseDto":{"required":["average","entries","influentialNegative","influentialPositive"],"type":"object","properties":{"influentialPositive":{"$ref":"#/components/schemas/ReasonAmountResponseDto"},"influentialNegative":{"$ref":"#/components/schemas/ReasonAmountResponseDto"},"average":{"type":"integer","format":"int32"},"entries":{"type":"array","items":{"$ref":"#/components/schemas/EnergyInfoDateResponseDto"}}}},"EnergyInfoDateResponseDto":{"required":["amount","date"],"type":"object","properties":{"date":{"type":"string","format":"date-time"},"amount":{"type":"integer","format":"int32"},"reason":{"type":"string","nullable":true}}},"ReasonAmountResponseDto":{"required":["level","reason"],"type":"object","properties":{"reason":{"type":"string"},"level":{"type":"integer","format":"int32"}}},"ReasonsResponseDto":{"required":["reasons"],"type":"object","properties":{"reasons":{"type":"array","items":{"type":"string"}}}},"MfaSettingsResponseDto":{"required":["mfaEnabled"],"type":"object","properties":{"mfaEnabled":{"type":"boolean"}}},"DisableMfaRequestDto":{"required":["password"],"type":"object","properties":{"password":{"type":"string"}}}}}}
+{
+	"openapi": "3.0.1",
+	"servers": [{ "url": "/api/v1", "description": "Request from the current instance." }],
+	"paths": {
+		"/users/settings": {
+			"get": {
+				"tags": ["settings-controller"],
+				"operationId": "getSettings",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": { "schema": { "$ref": "#/components/schemas/SettingsResponseDto" } }
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			},
+			"put": {
+				"tags": ["settings-controller"],
+				"operationId": "updateSettings",
+				"requestBody": {
+					"content": {
+						"application/json": { "schema": { "$ref": "#/components/schemas/SettingsRequestDto" } }
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": { "*/*": { "schema": { "$ref": "#/components/schemas/Unit" } } }
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/journals": {
+			"get": {
+				"tags": ["journal-controller"],
+				"operationId": "getCurrentJournal",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": { "schema": { "$ref": "#/components/schemas/JournalEntryResponseDto" } }
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			},
+			"put": {
+				"tags": ["journal-controller"],
+				"operationId": "updateCurrentJournal",
+				"requestBody": {
+					"content": {
+						"application/json": { "schema": { "$ref": "#/components/schemas/JournalRequestDto" } }
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": { "schema": { "$ref": "#/components/schemas/JournalEntryResponseDto" } }
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/journals/{id}": {
+			"get": {
+				"tags": ["journal-controller"],
+				"operationId": "getJournalById",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "string", "format": "uuid" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": { "schema": { "$ref": "#/components/schemas/JournalEntryResponseDto" } }
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			},
+			"put": {
+				"tags": ["journal-controller"],
+				"operationId": "updateCurrentJournal_1",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "string", "format": "uuid", "nullable": true }
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": { "schema": { "$ref": "#/components/schemas/JournalRequestDto" } }
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": { "schema": { "$ref": "#/components/schemas/JournalEntryResponseDto" } }
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/users/profile": {
+			"get": {
+				"tags": ["profile-controller"],
+				"operationId": "getMyProfile",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": { "schema": { "$ref": "#/components/schemas/ProfileResponseDto" } }
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["profile-controller"],
+				"operationId": "updateProfile",
+				"requestBody": {
+					"content": {
+						"application/json": { "schema": { "$ref": "#/components/schemas/ProfileRequestDto" } }
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": { "*/*": { "schema": { "$ref": "#/components/schemas/Unit" } } }
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/users/profile/verify": {
+			"post": {
+				"tags": ["profile-controller"],
+				"operationId": "verifyCode",
+				"parameters": [
+					{ "name": "code", "in": "query", "required": true, "schema": { "type": "string" } }
+				],
+				"responses": {
+					"200": { "description": "OK", "content": { "*/*": { "schema": { "type": "object" } } } },
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/users/profile/verify/request": {
+			"post": {
+				"tags": ["profile-controller"],
+				"operationId": "requestVerificationCode",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": { "schema": { "$ref": "#/components/schemas/VerificationRequestResponseDto" } }
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/users/profile/profilePicture": {
+			"post": {
+				"tags": ["profile-controller"],
+				"operationId": "uploadProfilePicture",
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": { "file": { "type": "string", "format": "binary" } }
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": { "*/*": { "schema": { "$ref": "#/components/schemas/Unit" } } }
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/users/profile/data-deletion": {
+			"post": {
+				"tags": ["profile-controller"],
+				"operationId": "requestDataDeletion",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": { "*/*": { "schema": { "$ref": "#/components/schemas/Unit" } } }
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["profile-controller"],
+				"operationId": "abortDataDeletion",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": { "*/*": { "schema": { "$ref": "#/components/schemas/Unit" } } }
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/users/profile/data-deletion/confirm": {
+			"post": {
+				"tags": ["profile-controller"],
+				"operationId": "confirmDataDeletion",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/DataDeletionConfirmRequestDto" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": { "*/*": { "schema": { "$ref": "#/components/schemas/Unit" } } }
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/users/privacy/data-export": {
+			"post": {
+				"tags": ["privacy-controller"],
+				"operationId": "requestDataExport",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": { "schema": { "$ref": "#/components/schemas/DataExportStatusResponseDto" } }
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/passkeys/register/start": {
+			"post": {
+				"tags": ["passkey-controller"],
+				"operationId": "passkeyRegisterStart",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": {
+								"schema": { "$ref": "#/components/schemas/RegisterPasskeyStartResponseDto" }
+							}
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/passkeys/register/finish": {
+			"post": {
+				"tags": ["passkey-controller"],
+				"operationId": "passkeyRegisterFinish",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/RegisterPasskeyFinishRequestDto" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": {
+								"schema": { "$ref": "#/components/schemas/RegisterPasskeyFinishResponseDto" }
+							}
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/energy": {
+			"get": {
+				"tags": ["energy-controller"],
+				"operationId": "getEnergyInfoToday",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": { "schema": { "$ref": "#/components/schemas/EnergyInfoResponseDto" } }
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["energy-controller"],
+				"operationId": "addEnergyEntry",
+				"requestBody": {
+					"content": {
+						"application/json": { "schema": { "$ref": "#/components/schemas/EnergyRequestDto" } }
+					},
+					"required": true
+				},
+				"responses": {
+					"200": { "description": "OK", "content": { "*/*": { "schema": { "type": "object" } } } },
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/auth/signup": {
+			"post": {
+				"tags": ["auth-controller"],
+				"operationId": "signUp",
+				"requestBody": {
+					"content": {
+						"application/json": { "schema": { "$ref": "#/components/schemas/SignUpRequestDto" } }
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": { "*/*": { "schema": { "$ref": "#/components/schemas/Unit" } } }
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/auth/signin": {
+			"post": {
+				"tags": ["auth-controller"],
+				"operationId": "signIn",
+				"requestBody": {
+					"content": {
+						"application/json": { "schema": { "$ref": "#/components/schemas/SignInRequestDto" } }
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": { "*/*": { "schema": { "$ref": "#/components/schemas/SignInResponseDto" } } }
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/auth/reset-password": {
+			"post": {
+				"tags": ["auth-controller"],
+				"operationId": "requestPasswordReset",
+				"parameters": [
+					{ "name": "email", "in": "query", "required": true, "schema": { "type": "string" } }
+				],
+				"responses": {
+					"200": { "description": "OK", "content": { "*/*": { "schema": { "type": "object" } } } },
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/auth/reset-password/confirm": {
+			"post": {
+				"tags": ["auth-controller"],
+				"operationId": "resetPassword",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/PasswordResetRequestDto" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": { "description": "OK", "content": { "*/*": { "schema": { "type": "object" } } } },
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/auth/passkey-authentication/start": {
+			"post": {
+				"tags": ["passkey-auth-controller"],
+				"operationId": "passkeyAuthStart",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/AuthPasskeyStartRequestDto" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": { "schema": { "$ref": "#/components/schemas/AuthPasskeyStartResponseDto" } }
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/auth/passkey-authentication/finish": {
+			"post": {
+				"tags": ["passkey-auth-controller"],
+				"operationId": "passkeyAuthFinish",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/AuthPasskeyFinishRequestDto" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": { "schema": { "$ref": "#/components/schemas/AuthPasskeyFinishResponseDto" } }
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/auth/mfa/verify": {
+			"post": {
+				"tags": ["mfa-controller"],
+				"operationId": "verifyMfaCodeAndEnable",
+				"requestBody": {
+					"content": {
+						"application/json": { "schema": { "$ref": "#/components/schemas/VerifyMfaRequestDto" } }
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": { "*/*": { "schema": { "$ref": "#/components/schemas/Unit" } } }
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/auth/mfa/setup": {
+			"post": {
+				"tags": ["mfa-controller"],
+				"operationId": "setupMfa",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": { "schema": { "$ref": "#/components/schemas/SetupMfaResponseDto" } }
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/auth/logout": {
+			"post": {
+				"tags": ["auth-controller"],
+				"operationId": "logout",
+				"responses": {
+					"200": { "description": "OK", "content": { "*/*": { "schema": { "type": "object" } } } },
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/streaks": {
+			"get": {
+				"tags": ["streak-controller"],
+				"operationId": "getCurrentStreak",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": { "*/*": { "schema": { "$ref": "#/components/schemas/StreakResponseDto" } } }
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/passkeys": {
+			"get": {
+				"tags": ["passkey-controller"],
+				"operationId": "passkeyList",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": {
+								"schema": {
+									"type": "array",
+									"items": { "$ref": "#/components/schemas/PasskeyResponseDto" }
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/journals/recent": {
+			"get": {
+				"tags": ["journal-controller"],
+				"operationId": "getRecentJournalsShort",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": {
+								"schema": {
+									"type": "array",
+									"items": { "$ref": "#/components/schemas/ShortJournalResponseDto" }
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/energy/{date}": {
+			"get": {
+				"tags": ["energy-controller"],
+				"operationId": "getEnergyEntriesForDay",
+				"parameters": [
+					{
+						"name": "date",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "string", "format": "date-time" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": { "schema": { "$ref": "#/components/schemas/EnergyDetailsResponseDto" } }
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/energy/recent": {
+			"get": {
+				"tags": ["energy-controller"],
+				"operationId": "getEnergyForDateRange",
+				"parameters": [
+					{
+						"name": "from",
+						"in": "query",
+						"required": true,
+						"schema": { "type": "string", "format": "date-time" }
+					},
+					{
+						"name": "to",
+						"in": "query",
+						"required": true,
+						"schema": { "type": "string", "format": "date-time" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": {
+								"schema": {
+									"type": "array",
+									"items": { "$ref": "#/components/schemas/EnergyInfoDateResponseDto" }
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/energy/reasons": {
+			"get": {
+				"tags": ["energy-controller"],
+				"operationId": "getEnergyReasons",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": { "schema": { "$ref": "#/components/schemas/ReasonsResponseDto" } }
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/auth/validate-code": {
+			"get": {
+				"tags": ["auth-controller"],
+				"operationId": "validatePasswordResetCode",
+				"parameters": [
+					{ "name": "code", "in": "query", "required": true, "schema": { "type": "string" } }
+				],
+				"responses": {
+					"200": { "description": "OK", "content": { "*/*": { "schema": { "type": "object" } } } },
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/auth/mfa": {
+			"get": {
+				"tags": ["mfa-controller"],
+				"operationId": "getMfaSettings",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": { "schema": { "$ref": "#/components/schemas/MfaSettingsResponseDto" } }
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["mfa-controller"],
+				"operationId": "disableMfa",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/DisableMfaRequestDto" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": { "*/*": { "schema": { "$ref": "#/components/schemas/Unit" } } }
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		},
+		"/passkeys/{passkeyId}": {
+			"delete": {
+				"tags": ["passkey-controller"],
+				"operationId": "passkeyDelete",
+				"parameters": [
+					{
+						"name": "passkeyId",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "string", "format": "uuid" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": { "*/*": { "schema": { "$ref": "#/components/schemas/Unit" } } }
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponseDto" } }
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"ErrorResponseDto": {
+				"required": ["code", "message", "timestamp"],
+				"type": "object",
+				"properties": {
+					"code": { "type": "string" },
+					"message": { "type": "string" },
+					"timestamp": { "type": "string", "format": "date-time" }
+				},
+				"description": "Standard error structure"
+			},
+			"SettingsRequestDto": {
+				"required": [
+					"dateFormat",
+					"language",
+					"marketingEmails",
+					"reminderEmails",
+					"securityAlerts",
+					"theme",
+					"timezone"
+				],
+				"type": "object",
+				"properties": {
+					"theme": { "type": "string", "enum": ["LIGHT", "DARK", "SYSTEM"] },
+					"language": { "type": "string", "enum": ["ENGLISH"] },
+					"marketingEmails": { "type": "boolean" },
+					"securityAlerts": { "type": "boolean" },
+					"reminderEmails": { "type": "boolean" },
+					"timezone": { "type": "string" },
+					"dateFormat": { "type": "string" }
+				}
+			},
+			"Unit": { "type": "object" },
+			"JournalRequestDto": {
+				"required": ["content"],
+				"type": "object",
+				"properties": { "content": { "type": "string" } }
+			},
+			"JournalEntryResponseDto": {
+				"required": ["content"],
+				"type": "object",
+				"properties": {
+					"id": { "type": "string", "format": "uuid", "nullable": true },
+					"content": { "type": "string" },
+					"availableUntil": { "type": "string", "format": "date-time", "nullable": true }
+				}
+			},
+			"ProfileRequestDto": {
+				"required": ["email", "firstName", "lastName", "middleName"],
+				"type": "object",
+				"properties": {
+					"firstName": { "type": "string" },
+					"middleName": { "type": "string" },
+					"lastName": { "type": "string" },
+					"email": { "type": "string" }
+				}
+			},
+			"VerificationRequestResponseDto": {
+				"required": ["nextCodeAllowedAt"],
+				"type": "object",
+				"properties": { "nextCodeAllowedAt": { "type": "string", "format": "date-time" } }
+			},
+			"DataDeletionConfirmRequestDto": {
+				"required": ["code"],
+				"type": "object",
+				"properties": { "code": { "type": "string" } }
+			},
+			"DataExportStatusResponseDto": {
+				"required": ["completedAt", "exportId", "requestedAt", "status"],
+				"type": "object",
+				"properties": {
+					"exportId": { "type": "string", "format": "uuid" },
+					"status": { "type": "string" },
+					"requestedAt": { "type": "string", "format": "date-time" },
+					"completedAt": { "type": "string", "format": "date-time" }
+				}
+			},
+			"RegisterPasskeyStartResponseDto": {
+				"required": ["options"],
+				"type": "object",
+				"properties": { "options": { "type": "string" } }
+			},
+			"RegisterPasskeyFinishRequestDto": {
+				"required": ["credential", "deviceName"],
+				"type": "object",
+				"properties": {
+					"credential": { "type": "string" },
+					"deviceName": { "maxLength": 100, "minLength": 0, "type": "string" }
+				}
+			},
+			"RegisterPasskeyFinishResponseDto": {
+				"required": ["createdAt", "deviceName", "id"],
+				"type": "object",
+				"properties": {
+					"id": { "type": "string", "format": "uuid" },
+					"deviceName": { "type": "string" },
+					"createdAt": { "type": "string", "format": "date-time" }
+				}
+			},
+			"EnergyRequestDto": {
+				"required": ["amount"],
+				"type": "object",
+				"properties": {
+					"amount": { "maximum": 100, "minimum": 0, "type": "integer", "format": "int32" },
+					"reason": { "maxLength": 220, "minLength": 0, "type": "string", "nullable": true }
+				}
+			},
+			"SignUpRequestDto": {
+				"required": ["email", "firstName", "lastName", "middleName", "password", "tosAccepted"],
+				"type": "object",
+				"properties": {
+					"firstName": { "maxLength": 20, "minLength": 2, "type": "string" },
+					"middleName": { "maxLength": 20, "minLength": 0, "type": "string" },
+					"lastName": { "maxLength": 20, "minLength": 2, "type": "string" },
+					"email": { "type": "string" },
+					"password": { "type": "string" },
+					"tosAccepted": { "type": "boolean" }
+				}
+			},
+			"SignInRequestDto": {
+				"required": ["email", "password", "rememberMe"],
+				"type": "object",
+				"properties": {
+					"email": { "type": "string" },
+					"password": { "type": "string" },
+					"rememberMe": { "type": "boolean" },
+					"mfaCode": { "maxLength": 2147483647, "minLength": 0, "type": "string", "nullable": true }
+				}
+			},
+			"SignInResponseDto": {
+				"required": ["mfaRequired"],
+				"type": "object",
+				"properties": { "mfaRequired": { "type": "boolean" } }
+			},
+			"PasswordResetRequestDto": {
+				"required": ["code", "password"],
+				"type": "object",
+				"properties": { "code": { "type": "string" }, "password": { "type": "string" } }
+			},
+			"AuthPasskeyStartRequestDto": {
+				"required": ["email"],
+				"type": "object",
+				"properties": { "email": { "type": "string" } }
+			},
+			"AuthPasskeyStartResponseDto": {
+				"required": ["options"],
+				"type": "object",
+				"properties": { "options": { "type": "string" } }
+			},
+			"AuthPasskeyFinishRequestDto": {
+				"required": ["credential", "email"],
+				"type": "object",
+				"properties": { "email": { "type": "string" }, "credential": { "type": "string" } }
+			},
+			"AuthPasskeyFinishResponseDto": {
+				"required": ["token"],
+				"type": "object",
+				"properties": { "token": { "type": "string" } }
+			},
+			"VerifyMfaRequestDto": {
+				"required": ["code"],
+				"type": "object",
+				"properties": { "code": { "maxLength": 6, "minLength": 6, "type": "string" } }
+			},
+			"SetupMfaResponseDto": {
+				"required": ["qrCodeBase64", "secret"],
+				"type": "object",
+				"properties": { "secret": { "type": "string" }, "qrCodeBase64": { "type": "string" } }
+			},
+			"SettingsResponseDto": {
+				"required": [
+					"dateFormat",
+					"language",
+					"marketingEmails",
+					"reminderEmails",
+					"securityAlerts",
+					"theme",
+					"timezone",
+					"updatedAt"
+				],
+				"type": "object",
+				"properties": {
+					"theme": { "type": "string", "enum": ["LIGHT", "DARK", "SYSTEM"] },
+					"language": { "type": "string", "enum": ["ENGLISH"] },
+					"marketingEmails": { "type": "boolean" },
+					"securityAlerts": { "type": "boolean" },
+					"reminderEmails": { "type": "boolean" },
+					"timezone": { "type": "string" },
+					"dateFormat": { "type": "string" },
+					"updatedAt": { "type": "string", "format": "date-time" }
+				}
+			},
+			"ProfileResponseDto": {
+				"required": [
+					"createdAt",
+					"dateFormat",
+					"email",
+					"firstName",
+					"id",
+					"lastName",
+					"middleName",
+					"profilePictureUrl",
+					"theme",
+					"timezone",
+					"verified"
+				],
+				"type": "object",
+				"properties": {
+					"id": { "type": "string" },
+					"firstName": { "type": "string" },
+					"middleName": { "type": "string" },
+					"lastName": { "type": "string" },
+					"email": { "type": "string" },
+					"profilePictureUrl": { "type": "string" },
+					"theme": { "type": "string", "enum": ["LIGHT", "DARK", "SYSTEM"] },
+					"timezone": { "type": "string" },
+					"dateFormat": { "type": "string" },
+					"createdAt": { "type": "integer", "format": "int64" },
+					"verified": { "type": "boolean" }
+				}
+			},
+			"StreakResponseDto": {
+				"required": ["streak", "streakIncreasedToday"],
+				"type": "object",
+				"properties": {
+					"streak": { "type": "integer", "format": "int32" },
+					"streakIncreasedToday": { "type": "boolean" }
+				}
+			},
+			"PasskeyResponseDto": {
+				"required": ["createdAt", "deviceName", "id", "lastUsedAt"],
+				"type": "object",
+				"properties": {
+					"id": { "type": "string", "format": "uuid" },
+					"deviceName": { "type": "string" },
+					"createdAt": { "type": "string", "format": "date-time" },
+					"lastUsedAt": { "type": "string", "format": "date-time" }
+				}
+			},
+			"ShortJournalResponseDto": {
+				"required": ["content", "id", "lockedSince"],
+				"type": "object",
+				"properties": {
+					"id": { "type": "string", "format": "uuid" },
+					"content": { "type": "string" },
+					"lockedSince": { "type": "string", "format": "date-time" }
+				}
+			},
+			"EnergyInfoResponseDto": {
+				"required": ["energy", "nextEntryAllowed", "reason"],
+				"type": "object",
+				"properties": {
+					"energy": { "type": "integer", "format": "int32" },
+					"reason": { "type": "string" },
+					"nextEntryAllowed": { "type": "string", "format": "date-time" }
+				}
+			},
+			"EnergyDetailsResponseDto": {
+				"required": ["average", "entries", "influentialNegative", "influentialPositive"],
+				"type": "object",
+				"properties": {
+					"influentialPositive": { "$ref": "#/components/schemas/ReasonAmountResponseDto" },
+					"influentialNegative": { "$ref": "#/components/schemas/ReasonAmountResponseDto" },
+					"average": { "type": "integer", "format": "int32" },
+					"entries": {
+						"type": "array",
+						"items": { "$ref": "#/components/schemas/EnergyInfoDateResponseDto" }
+					}
+				}
+			},
+			"EnergyInfoDateResponseDto": {
+				"required": ["amount", "date"],
+				"type": "object",
+				"properties": {
+					"date": { "type": "string", "format": "date-time" },
+					"amount": { "type": "integer", "format": "int32" },
+					"reason": { "type": "string", "nullable": true }
+				}
+			},
+			"ReasonAmountResponseDto": {
+				"required": ["level", "reason"],
+				"type": "object",
+				"properties": {
+					"reason": { "type": "string" },
+					"level": { "type": "integer", "format": "int32" }
+				}
+			},
+			"ReasonsResponseDto": {
+				"required": ["reasons"],
+				"type": "object",
+				"properties": { "reasons": { "type": "array", "items": { "type": "string" } } }
+			},
+			"MfaSettingsResponseDto": {
+				"required": ["mfaEnabled"],
+				"type": "object",
+				"properties": { "mfaEnabled": { "type": "boolean" } }
+			},
+			"DisableMfaRequestDto": {
+				"required": ["password"],
+				"type": "object",
+				"properties": { "password": { "type": "string" } }
+			}
+		}
+	}
+}
